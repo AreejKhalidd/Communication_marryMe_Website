@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MyProfile from '../views/MyProfile.vue'
+import block from '../views/Block'
+
 
 Vue.use(VueRouter)
 
@@ -23,6 +25,12 @@ const routes = [
     path: '/my_profile',
     name: 'MyProfile',
     component: MyProfile
+  },
+
+  {
+    path: '/list',
+    name: 'block',
+    component: block
   },
 ]
 
