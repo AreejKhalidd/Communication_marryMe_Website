@@ -32,7 +32,7 @@
         <h2 class="headline font-weight-bold mb-3">
           What's next?
         </h2>
-
+        <br>
         <v-row justify="center">
           <a
             v-for="(next, i) in whatsNext"
@@ -53,7 +53,7 @@
         <h2 class="headline font-weight-bold mb-3">
           Important Links
         </h2>
-
+        <br>
         <v-row justify="center">
           <a
             v-for="(link, i) in importantLinks"
@@ -74,7 +74,7 @@
         <h2 class="headline font-weight-bold mb-3">
           Ecosystem
         </h2>
-
+        <br>
         <v-row justify="center">
           <a
             v-for="(eco, i) in ecosystem"
