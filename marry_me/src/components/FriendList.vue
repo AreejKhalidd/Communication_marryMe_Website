@@ -1,7 +1,7 @@
 <template>
   <v-card :id="id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
 
-    <v-list class="list-style" three-line>
+    <v-list   class="list-style" three-line>
       <template>
 
         <v-list-item style="max-width: 1300px">
@@ -14,7 +14,7 @@
             <v-list-item-subtitle style="font-weight: bolder;font-size: 17px">العمر : {{ age }}</v-list-item-subtitle>
           </v-list-item-content>
 
-          <div class="text-center">
+          <div  class="text-center">
             <v-dialog
                 v-model="dialog"
                 width="500"
@@ -30,11 +30,11 @@
 
               <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
-                  ازالة شخص من قائمة المحظورين
+                  إزالة شخص معجب به
                 </v-card-title>
 
                 <v-card-text>
-                  هل انت متأكد من إزالة هذا الشخص من قائمة المحظورين ؟
+                  هل انت متأكد من إزالة هذا الشخص ؟
                 </v-card-text>
 
                 <v-divider></v-divider>
@@ -76,13 +76,13 @@ export default {
   props: ["name", "age", "id", "img"],
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU1NzI0MiwiZXhwIjoxNjMxNTYwODQyLCJuYmYiOjE2MzE1NTcyNDIsImp0aSI6IlhlZ0R6cXlEOGxvdlRONm0iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.O_MQdJI3mAyg2BxoO-KuSPuFIuxfdoU1UvCUP0Dnymc");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU2MDkxMCwiZXhwIjoxNjMxNTY0NTEwLCJuYmYiOjE2MzE1NjA5MTAsImp0aSI6ImYwRzM0bGZYRkFoRkVtY3UiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.IcGP4TX6W7to8hd0PEODTpqilW5lRPH9bpUAkH5OES0");
       axios({
         method: 'delete',
-        url: "http://127.0.0.1:8000/api/removeBlock",
+        url: "http://127.0.0.1:8000/api/removeFromFav",
         headers: {Authorization: AuthStr},
         data: {
-          blockId: id, // This is the body part
+          id: id, // This is the body part
         }
       });
       this.dialog = false;
@@ -109,7 +109,7 @@ export default {
 
 </style>
 <style>
-body{
+body {
   background-color: #EEE;
 }
 </style>
