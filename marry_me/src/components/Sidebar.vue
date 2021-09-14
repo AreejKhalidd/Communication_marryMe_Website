@@ -12,7 +12,7 @@
                                     <button class="btns" @click="goToblocks()" >
                                       قائمة المحظورين
                                     </button>
-                                    <button class="btns" @click="goTolikedme()">
+                                    <button v-if="VIP === 1 " class="btns" @click="goTolikedme()">
                                          قائمة المعجبين بي
                                     </button>
                                     <button class="btns" @click="goTocertify()">
@@ -28,7 +28,13 @@
 
 
 <script>
+import axios from 'axios';
 export default{
+  data() {
+    return {
+      VIP: "",
+    }
+  },
  methods:{
       goToblocks(){
          this.$router.push('/blockedUsers'); 
@@ -43,7 +49,22 @@ export default{
       goTocertify(){
          this.$router.push('/'); 
       }, 
-  }
+  },
+  mounted(){
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
+          axios({
+            method: 'get',
+            url: "http://127.0.0.1:8000/api/profile",
+            headers: {Authorization: token}
+          }).then(response => {
+          console.log(response.data)
+          this.VIP=response.data.VIP;
+                })
+                        .catch((error) => {
+                        console.log('There is error:'+error);
+                        return "error occoured"
+                });
+  },
 }
 </script>
 

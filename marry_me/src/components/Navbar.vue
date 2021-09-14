@@ -21,7 +21,7 @@
       </b-collapse>
 
       <b-navbar-nav>
-        <b-navbar-brand  href="#" disabled><b-img src="logo.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
+        <b-navbar-brand  href="#" disabled><b-img  src="marry_me.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       </b-navbar-nav>
 
@@ -32,10 +32,11 @@
 <script>
 import axios from "axios";
 export default{
+
  methods:{
        
       logout(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYwMDQyMSwiZXhwIjoxNjMxNjA0MDIxLCJuYmYiOjE2MzE2MDA0MjEsImp0aSI6IjAxZlVrdFkwbjFyNFdDTm0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.4sCVo-xhPEseSEh4zofOKMAW3k9I1N9TSAQPoPlflJM");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
           axios({
             method: 'post',
             url: "http://127.0.0.1:8000/api/logout",
