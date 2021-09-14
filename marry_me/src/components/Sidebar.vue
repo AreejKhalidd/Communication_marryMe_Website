@@ -38,7 +38,7 @@ export default{
          this.$router.push('/favUsers'); 
       },  
       goTolikedme(){
-         this.$router.push('/'); 
+         this.$router.push('followersList');
       },
       goTocertify(){
          this.$router.push('/'); 
