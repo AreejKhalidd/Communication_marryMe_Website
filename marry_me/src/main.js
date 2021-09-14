@@ -9,16 +9,6 @@ Vue.use(IconsPlugin)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
-Vue.use(VueRouter);
-const routes=[
-  {path:"/listChats" , component:require('./components/listChats.vue').default},
-    {path:"/Chat/:id/:name" , component:require('./components/Chat.vue').default},
-    {path:"/Chat2/:id/:name" , component:require('./components/Chat2.vue').default},
-]
-const router = new VueRouter({
-    routes:routes,
-    mode:"history"
-})
 new Vue({
   vuetify,
   router,

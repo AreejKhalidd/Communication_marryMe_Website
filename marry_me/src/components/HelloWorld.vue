@@ -1,5 +1,5 @@
 <template>
-
+<v-container>
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
           Welcome to Vuetify
@@ -77,7 +77,7 @@
           </a>
         </v-row>
       </v-col>
-    </v-row>
+    
   </v-container>
 </template>
 
