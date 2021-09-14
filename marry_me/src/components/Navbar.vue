@@ -21,7 +21,7 @@
       </b-collapse>
 
       <b-navbar-nav>
-        <b-navbar-brand  href="#" disabled><b-img src="logo.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
+        <b-navbar-brand  href="#" disabled><b-img  src="marry_me.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       </b-navbar-nav>
 
@@ -32,22 +32,26 @@
 <script>
 import axios from "axios";
 export default{
+
  methods:{
+       
       logout(){
-            const token ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU2NDAzMiwiZXhwIjoxNjMxNTY3NjMyLCJuYmYiOjE2MzE1NjQwMzIsImp0aSI6InRERmVZV3JIbzRzUmdVS3oiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.DlkLD9ufGimJ0TBEd5mOdgMRbNSTauC2N_MO2vwOHsA");
-                axios.post("http://127.0.0.1:8000/api/logout",
-                  { headers: {Authorization: token} }
-                )
-                .then(response => {
-                        console.log(response.data)
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
+          axios({
+            method: 'post',
+            url: "http://127.0.0.1:8000/api/logout",
+            headers: {Authorization: token}
+          }).then(response => {
+          console.log(response.data)
+          alert("You are logged out..");
+          this.$router.push('/');
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
-                        return "You are logged out"
+                        return "error occoured"
                         //return to login page
                 });
-        }
-      ,  
+      },
   }
 }
 </script>
@@ -55,6 +59,12 @@ export default{
 
 
 <style scoped> 
+.alert {
+  padding: 20px;
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 15px;
+}
 .bar{
   color:rgba(255,98,101,1);
   height:100 px;
@@ -63,7 +73,7 @@ export default{
   
 }
 .in{
-    height:27px;
+    height:30px;
     width:150px;
 }
 .btns{

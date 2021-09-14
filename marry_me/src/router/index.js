@@ -5,6 +5,9 @@ import MyProfile from '../views/MyProfile.vue'
 import block from '../views/Block'
 import friend from '../views/Friend'
 import HomePage from '../views/HomePage'
+import Userinfo from '../views/Userinfo'
+import follower from '../views/LikedMe'
+
 
 Vue.use(VueRouter)
 
@@ -42,6 +45,17 @@ const routes = [{
         path: '/homepage',
         name: 'HomePage',
         component: HomePage
+    },
+    {
+        path: '/followersList',
+        name: 'follower',
+        component: follower
+    },
+    {
+        path: '/userinfo',
+        name: 'Userinfo',
+        component: Userinfo,
+        props: true
     },
 ]
 

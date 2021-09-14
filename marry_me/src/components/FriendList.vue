@@ -72,11 +72,11 @@ export default {
       dialog: false,
     }
   },
-  name: "BlockList",
+  name: "FriendList",
   props: ["name", "age", "id", "img"],
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU2MDkxMCwiZXhwIjoxNjMxNTY0NTEwLCJuYmYiOjE2MzE1NjA5MTAsImp0aSI6ImYwRzM0bGZYRkFoRkVtY3UiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.IcGP4TX6W7to8hd0PEODTpqilW5lRPH9bpUAkH5OES0");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU3NDE2NiwiZXhwIjoxNjMxNTc3NzY2LCJuYmYiOjE2MzE1NzQxNjYsImp0aSI6InV6WTA0dVl2T1FXWmg0d08iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ulOKxKZl9pqI9RyF7yNP_xq2fXWT4MOfljQoj-PtUZQ");
       axios({
         method: 'delete',
         url: "http://127.0.0.1:8000/api/removeFromFav",
