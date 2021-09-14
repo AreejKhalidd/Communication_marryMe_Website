@@ -7,7 +7,7 @@
                             <nav class="mb-5">
                             <b-nav vertical type="dark" variant="light" text-variant="dark">
                                     <button class="btns" @click="goTofavs()">
-                                        قائمة المعجب بهم
+                                        قائمة المفضلين
                                     </button>
                                     <button class="btns" @click="goToblocks()" >
                                       قائمة المحظورين
@@ -38,7 +38,7 @@ export default{
          this.$router.push('/favUsers'); 
       },  
       goTolikedme(){
-         this.$router.push('followersList');
+         this.$router.push('/'); 
       },
       goTocertify(){
          this.$router.push('/'); 
