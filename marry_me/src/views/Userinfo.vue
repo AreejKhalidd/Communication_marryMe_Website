@@ -190,6 +190,7 @@ export default {
      text-variant:grey;
       width:40%;
     padding-radius:9px;
+    border-radius:15px;
 }
 .btns-prf{
 width:80px;

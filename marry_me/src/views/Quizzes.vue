@@ -13,7 +13,7 @@
           >
             <v-app-bar-nav-icon style="margin-top: 5px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-            <v-toolbar-title style="width: 1200px;flex: auto;margin-bottom: 65px">قائمة المحظورين</v-toolbar-title>
+            <v-toolbar-title style="width: 1200px;flex: auto;margin-bottom: 65px"> اسئلة التسجيل </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -42,9 +42,7 @@
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
-          <BlockList style="margin: 20px !important;" v-for="block in blocks" :key="block.id" :id="block.id"
-                     :name="block.name" :age="block.age"
-                     :img="block.blocked_image"/>
+          <Questions />
           <ErrorPage style="margin: 50px !important;" v-if="error"/>
         </v-card>
       </v-app>
@@ -57,18 +55,17 @@
 </template>
 
 <script>
-import BlockList from '@/components/BlockList.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
-import axios from "axios";
 import AnotherSideBar from '@/components/AnotherSideBar.vue'
+import Questions from '@/components/Questions.vue'
 
 
 export default {
   name: "Block",
   components: {
-    BlockList,
     AnotherSideBar,
-    ErrorPage
+    ErrorPage,
+    Questions
   },
   data() {
     return {
@@ -78,21 +75,22 @@ export default {
       error: false,
     }
   },
-  mounted() {
-    // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
-    axios.get("http://127.0.0.1:8000/api/getAllBlocks", {headers: {Authorization: AuthStr}})
-        .then(response => {
-          // If request is good...
-          this.error = true;
-          this.blocks = response.data;
-        })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            this.error = true;
-          }
-        });
-  },
+//   mounted() {
+//     // GET request using axios with set headers
+//     const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
+//     axios.get("http://127.0.0.1:8000/api/getAllBlocks", {headers: {Authorization: AuthStr}})
+//         .then(response => {
+//           // If request is good...
+//           this.error = true;
+//           this.blocks = response.data;
+//         })
+//         .catch((error) => {
+//           if (error.response.status === 403) {
+//             this.error = true;
+//           }
+//         });
+//   },
+
   watch: {
     group() {
       this.drawer = false
