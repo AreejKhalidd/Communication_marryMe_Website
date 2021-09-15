@@ -61,7 +61,7 @@ export default{
     
       
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTY2ODIyNiwiZXhwIjoxNjMxNjcxODI2LCJuYmYiOjE2MzE2NjgyMjYsImp0aSI6IlBvZWp1OTBOVnRIcmlmdUUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.g8vRJFmg9jrUbecJsL4Pe404CqnWQMC8dtAFwJT1DMs");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -107,6 +107,13 @@ export default{
      text-variant:grey;
      width:30%;
     padding-radius:9px;
+        border-radius:15px;
+}
+.cardd:hover{
+       box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  border-radius:15px;
 }
 .btns-prf{
 width:80px;
