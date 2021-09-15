@@ -8,7 +8,7 @@ import HomePage from '../views/HomePage'
 import Userinfo from '../views/Userinfo'
 import follower from '../views/LikedMe'
 import requests from '../views/Request'
-
+import questions from '../views/Quizzes'
 
 Vue.use(VueRouter)
 
@@ -62,6 +62,11 @@ const routes = [{
         path: '/allRequests',
         name: 'requests',
         component: requests
+    },
+    {
+        path: '/questions',
+        name: 'questions',
+        component: questions
     },
 ]
 
