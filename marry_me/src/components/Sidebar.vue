@@ -47,7 +47,7 @@ export default{
          this.$router.push('/'); 
       },
       goTocertify(){
-         this.$router.push('/'); 
+         this.$router.push('/certifyme'); 
       }, 
   },
   mounted(){

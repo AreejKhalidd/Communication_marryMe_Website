@@ -7,7 +7,7 @@ import friend from '../views/Friend'
 import HomePage from '../views/HomePage'
 import Userinfo from '../views/Userinfo'
 import follower from '../views/LikedMe'
-
+import CertifyMe from '../views/CertifyMe'
 
 Vue.use(VueRouter)
 
@@ -56,6 +56,12 @@ const routes = [{
         name: 'Userinfo',
         component: Userinfo,
         props: true
+    },
+    {
+        path: '/certifyme',
+        name: 'CertifyMe',
+        component: CertifyMe,
+        
     },
 ]
 

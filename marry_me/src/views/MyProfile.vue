@@ -1,11 +1,12 @@
 <template>
   <v-main id="content">
-    <v-app-bar app color="#979797"></v-app-bar>
+    <Navbar/>
+    <Sidebar/>
     <v-row>
       <v-col cols="12" id="Black">
         <br />
         <br />
-        <h1 class="text-center">My Profile</h1>
+        <h1 class="text-center">حسابي الشخصي</h1>
 
         <br />
         <v-form ref="form" id="form" >
@@ -31,7 +32,7 @@
           <br />
           <br />
           <v-btn @click="RemoveAvatar" rounded outlined style="width: 230px" color="#FF6265" small>
-            Remove My Profile Picture
+            ازالة صورة الملف الشخصي
           </v-btn>
 
           <br />
@@ -54,21 +55,21 @@
         <v-text-field
           v-model="PhoneNumber"
           style="width:200px"
-          label="Phone Number"
+          label="رقم الموبايل"
               color="#FF6265"
               :rules="[rules.number, rules.required]"
         ></v-text-field>
 
             <v-text-field
               v-model="BirthDay"
-              label="Birth Day"
+              label="تاريخ الميلاد"
               style="width:200px"
               color="#FF6265"
               disabled
             ></v-text-field>
             <v-text-field
               v-model="Gender"
-              label="Gender"
+              label="النوع"
               style="width:200px"
               color="#FF6265"
               disabled
@@ -79,13 +80,13 @@
         <v-text-field
           v-model="NumberOfReports"
           style="width:200px"
-          label="Number Of Reports on you"
+          label="عدد مرات الابلاغ"
           color="#FF6265"
           disabled
         ></v-text-field>
             <v-text-field
               v-model="NumberOfBans"
-              label="Number Of Bans"
+              label="عدد مرات الحظر"
               style="width:200px"
               color="#FF6265"
               disabled
@@ -96,18 +97,53 @@
           <v-divider id="Grey" dark></v-divider>
           <br />
           <v-row>
-          <v-btn v-if="vip" @click="HideData" rounded outlined color="#FF6265">
-            Hide My Data To Others
-          </v-btn>
+          <h3 id="Black">
+            الاسئله  
+          </h3>
+          <h5  color="#ff6265">
+            بامكانك اخفاء سؤال واحد فقط  
+          </h5>
+          <v-card width="700" class="mx-auto ">
+            <v-list two-line>
+              <template v-for="i in Info.length">
+                <v-divider :key="i" ></v-divider>
+                <v-list-item :key="i">
+                    <v-list-item-content >
+                      <v-list-item-title>{{Info[i-1][0][0].question}}</v-list-item-title>
+                      <v-list-item-subtitle>{{Info[i-1][1][0].answer}}</v-list-item-subtitle>
+                      <br><br/>
+                      <div>
+                      <v-btn v-if="vip" @click="HideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                        اخفاء السؤال 
+                      </v-btn>
+                      <v-btn @click="HideData" rounded outlined color="#FF6265" style="width: 130px">
+                        تعديل الاجابه 
+                      </v-btn>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+              </template>  
+            </v-list>
+          </v-card>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-          <v-btn @click="SaveChanges" rounded outlined color="#FF6265">
-            Update Profile
-          </v-btn>
-          <v-btn @click="DeleteAccount" rounded outlined color="#FF6265">
-            Delete My Account
-          </v-btn>
+          <div>
+            <br><br/>
+            <v-btn  rounded outlined color="#FF6265" style="width: 230px">
+              تحديث البروفايل
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <br/>
+            <v-btn @click="DeleteAccount" rounded outlined color="#FF6265" style="width: 230px">
+             حذف الاكونت
+            </v-btn>
+            <v-btn v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
+               VIP التحديث الي 
+            </v-btn>
+          </div>
           </v-row>
         </v-form>
         <br />
@@ -120,12 +156,19 @@
 <script>
 import axios from 'axios';
 import SignupAvatar from "../assets/UserDefaultAvatar.png";
+import Navbar from '@/components/Navbar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 export default {
+   components: {
+    Navbar,
+    Sidebar,
+   },
   data() {
     return {
       avatarurl: null,
       url: SignupAvatar,
       file: '',
+      ID:'',
       Name: "",
       Email: "",
       PhoneNumber: "",
@@ -141,6 +184,9 @@ export default {
         required: (value) => !!value || "Required.",
         number: (value) => this.IsaNumber(value) || "Not a Valid Number",
       },
+      Questions:[],
+      Answers:[],
+      Info:[]
     };
   },
   methods: {
@@ -163,9 +209,10 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYwNDkzMSwiZXhwIjoxNjMxNjMzNzMxLCJuYmYiOjE2MzE2MDQ5MzEsImp0aSI6InB1SmhmdFNBaFBvM29MemQiLCJzdWIiOjQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0A_iCOmx98Nx7F5wdzDLBoe3oV0vRQj8fANUrepJMIw'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
+          this.ID = response.data.id;
           this.Name = response.data.name;
           this.Email = response.data.email;
           this.PhoneNumber = response.data.phone;
@@ -179,10 +226,20 @@ export default {
           
         });
     },
+    getUserQA() {
+      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+      //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+     const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI'}` } };//temp for testing the request
+      axios.get('http://127.0.0.1:8000/api/show-user', option)
+        .then((response) => {
+          this.Info = response.data;
+          console.log(this.Info.length);
+        });
+    },
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYwNjA2OSwiZXhwIjoxNjMxNjM0ODY5LCJuYmYiOjE2MzE2MDYwNjksImp0aSI6ImV3aFVyUFZXRFozNkdnOUEiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.wMLHAZDqCQk8iJ-ByIVHMQlMfk8k5GU7S2u0Lx6qXVQ'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTczNzM0NywiZXhwIjoxNjMxNzQwOTQ3LCJuYmYiOjE2MzE3MzczNDcsImp0aSI6Ilo4eldhYVY1cXIwNW1NeEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.9ahhIRn-zmCTgnTvyfsBfADxkENSvoWW24zpPq4Tt8M'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -190,9 +247,25 @@ export default {
         });
 
     },
+    HideData(id){
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI");
+       axios({
+       method: 'get',
+       url: "http://127.0.0.1:8000/api/hide",
+       headers: {Authorization: token},
+       params: {question_id :id}
+       }).then(response => {
+       this.Info = response.data;
+       console.log(this.Info);
+       })
+       .catch((error) => {
+       console.log('There is error:'+error);
+       });
+    }
   },
   created() {
     this.getUserInfo();
+    this.getUserQA();
   },
   computed: {
     useravatar() {
