@@ -1,7 +1,7 @@
 <template>
   <div data-app>
     <div id="app">
-      <v-app id="inspire">
+      <v-app id="inspire" style="direction: rtl">
         <v-card
             height="100%"
             width="100%"
@@ -23,6 +23,7 @@
               v-model="drawer"
               absolute
               bottom
+              right
               temporary
               style="min-width: 15%;min-height: 100%; "
 
@@ -44,6 +45,7 @@
           <BlockList style="margin: 20px !important;" v-for="block in blocks" :key="block.id" :id="block.id"
                      :name="block.name" :age="block.age"
                      :img="block.blocked_image"/>
+          <ErrorPage style="margin: 50px !important;" v-if="error"/>
         </v-card>
       </v-app>
     </div>
@@ -56,6 +58,7 @@
 
 <script>
 import BlockList from '@/components/BlockList.vue'
+import ErrorPage from '@/components/ErrorPage.vue'
 import axios from "axios";
 import AnotherSideBar from '@/components/AnotherSideBar.vue'
 
@@ -64,28 +67,30 @@ export default {
   name: "Block",
   components: {
     BlockList,
-    AnotherSideBar
+    AnotherSideBar,
+    ErrorPage
   },
   data() {
     return {
       blocks: [],
       drawer: false,
       group: null,
+      error: false,
     }
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU3NDE2NiwiZXhwIjoxNjMxNTc3NzY2LCJuYmYiOjE2MzE1NzQxNjYsImp0aSI6InV6WTA0dVl2T1FXWmg0d08iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ulOKxKZl9pqI9RyF7yNP_xq2fXWT4MOfljQoj-PtUZQ");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
     axios.get("http://127.0.0.1:8000/api/getAllBlocks", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
-          console.log(response.data);
-          this.blocks = response.data
-          console.log(this.blocks)
+          this.error = true;
+          this.blocks = response.data;
         })
         .catch((error) => {
-          console.log('error ' + error);
-          return "There is not any data"
+          if (error.response.status === 403) {
+            this.error = true;
+          }
         });
   },
   watch: {
@@ -106,7 +111,6 @@ export default {
   height: 100%;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.75);
 }
-
 
 
 </style>

@@ -19,16 +19,16 @@
       </v-icon>
       <span class="link">الصفحة الشخصية</span>
     </v-list-item>
-    <v-list-item to="my_profile">
+    <v-list-item to="followersList">
       <font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 4px" :icon="fanIcon"/>
       <span class="link">قائمة المعجبين بي</span>
     </v-list-item>
-    <v-list-item to="my_profile">
+    <v-list-item to="favUsers">
       <font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 4px" :icon="favIcon"/>
       <span class="link"> قائمة المعجب بهم</span>
 
     </v-list-item>
-    <v-list-item to="my_profile">
+    <v-list-item to="blockedUsers">
       <font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 4px" :icon="blockIcon"/>
       <span class="link">قائمة المحظورين</span>
 
@@ -68,7 +68,7 @@ export default {
   line-height: 40px;
   margin-top: 7px;
   overflow: hidden;
-  margin-left: 30px;
+  margin-right: 10px;
   cursor: pointer;
   color: #EEEEEE;
 }

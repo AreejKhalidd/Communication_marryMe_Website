@@ -2,7 +2,7 @@
 
   <div data-app>
     <div id="app">
-      <v-app id="inspire">
+      <v-app id="inspire" style="direction: rtl">
         <v-card
             class=" overflow-hidden"
             height="100%"
@@ -25,6 +25,7 @@
               v-model="drawer"
               absolute
               bottom
+              right
               temporary
               style="min-width: 15%;min-height: 100%;max-width: 40%;width: 200px  "
 
@@ -38,18 +39,21 @@
                   v-model="group"
                   active-class="deep-purple--text text--accent-4"
               >
-                <AnotherSideBar />
+                <AnotherSideBar/>
 
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
-          <FriendList style="margin: 20px !important;" v-for="friend in friends" :key="friend.id" :id="friend.id" :name="friend.name" :age="friend.age"
+
+          <FriendList style="margin: 20px !important;" v-for="friend in friends" :key="friend.id" :id="friend.id"
+                      :name="friend.name" :age="friend.age"
                       :img="friend.user2_image"/>
+          <ErrorPage style="margin: 50px !important;" v-if="error"/>
 
         </v-card>
+
       </v-app>
     </div>
-
 
   </div>
 
@@ -59,38 +63,43 @@
 <script>
 import FriendList from '@/components/FriendList.vue'
 import AnotherSideBar from '@/components/AnotherSideBar.vue'
+import ErrorPage from '@/components/ErrorPage.vue'
 import axios from "axios";
 
 export default {
   name: "Friend",
   components: {
     FriendList,
-    AnotherSideBar
+    AnotherSideBar,
+    ErrorPage
   },
   data() {
     return {
       friends: [],
       drawer: false,
       group: null,
+      error: false
     }
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU3NDE2NiwiZXhwIjoxNjMxNTc3NzY2LCJuYmYiOjE2MzE1NzQxNjYsImp0aSI6InV6WTA0dVl2T1FXWmg0d08iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ulOKxKZl9pqI9RyF7yNP_xq2fXWT4MOfljQoj-PtUZQ");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTY1NjcwOCwiZXhwIjoxNjMxNjYwMzA4LCJuYmYiOjE2MzE2NTY3MDgsImp0aSI6IjBMR1ljNnFlaGRmMkdqMXYiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.CmAIkEtLDlbvJUd5ckI-Ux8T-2QzkMt3cfxMuz5zVpw");
     axios.get("http://127.0.0.1:8000/api/getAllFriends", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
+          this.error = false;
           console.log(response.statusText);
           this.friends = response.data
           console.log(this.friends)
         })
         .catch((error) => {
-          console.log('error ' + error);
-          return "There is not any data"
+          if (error.response.status === 403) {
+            this.error = true;
+          }
         });
   },
   watch: {
-    group () {
+    group() {
       this.drawer = false
     },
   },
@@ -100,39 +109,13 @@ export default {
 </script>
 
 <style scoped>
-.linkStyle{
-  background:rgba(0, 0, 0, 0.75) !important;
-  padding:10px 0 20px 0;
-  border:1px solid #111;
+.linkStyle {
+  background: rgba(0, 0, 0, 0.75) !important;
+  padding: 10px 0 20px 0;
+  border: 1px solid #111;
   width: 100%;
   height: 100%;
-  box-shadow:0 4px 5px rgba(0, 0, 0, 0.75);
-}
-.link{
-  font-size:16px;
-  font-weight:bolder;
-  text-align:center;
-  position:relative;
-  height:40px;
-  line-height:40px;
-  margin-top:7px;
-  overflow:hidden;
-  width:30%;
-  cursor:pointer;
-  color: #EEEEEE;
-}
-.link:after{
-  content: '';
-  position:absolute;
-  width:80%;
-  border-bottom:1px solid rgba(255, 255, 255, 0.5);
-  bottom:50%;
-  left:-100%;
-  transition-delay:  0.5s;
-  transition: all 0.5s;
-}
-.link:hover:after{
-  left:100%;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.75);
 }
 
 </style>
