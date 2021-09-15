@@ -33,12 +33,17 @@
       <span class="link">قائمة المحظورين</span>
 
     </v-list-item>
+    <v-list-item to="allRequests">
+      <font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 4px" :icon="friendsIcon"/>
+      <span class="link">قائمة طلبات الصداقة</span>
+
+    </v-list-item>
   </div>
 
 </template>
 
 <script>
-import {faHeart,faFan,faAngry} from '@fortawesome/free-solid-svg-icons'
+import {faHeart,faFan,faAngry,faUserFriends} from '@fortawesome/free-solid-svg-icons'
 
 export default {
   name: "SlideBar",
@@ -51,6 +56,9 @@ export default {
     },
     blockIcon() {
       return faAngry
+    },
+    friendsIcon(){
+      return faUserFriends
     }
   }
 
