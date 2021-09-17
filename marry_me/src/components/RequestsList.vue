@@ -1,7 +1,6 @@
 <template>
   <v-card :id="id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
-
-    <v-list class="list-style" three-line>
+    <v-list   class="list-style" three-line>
       <template>
 
         <v-list-item style="max-width: 1300px">
@@ -14,7 +13,7 @@
             <v-list-item-subtitle style="font-weight: bolder;font-size: 17px">العمر : {{ age }}</v-list-item-subtitle>
           </v-list-item-content>
 
-          <div class="text-center">
+          <div  class="text-center">
             <v-dialog
                 v-model="dialog"
                 width="500"
@@ -30,11 +29,11 @@
 
               <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
-                  ازالة شخص من قائمة المحظورين
+                  إزالة الطلب الذي ارسلته
                 </v-card-title>
 
                 <v-card-text>
-                  هل انت متأكد من إزالة هذا الشخص من قائمة المحظورين ؟
+                  هل انت متأكد من إزالة هذا الطلب ؟
                 </v-card-text>
 
                 <v-divider></v-divider>
@@ -72,17 +71,17 @@ export default {
       dialog: false,
     }
   },
-  name: "BlockList",
+  name: "RequestList",
   props: ["name", "age", "id", "img"],
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMTcyNjgzMiwiZXhwIjoxNjMxNzMwNDMyLCJuYmYiOjE2MzE3MjY4MzIsImp0aSI6IjBrdEdySUxLUXdCdWZqdTAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pnOp4pH2Go7nlfkK8mc44Vug0lbs3QtYrYjY20oemO8");
       axios({
         method: 'delete',
-        url: "http://127.0.0.1:8000/api/removeBlock",
+        url: "http://127.0.0.1:8000/api/deleteRequest",
         headers: {Authorization: AuthStr},
         data: {
-          blockId: id, // This is the body part
+          id: id, // This is the body part
         }
       });
       this.dialog = false;
@@ -107,9 +106,4 @@ export default {
   transition: 0.8s;
 }
 
-</style>
-<style>
-body{
-  background-color: #EEE;
-}
 </style>

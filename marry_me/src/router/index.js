@@ -8,6 +8,11 @@ import HomePage from '../views/HomePage'
 import Userinfo from '../views/Userinfo'
 import follower from '../views/LikedMe'
 import Chat from '../views/Chat'
+import CertifyMe from '../views/CertifyMe'
+import requests from '../views/Request'
+import questions from '../views/Quizzes'
+import SearchResult from '../views/SearchResult'
+import Userinfoforsearch from '../views/Userinfoforsearch'
 
 Vue.use(VueRouter)
 
@@ -61,6 +66,33 @@ const routes = [{
         path: '/chat',
         name: 'Chat',
         component: Chat,
+    },
+    {
+        path: '/certifyme',
+        name: 'CertifyMe',
+        component: CertifyMe,
+    },
+    { 
+        path: '/allRequests',
+        name: 'requests',
+        component: requests
+    },
+    {
+        path: '/questions',
+        name: 'questions',
+        component: questions
+    },
+    {
+        path: '/searchResult',
+        name: 'SearchResult',
+        component: SearchResult,
+        props: true
+    },
+    {
+        path: '/userinfoforsearch',
+        name: 'Userinfoforsearch',
+        component: Userinfoforsearch,
+        props: true
     },
 ]
 

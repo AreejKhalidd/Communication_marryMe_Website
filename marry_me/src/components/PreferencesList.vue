@@ -10,33 +10,33 @@
            :key="index"
         @click="gotouserinfo(user)"
         >
-                    <div v-if="user.image != 'NULL' " >
-                        <b-card-img v-bind:src="user.image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
+                    <div v-if="user.user[0].image != 'NULL' " >
+                        <b-card-img v-bind:src="user.user[0].image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.gender ==  'Female' " >
+                    <div v-else-if="user.user[0].gender ==  'Female' " >
                         <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.gender ==  'female' " >
+                    <div v-else-if="user.user[0].gender ==  'female' " >
                         <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.gender ==  'Male' " >
+                    <div v-else-if="user.user[0].gender ==  'Male' " >
                         <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.gender ==  'male' " >
+                    <div v-else-if="user.user[0].gender ==  'male' " >
                         <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
                 
         
             <b-card-text>                 
-                 {{ user.name}} : الاسم
+                 {{ user.user[0].name}} : الاسم
             </b-card-text>
             <b-card-text>
-               {{ user.age}} : العمر
+               {{ user.user[0].age}} : العمر
             </b-card-text>
                 <b-button href="#" variant="primary" class="btns-prf" @click="gotouserinfo(user)">المزيد</b-button>
         </b-card>
@@ -54,64 +54,21 @@ export default{
       data(){
             return{
                 users:  [
-                    {
-                                "id": 2,
-                                "name": "mahmoud ahmed",
-                                "email": "schowalter.jannie@example.net",
-                                "email_verified_at": "2021-09-01T17:05:53.000000Z",
-                                "phone": "814-367-6631",
-                                "birth_day": "1979-06-02",
-                                "age": 50,
-                                "gender": "male",
-                                "image": "https://via.placeholder.com/640x480.png/007744?text=rerum",
-                                "reports": 62294,
-                                "answered": null,
-                                "ban": 0,
-                                "ban_count": 94,
-                                "certified": 0,
-                                "VIP": 0,
-                                "created_at": "2021-09-01T06:55:48.000000Z",
-                                "updated_at": "1992-12-08T17:01:40.000000Z",
-                                "mac_address": "grIi2lS4eQ",
-                                "id_number": "d49cf2e9-8577-3ca6-963b-4611ccfe7790",
-                                "online": 1
-                                },
-                                {
-                                "id": 4,
-                                "name": "mohamed",
-                                "email": "schowalter.jannie@example.net",
-                                "email_verified_at": "2021-09-01T17:05:53.000000Z",
-                                "phone": "814-367-6631",
-                                "birth_day": "1979-06-02",
-                                "age": 40,
-                                "gender": "Male",
-                                "image": "NULL",
-                                "reports": 62294,
-                                "answered": null,
-                                "ban": 0,
-                                "ban_count": 94,
-                                "certified": 0,
-                                "VIP": 1,
-                                "created_at": "2021-09-01T06:55:48.000000Z",
-                                "updated_at": "1992-12-08T17:01:40.000000Z",
-                                "mac_address": "grIi2lS4eQ",
-                                "id_number": "d49cf2e9-8577-3ca6-963b-4611ccfe7790",
-                                "online": 0
-                                },
+                    
                 ]  
             }
       },
     
       
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTU4NzMxMCwiZXhwIjoxNjMxNTkwOTEwLCJuYmYiOjE2MzE1ODczMTAsImp0aSI6ImFXTjIyT1VEeXdVcmVuN0oiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ULudIxmbQ77G2W886OQBosk6AfRRKK0U8jlzXPkbiqM");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc1OTYyNiwiZXhwIjoxNjMxNzYzMjI2LCJuYmYiOjE2MzE3NTk2MjYsImp0aSI6InZEaGdwMDd6czNoN1huSVoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.M_BBx6KHB5kg61xomLEQ1xeDr3qQta8tox2rBzc3yAk");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
                     headers: {Authorization: token}
                     }).then(response => {
-                    console.log(response.data)
                     this.users=response.data;
+                    console.log(this.users)
                 })
                     .catch((error) => {
                     console.log('There is error:'+error);
@@ -150,6 +107,13 @@ export default{
      text-variant:grey;
      width:30%;
     padding-radius:9px;
+        border-radius:15px;
+}
+.cardd:hover{
+       box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  border-radius:15px;
 }
 .btns-prf{
 width:80px;

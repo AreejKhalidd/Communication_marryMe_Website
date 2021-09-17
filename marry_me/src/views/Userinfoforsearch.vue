@@ -3,51 +3,42 @@
         <Navbar/>
         <Sidebar/>
       <div>
-            <h5 class="headerpref"> A user from your preference list  </h5>
+            <h5 class="headerpref"> A user by your search</h5>
         <b-card
         tag="article"       
         class="cardd" 
         >
-           <div v-if="user.user[0].gender != 'NULL' " >
-                        <b-card-img v-bind:src="user.user[0].image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
+           <div v-if="gender != 'NULL' " >
+                        <b-card-img v-bind:src="image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'Female' " >
+                    <div v-else-if="gender ==  'Female' " >
                         <b-card-img src="../assets/female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'female' " >
+                    <div v-else-if="gender ==  'female' " >
                         <b-card-img src="../assets/female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'Male' " >
+                    <div v-else-if="gender ==  'Male' " >
                         <b-card-img src="../assets/male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'male' " >
+                    <div v-else-if="gender ==  'male' " >
                         <b-card-img src="../assets/male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
                         </b-card-img>
               </div>
 
             <b-card-text>                 
-                 {{ user.user[0].name }} : الاسم
+                 {{ name }} : الاسم
             </b-card-text>
             <b-card-text>
-               {{ user.user[0].age}} : العمر
+               {{ age}} : العمر
             </b-card-text>
             <b-card-text>
-               {{ user.user[0].birth_day}} : تاريخ الميلاد
+               {{ email}} : البريد الإلكتروني
             </b-card-text>
-            <b-card-text>
-               {{ user.user[0].email}} : البريد الإلكتروني
-            </b-card-text>
-            <b-card-text v-if="user.user[0].online === 1">
-                 المستخدم نشط الان
-            </b-card-text>
-            <b-card-text 
-                v-if="user.user[0].VIP === 1">
-                  VIP المستخدم 
-            </b-card-text>
+
                   <button  v-if="VIP === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><img title="بدء المحادثة" class="btns-logo" src="../assets/chat.jpg" /></button>
                   <button  v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><img title="ارسال طلب المحادثة" class="btns-logo" src="../assets/chat2.png" /></button>
                  <button  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)"><img title="اضافة الي المفضلين" class="btns-logo" src="../assets/fav.png" /></button>
@@ -62,12 +53,19 @@ import axios from "axios";
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 export default {
-    name: "Userinfo",
+    name: "Userinfoforsearch",
     components: {
     Navbar,
     Sidebar,
    },
-    props: { user:Object,},
+    props: {
+             name:null,
+             id:null,
+             email:null,
+             image:null, 
+             gender:null,
+             age:null,
+           },
   data() {
     return {
       VIP: "",
