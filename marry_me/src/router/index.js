@@ -7,7 +7,7 @@ import friend from '../views/Friend'
 import HomePage from '../views/HomePage'
 import Userinfo from '../views/Userinfo'
 import follower from '../views/LikedMe'
-
+import Chat from '../views/Chat'
 
 Vue.use(VueRouter)
 
@@ -56,6 +56,11 @@ const routes = [{
         name: 'Userinfo',
         component: Userinfo,
         props: true
+    },
+    {
+        path: '/chat',
+        name: 'Chat',
+        component: Chat,
     },
 ]
 
