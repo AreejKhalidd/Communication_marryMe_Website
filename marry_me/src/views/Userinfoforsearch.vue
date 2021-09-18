@@ -2,49 +2,63 @@
   <div id="lg">
         <Navbar/>
         <Sidebar/>
-      <div>
-            <h5 class="headerpref"> A user by your search</h5>
-        <b-card
-        tag="article"       
-        class="cardd" 
-        >
-           <div v-if="gender != 'NULL' " >
-                        <b-card-img v-bind:src="image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+     <div class="usercard" align="center">      
+         <v-card outlined shaped style="max-width: 50rem; max-height: 150rem;" class="cardd">
+              <h5 class="headerpref">    مستخدم عن طريق بحثك </h5>
+            <v-list-item three-line align="center">
+                <v-list-item-content align="center">
+                     <v-row align="center">                      
+                            <div v-if="image != NULL " align="center" >
+                              <v-img v-bind:src="image" align="center" style="max-width: 30rem; max-height: 40rem;"  alt="User's image" >
+                              </v-img>
+                            </div>  
+                            <div v-if="image != '' "  >
+                                <v-img src="image"  align="center" style="max-width: 30rem; max-height: 40rem;"  alt="User's image" >
+                                </v-img>
+                           </div> 
+                            <div v-if="image == '' "  >
+                                <v-img src="../assets/UserDefaultAvatar.png" align="center" style="max-width: 30rem; max-height: 40rem;" alt="User's image" >
+                                </v-img>
+                           </div> 
+                           <div v-if="image == NULL "  >
+                                <img :src="img" align="center" style="max-width: 30rem; max-height: 40rem;"   alt="User's image" >
+                                
+                           </div> 
+  
+                    </v-row>
+                    <div class="ms-auto">
+                       {{ name}} : الاسم
                     </div>
-                    <div v-else-if="gender ==  'Female' " >
-                        <b-card-img src="../assets/female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+                    <div>
+                      {{ age}} : العمر
                     </div>
-                    <div v-else-if="gender ==  'female' " >
-                        <b-card-img src="../assets/female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+                    <div>
+                        {{ birth_day}} : تاريخ الميلاد
                     </div>
-                    <div v-else-if="gender ==  'Male' " >
-                        <b-card-img src="../assets/male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+                    <div>
+                        
+                        {{ email}} : البريد الإلكتروني
                     </div>
-                    <div v-else-if="gender ==  'male' " >
-                        <b-card-img src="../assets/male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
-              </div>
-
-            <b-card-text>                 
-                 {{ name }} : الاسم
-            </b-card-text>
-            <b-card-text>
-               {{ age}} : العمر
-            </b-card-text>
-            <b-card-text>
-               {{ email}} : البريد الإلكتروني
-            </b-card-text>
-
-                  <button  v-if="VIP === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><img title="بدء المحادثة" class="btns-logo" src="../assets/chat.jpg" /></button>
-                  <button  v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><img title="ارسال طلب المحادثة" class="btns-logo" src="../assets/chat2.png" /></button>
-                 <button  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)"><img title="اضافة الي المفضلين" class="btns-logo" src="../assets/fav.png" /></button>
-                 <button  rounded="circle" class="btns-logo" title="حظر" @click="addtoblocks(user.user[0].id)"><img title="حظر" class="btns-logo" src="../assets/block.png" /></button>
-        </b-card>
-        </div>
+                    <div v-if="online === 1">
+                          المستخدم نشط الان
+                    </div>
+                    <div v-if="VIP === 1">
+                          VIP المستخدم 
+                    </div>
+                 </v-list-item-content>
+            </v-list-item>
+                <v-card-actions>
+                  <v-row align="center" justify="center">
+                    <v-col>
+                      <button  v-if="VIP === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                      <button  v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                      <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>
+                      <button  rounded="circle" class="btns-logo" title="حظر" @click="addtoblocks(id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="block"/></button>
+                    </v-col>
+                  </v-row>
+            </v-card-actions>
+         </v-card>
+      </div>
   </div>
 </template>
 
@@ -52,6 +66,8 @@
 import axios from "axios";
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
+import img from "../assets/UserDefaultAvatar.png";
 export default {
     name: "Userinfoforsearch",
     components: {
@@ -69,6 +85,7 @@ export default {
   data() {
     return {
       VIP: "",
+      img:img,
     }
   },  
     methods:{
@@ -156,7 +173,20 @@ export default {
                         console.log('There is error:'+error);
                         return "error occoured"
                 });
-  },
+  }
+  , 
+      computed: {
+    fav() {
+      return faHeart
+    },
+    startChat(){
+      return faComment
+    },
+    block(){
+      return faBan
+    },
+    
+    }, 
 }
 </script>
 <style scoped>
@@ -256,8 +286,11 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   font-size:12px;
 }
 .headerpref{
-    margin-top:9px;
-    margin-bottom:2px;
-    text-align:center;
-} 
+  margin-top:7px;
+  margin-bottom:3px;
+}
+.usercard{
+  margin-top:42px;
+  text-align:center;
+}
 </style>
