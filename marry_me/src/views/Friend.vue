@@ -92,10 +92,9 @@ export default {
           this.friends = response.data
           console.log(this.friends)
         })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            this.error = true;
-          }
+        .catch(() => {
+
+          this.error = true;
         });
   },
   watch: {
