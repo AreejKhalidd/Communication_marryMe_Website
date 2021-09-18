@@ -1,52 +1,54 @@
 <template>
-   <div id="pref" >
-        <div>
-        <h4 class="headerpref"> Your Preferences List </h4>
-        <b-card
-        tag="article"
-        style="max-width: 20rem;"  
-        class="cardd" 
-           v-for="(user, index) in users" 
-           :key="index"
-        @click="gotouserinfo(user)"
-        >
-                    <div v-if="user.user[0].image != 'NULL' " >
-                        <b-card-img v-bind:src="user.user[0].image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+   <div  align="center" >
+     <div class="preflist" align="center">
+        <h4 class="headerpref" align="center">   
+قائمة التفضيلات الخاصة بك   </h4>
+       <v-card outlined shaped style="max-width: 20rem; max-height: 60rem;" class="cardd" v-for="(user, index) in users" :key="index">
+            <v-list-item three-line align="center">
+                <v-list-item-content align="center">
+                    <v-row align="center">                      
+                           <div v-if="user.user[0].image != NULL " >
+                              <v-img v-bind:src="user.user[0].image" align="center" style="max-width: 20rem; max-height: 60rem;"  alt="User's image" >
+                              </v-img>
+                            </div>  
+                            <div v-if="user.user[0].image != '' "  >
+                                <v-img src="user.user[0].image" align="center" style="max-width: 20rem; max-height: 60rem;" alt="User's image" >
+                                </v-img>
+                           </div> 
+                            <div v-if="user.user[0].image == '' "  >
+                                <v-img src="../assets/UserDefaultAvatar.png" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
+                                </v-img>
+                           </div> 
+                           <div v-if="user.user[0].image == NULL "  >
+                                <img v-bind:src="img" class="lazy" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
+                                
+                           </div>    
+                    </v-row  >
+                    <div class="ms-auto">
+                       {{ user.user[0].name}} : الاسم
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'Female' " >
-                        <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
+                    <div>
+                      {{ user.user[0].age}} : العمر
                     </div>
-                    <div v-else-if="user.user[0].gender ==  'female' " >
-                        <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
-                    </div>
-                    <div v-else-if="user.user[0].gender ==  'Male' " >
-                        <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
-                    </div>
-                    <div v-else-if="user.user[0].gender ==  'male' " >
-                        <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                        </b-card-img>
-                    </div>
-                
-        
-            <b-card-text>                 
-                 {{ user.user[0].name}} : الاسم
-            </b-card-text>
-            <b-card-text>
-               {{ user.user[0].age}} : العمر
-            </b-card-text>
-                <b-button href="#" variant="primary" class="btns-prf" @click="gotouserinfo(user)">المزيد</b-button>
-        </b-card>
-        </div>
-    </div>
+                 </v-list-item-content>
+            </v-list-item>
+                <v-card-actions>
+                  <v-row align="center" justify="center">
+                    <v-col>
+                        <b-button variant="primary" small
+                        style="width: 200px" rounded class="btns-prf" @click="gotouserinfo(user)">المزيد</b-button>
+                    </v-col>
+                  </v-row>
+                </v-card-actions>
+    </v-card>
+   </div>
+</div>
 </template>
 
 
 <script>
 import axios from "axios";
+import img from "../assets/UserDefaultAvatar.png";
 export default{
        props:{
         
@@ -55,13 +57,14 @@ export default{
             return{
                 users:  [
                     
-                ]  
+                ],
+                img:img,  
             }
       },
-    
-      
+
+
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc1OTYyNiwiZXhwIjoxNjMxNzYzMjI2LCJuYmYiOjE2MzE3NTk2MjYsImp0aSI6InZEaGdwMDd6czNoN1huSVoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.M_BBx6KHB5kg61xomLEQ1xeDr3qQta8tox2rBzc3yAk");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwMDc5NSwiZXhwIjoxNjMyMDA0Mzk1LCJuYmYiOjE2MzIwMDA3OTUsImp0aSI6IkxESjVQaEUyMTB5YVFsdGUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fYvVLvx35XhN08WdHmyWmzYy-ZqNy9MqEWRGKyMO5TY");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -84,6 +87,7 @@ export default{
         },
         gotouserinfo(user){
           console.log(user.id);
+          console.log("hiiiiiiii");
           this.$router
           .push({
                     name: 'Userinfo',
@@ -108,6 +112,7 @@ export default{
      width:30%;
     padding-radius:9px;
         border-radius:15px;
+        height:400px;
 }
 .cardd:hover{
        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
@@ -175,5 +180,8 @@ font-size:12px;
 .headerpref{
     margin-top:6px;
     margin-bottom:5px;
+}
+.preflist{
+  margin-top:42px;
 }
 </style>

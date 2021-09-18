@@ -1,45 +1,47 @@
 <template>
    <div class="search">
     <Navbar/>
-      <div id="searchlist">
+    <Sidebar/>
+      <div class="searchlist" align="center">
         <h4 class="headerpref"> {{this.msgtoshow}} </h4>
-        <b-card
-        tag="article"
-        style="max-width: 20rem;"  
-        class="cardd" 
-        v-for="(user, index) in this.userstoshow" 
-           :key="index" 
-        >
-
-                <div v-if="user.image != 'NULL' " >
-                    <b-card-img v-bind:src="user.image" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                    </b-card-img>
-                </div>
-                <div v-else-if="user.gender ==  'Female' " >
-                    <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                    </b-card-img>
-                </div>
-                <div v-else-if="user.gender ==  'female' " >
-                    <b-card-img src="female-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                    </b-card-img>
-                </div>
-                <div v-else-if="user.gender ==  'Male' " >
-                    <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                    </b-card-img>
-                </div>
-                <div v-else-if="user.gender ==  'male' " >
-                    <b-card-img src="male-user.jpg" style="max-width: 20rem; max-height: 60rem;" height="280px"  alt="User's image" >
-                    </b-card-img>
-                </div>
-        
-            <b-card-text>                 
-                 {{ user.name}} : الاسم
-            </b-card-text>
-            <b-card-text>
-               {{ user.age}} : العمر
-            </b-card-text>
-                <b-button href="#" variant="primary" class="btns-prf" @click="gotouserinfo(user,index)" >المزيد</b-button>
-        </b-card>  
+ <v-card outlined shaped style="max-width: 20rem;" class="cardd" v-for="(user, index) in userstoshow" :key="index">
+            <v-list-item three-line align="center">
+                <v-list-item-content align="center">
+                    <v-row align="center">                      
+                           <div v-if="user.image != NULL " >
+                              <v-img v-bind:src="user.image" align="center" style="max-width: 20rem; max-height: 60rem;"  alt="User's image" >
+                              </v-img>
+                            </div>  
+                            <div v-if="user.image != '' "  >
+                                <v-img src="user.image" align="center" style="max-width: 20rem; max-height: 60rem;" alt="User's image" >
+                                </v-img>
+                           </div> 
+                            <div v-if="user.image == '' "  >
+                                <v-img src="../assets/UserDefaultAvatar.png" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
+                                </v-img>
+                           </div> 
+                           <div v-if="user.image == NULL "  >
+                                <img v-bind:src="img" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
+                                
+                           </div>    
+                    </v-row  >
+                    <div class="ms-auto">
+                       {{ user.name}} : الاسم
+                    </div>
+                    <div>
+                      {{ user.age}} : العمر
+                    </div>
+                 </v-list-item-content>
+            </v-list-item>
+                <v-card-actions>
+                  <v-row align="center" justify="center">
+                    <v-col>
+                        <b-button variant="primary" small
+                        style="width: 200px" rounded class="btns-prf" @click="gotouserinfo(user,index)">المزيد</b-button>
+                    </v-col>
+                  </v-row>
+                </v-card-actions>
+    </v-card> 
     </div> 
   </div>
 </template>
@@ -47,16 +49,20 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import Sidebar from '@/components/Sidebar.vue'
+import img from "../assets/UserDefaultAvatar.png";
  export default {
     name: "SearchResult",
     components: {
     Navbar,
+    Sidebar,
    },
    props: { users:[] , msg:null },
    data() {
     return {   
                 userstoshow:JSON.parse(this.users),
-                msgtoshow:this.msg
+                msgtoshow:this.msg,
+                img:img,
         }
     },
 
@@ -94,6 +100,7 @@ import Navbar from '@/components/Navbar.vue'
      width:30%;
     padding-radius:9px;
         border-radius:15px;
+        height:400px;
 }
 .cardd:hover{
        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
@@ -158,8 +165,8 @@ font-size:12px;
   cursor:pointer;
 font-size:12px;
 }
-.headerpref{
-    margin-top:6px;
-    margin-bottom:5px;
+
+.searchlist{
+  margin-top:42px;
 }
 </style>
