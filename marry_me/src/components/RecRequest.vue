@@ -19,12 +19,12 @@
               <template>
                 <v-btn
                     class="ml-3"
-                    @click="accept(id,sender_id)"
+                    @click="decision(id,sender_id,1)"
                     depressed color="primary">
                   قبول
                 </v-btn>
                 <v-btn
-                    @click="reject(id,sender_id)"
+                    @click="decision(id,sender_id,2)"
                     style="background-color: #FE6265" depressed color="error">
                   رفض
                 </v-btn>
@@ -44,39 +44,34 @@ export default {
       dialog: false,
     }
   },
-  name: "RecRequests",
-  props: ["name", "age", "id", "img","sender_id","status"],
-  methods: {
-    accept(id,s) {
-      console.log(id,s)
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMTcyNjgzMiwiZXhwIjoxNjMxNzMwNDMyLCJuYmYiOjE2MzE3MjY4MzIsImp0aSI6IjBrdEdySUxLUXdCdWZqdTAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pnOp4pH2Go7nlfkK8mc44Vug0lbs3QtYrYjY20oemO8");
-      axios({
-        method: 'post',
-        url: "http://127.0.0.1:8000/api/decision",
-        headers: {Authorization: AuthStr},
-        data: {
-          sender: s, // This is the body part
-          replay:1
-        }
-      });
-      this.dialog = false;
-      document.getElementById(id).style.display = 'none';
-    },
-    reject(id,s) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTY4MDQzMywiZXhwIjoxNjMxNjg0MDMzLCJuYmYiOjE2MzE2ODA0MzMsImp0aSI6Ik5WOW1JNkpGakFXVUFYSGMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.VS94Vgio9bOPMJziB8uxMUfqtHbp5X5AJsYIwPDWeeo");
-      axios({
-        method: 'post',
-        url: "http://127.0.0.1:8000/api/decision",
-        headers: {Authorization: AuthStr},
-        data: {
-          sender: s, // This is the body part
-          replay:2
-        }
-      });
-      this.dialog = false;
-      document.getElementById(id).style.display = 'none';
-    }
 
+  name: "RecRequests",
+  props:{
+    name:String,
+    age:Number,
+    id:Number,
+    img:String,
+    count:Function,
+    sender_id:Number,
+    status:Number,
+  },
+  methods: {
+    decision(id, s, rep) {
+      console.log(id,s)
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5MzI2NSwiZXhwIjoxNjMyMDIyMDY1LCJuYmYiOjE2MzE5OTMyNjUsImp0aSI6InhHekRKRlN0M3lMVU5OU0siLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.RMnYYLEKKVFQCV9gBWnJMEkOFlJcfzXA6BJPXlJgUHk");
+      axios({
+        method: 'post',
+        url: "http://127.0.0.1:8000/api/decision",
+        headers: {Authorization: AuthStr},
+        data: {
+          sender: s, // This is the body part
+          replay:rep
+        }
+      });
+      this.dialog = false;
+      document.getElementById(id).style.display = 'none';
+      this.count();
+    }
   }
 }
 </script>

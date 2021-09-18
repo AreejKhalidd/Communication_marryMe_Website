@@ -87,10 +87,8 @@ export default {
           this.error = true;
           this.followers = response.data
         })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            this.error = true;
-          }
+        .catch(() => {
+          this.error = true;
         });
   },
   watch: {

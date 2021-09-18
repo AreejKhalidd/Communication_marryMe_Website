@@ -72,10 +72,16 @@ export default {
     }
   },
   name: "RequestList",
-  props: ["name", "age", "id", "img"],
+  props:{
+    name:String,
+    age:Number,
+    id:Number,
+    img:String,
+    count:Function
+  },
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMTcyNjgzMiwiZXhwIjoxNjMxNzMwNDMyLCJuYmYiOjE2MzE3MjY4MzIsImp0aSI6IjBrdEdySUxLUXdCdWZqdTAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pnOp4pH2Go7nlfkK8mc44Vug0lbs3QtYrYjY20oemO8");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5MzI2NSwiZXhwIjoxNjMyMDIyMDY1LCJuYmYiOjE2MzE5OTMyNjUsImp0aSI6InhHekRKRlN0M3lMVU5OU0siLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.RMnYYLEKKVFQCV9gBWnJMEkOFlJcfzXA6BJPXlJgUHk");
       axios({
         method: 'delete',
         url: "http://127.0.0.1:8000/api/deleteRequest",
@@ -85,7 +91,8 @@ export default {
         }
       });
       this.dialog = false;
-      document.getElementById(id).style.display='none';
+      document.getElementById(id).style.display = 'none';
+      this.count();
     }
   }
 }

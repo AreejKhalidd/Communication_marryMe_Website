@@ -87,10 +87,8 @@ export default {
           this.error = true;
           this.blocks = response.data;
         })
-        .catch((error) => {
-          if (error.response.status === 403) {
+        .catch(() => {
             this.error = true;
-          }
         });
   },
   watch: {
