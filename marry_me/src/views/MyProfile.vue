@@ -162,8 +162,9 @@
           <div>
             <br><br/>
             <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
-              تحديث البروفايل
+              تحديث الحساب
             </v-btn>
+            <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
@@ -218,7 +219,7 @@ export default {
         id:'',
         answer:''
       },
-      newAnswer:'',
+      updataBoolean:false,
        radioGroup: '',
       rules: {
         required: (value) => !!value || "Required.",
@@ -247,7 +248,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -265,7 +266,7 @@ export default {
         });
     },
     getUserQA() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/show-user",
@@ -352,17 +353,18 @@ export default {
        });
     },
     saveChanges() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
        headers: {Authorization: token},
        data: {
          phone :this.PhoneNumber,
-         image :this.url,
+         image :this.file,
          }
        }).then(response => {
        console.log(response.data.message);
+       this.updataBoolean = true;
        })
        .catch((error) => {
        console.log('There is error:'+error);
