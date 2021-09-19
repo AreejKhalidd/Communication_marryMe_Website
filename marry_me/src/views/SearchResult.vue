@@ -1,5 +1,6 @@
 <template>
-   <div class="search">
+ <div class="page">
+   <div class="bars">
     <Navbar/>
     <Sidebar/>
       <div class="searchlist" align="center">
@@ -44,6 +45,7 @@
     </v-card> 
     </div> 
   </div>
+ </div>
 </template>
 
 
@@ -94,7 +96,7 @@ import img from "../assets/UserDefaultAvatar.png";
     margin-left:5px;
     margin-top:5px;
     margin-bottom:5px;
-    background-color: white;
+     background-color: rgb(211,211,211);
     bg-variant:dark;
      text-variant:grey;
      width:30%;
@@ -165,8 +167,15 @@ font-size:12px;
   cursor:pointer;
 font-size:12px;
 }
-
+  .bars{
+  text-align:center;
+   background-color:white;
+}
 .searchlist{
   margin-top:42px;
+  background-color:white;
+}
+.page{
+  background-color:white;
 }
 </style>

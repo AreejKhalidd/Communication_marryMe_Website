@@ -1,5 +1,5 @@
 <template>
-  <div id="homepage">
+  <div class="homepage">
     <Navbar/>
     <Sidebar/>
     <SlidingCards/>
@@ -26,4 +26,7 @@ import SlidingCards from '@/components/SlidingCards.vue'
 </script>
 
 <style scoped>
+.homepage{
+  background-color:white;
+}
 </style>

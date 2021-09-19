@@ -1,6 +1,6 @@
 <template>
-<div id="app" >
-    <b-navbar type="light" varient="light" class="bar">
+<div class="nb" >
+    <b-navbar class="bar">
       <span></span>
 
           <b-navbar-nav class="mr-auto ml-5 me-3"> 
@@ -16,14 +16,17 @@
               <input type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
             <b-nav-item href="/chat">المحادثات</b-nav-item>
             <b-nav-item href="/my_profile">الصفحة الشخصية</b-nav-item>
-            <b-nav-item href="/homepage">الصفحة الرئيسية</b-nav-item>    
+            <b-nav-item href="/homepage">الصفحة الرئيسية</b-nav-item> 
+            
             </b-navbar-nav>
       </b-collapse>
-               
-      <b-navbar-nav>
-        <b-navbar-brand  href="#" disabled><b-img  src="marry_me.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      </b-navbar-nav>
+        
+         
+    <b-navbar-brand >
+      <button v-b-toggle.sidebar-right size="sm" title="فتح الشريط الجانبي" >
+        <font-awesome-icon title="فتح الشريط الجانبي" rounded="circle" style="color: #FE6265;font-size: 30px;" :icon="list" class="icon"/>
+      </button>
+     </b-navbar-brand>
 
     </b-navbar>
 
@@ -35,7 +38,7 @@
 
 <script>
 import axios from "axios";
-
+import {faFolder,faList} from '@fortawesome/free-solid-svg-icons'
 export default{
    data() {
     return {
@@ -47,6 +50,14 @@ export default{
       msg:"",
     }
   },
+   computed: {
+    folder() {
+      return faFolder
+     },
+     list() {
+      return faList
+     },
+    },
   methods:{
          watch: {
             '$route.query.q'() {
@@ -87,7 +98,7 @@ export default{
             else{
               this.msg="الناتج عن بحثك"
             }
-              const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwMDc5NSwiZXhwIjoxNjMyMDA0Mzk1LCJuYmYiOjE2MzIwMDA3OTUsImp0aSI6IkxESjVQaEUyMTB5YVFsdGUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fYvVLvx35XhN08WdHmyWmzYy-ZqNy9MqEWRGKyMO5TY");
+              const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwNjEyNSwiZXhwIjoxNjMyMDA5NzI1LCJuYmYiOjE2MzIwMDYxMjUsImp0aSI6IllBZkR4OFk2MjBzcGtMQnciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.0Aok8zuObQqSdtZgALjnJgnnl5-QqCR1xy_iWnZfzs4");
               axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/filter",
@@ -189,6 +200,18 @@ export default{
   color:grey;
   border-radius: 12px;
 }
+.btn-ss{
+  background-color: white;
+  color:black;
+  border-radius: 12px;
+  margin-bottom:4px;
+  margin-top:5px;
+  margin-right:20px;
+  margin-left:20px;
+  width:20px;
+  height:20px;
+  variant:outline-secondary;
+}
 span:not(:last-child) {
     margin-right: 5px;
 }
@@ -222,6 +245,9 @@ span:not(:last-child) {
           color: rgba(0,0,0,.50);
           font-weight: 100;
       }
+    }
+    .nb{
+      background-color: white;
     }
   }
 

@@ -64,7 +64,7 @@ export default{
 
 
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwMDc5NSwiZXhwIjoxNjMyMDA0Mzk1LCJuYmYiOjE2MzIwMDA3OTUsImp0aSI6IkxESjVQaEUyMTB5YVFsdGUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fYvVLvx35XhN08WdHmyWmzYy-ZqNy9MqEWRGKyMO5TY");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwNjEyNSwiZXhwIjoxNjMyMDA5NzI1LCJuYmYiOjE2MzIwMDYxMjUsImp0aSI6IllBZkR4OFk2MjBzcGtMQnciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.0Aok8zuObQqSdtZgALjnJgnnl5-QqCR1xy_iWnZfzs4");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -106,7 +106,7 @@ export default{
     margin-left:5px;
     margin-top:5px;
     margin-bottom:5px;
-    background-color: white;
+    background-color: rgb(211,211,211);
     bg-variant:dark;
      text-variant:grey;
      width:30%;
@@ -183,5 +183,6 @@ font-size:12px;
 }
 .preflist{
   margin-top:42px;
+  background-color:white;
 }
 </style>

@@ -1,8 +1,9 @@
 <template>
-  <div id="lg">
+ <div class="page">
+  <div class="bars" align="center">
         <Navbar/>
         <Sidebar/>
-     <div class="usercard" align="center">      
+     <div class="usercard"  >      
          <v-card outlined shaped style="max-width: 50rem; max-height: 150rem;" class="cardd">
               <h5 class="headerpref">    مستخدم عن طريق بحثك </h5>
             <v-list-item three-line align="center">
@@ -60,6 +61,7 @@
          </v-card>
       </div>
   </div>
+ </div>
 </template>
 
 <script>
@@ -213,7 +215,7 @@ export default {
     margin-left:400px;
     margin-top:7px;
     margin-bottom:5px;
-    background-color: white;
+    background-color: rgb(211,211,211);
     bg-variant:dark;
      text-variant:grey;
       width:40%;
@@ -266,7 +268,7 @@ font-size:12px;
 }
 .btns-logo{
 margin-right:4px;
-background-color: white;
+background-color: rgb(211,211,211);
 variant:outline-secondary;
 color:black;
 border-radius: 40%;
@@ -278,7 +280,7 @@ width: 60px;
 box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   -webkit-transform: scale(1.05);
   transform: scale(1.05);
-  background-color:white;
+  background-color:rgb(211,211,211);
   color:grey;
   border-radius: 40%;
   variant:outline-secondary;
@@ -292,5 +294,12 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
 .usercard{
   margin-top:42px;
   text-align:center;
+}
+.bars{
+  
+  background-color:white;
+}
+.page{
+  background-color:white;
 }
 </style>
