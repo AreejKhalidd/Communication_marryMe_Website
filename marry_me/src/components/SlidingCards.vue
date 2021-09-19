@@ -22,7 +22,7 @@
                 text=" يمكنه بدء المحادثة فورا مع الطرف الاخر بدون ارسال طلب VIPمستخدم  "
                 color="black"
                 :img-src="chat"
-                style="max-width: 1024px; max-height: 300px; font-color:black; color:black;"
+                style="max-width: 1024px; max-height: 300px;background: rgba(255,98,101,1); font-color:black; color:black;border-radius: 3px 3px 3px 3px;box-shadow: 0px 6px 0px white; border: solid 3px rgba(255,98,101,1);"
                 
                 ></b-carousel-slide>
 
@@ -32,7 +32,7 @@
                 text=" يمكنه ان يخفي بعد البيانات الخاصة به VIPمستخدم  "
                 color="black"
                 :img-src="hide"
-                style="max-width: 1024px; max-height: 300px; text-color:black; color:black;"
+                style="max-width: 1024px; max-height: 300px;background: rgba(255,98,101,1); font-color:black; color:black;border-radius: 3px 3px 3px 3px;box-shadow: 0px 6px 0px white; border: solid 3px rgba(255,98,101,1);"
                 ></b-carousel-slide>
                  <b-carousel-slide
                 align="center"
@@ -40,7 +40,7 @@
                 text=" يمكنه ان يري من قام بالاعجاب به VIPمستخدم  "
                 color="black"
                 :img-src="like"
-                style="max-width: 1024px; max-height: 300px; text-color:black; color:black;"
+                style="max-width: 1024px; max-height: 300px;background: rgba(255,98,101,1); font-color:black; color:black;border-radius: 3px 3px 3px 3px;box-shadow: 0px 6px 0px white; border: solid 3px rgba(255,98,101,1);"
                 ></b-carousel-slide>
 
     </b-carousel>
@@ -49,9 +49,9 @@
 
 
 <script>
-import chat from "../assets/chat.jpg";
-import hide from "../assets/hide.png";
-import like from "../assets/likee.png";
+import chat from "../assets/chat.png";
+import hide from "../assets/hide.jpg";
+import like from "../assets/likee.jpg";
   export default {
     data() {
       return {
@@ -86,6 +86,7 @@ import like from "../assets/likee.png";
     border:15px;
     border-radius:15px;
     color:black;
+   
 }
 </style>
 <style lang="sass">
