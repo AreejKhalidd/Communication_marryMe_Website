@@ -80,11 +80,11 @@ export default {
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1NjIxMCwiZXhwIjoxNjMyMTAzMDEwLCJuYmYiOjE2MzIwNTYyMTAsImp0aSI6IkRoNDJwUk5McVM4b3Y5anoiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QrsKt8UGJWQT2bx2tWBT1VxU6obV2SdaYhpMcVC3kSk");
     axios.get("http://127.0.0.1:8000/api/showAllLiked", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
-          this.error = true;
+          this.error = false;
           this.followers = response.data
         })
         .catch(() => {
