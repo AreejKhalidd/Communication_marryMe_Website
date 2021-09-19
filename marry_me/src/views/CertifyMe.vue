@@ -13,7 +13,7 @@
             <h5 class="text-center">...قم برفع صور تتضمن معلومات تريد تصديقها</h5>
             <br>
                     <v-file-input 
-                    v-model="files"
+                    v-model="file"
                     ref="myfile"
                     accept="image/*"
                     prepend-icon="mdi-camera-plus"
@@ -25,7 +25,7 @@
           <br />
           <v-row>
           <v-spacer></v-spacer>
-          <v-btn @click="submitFiles" rounded outlined color="#FF6265">
+          <v-btn @click="Validate" rounded outlined color="#FF6265">
             قم بارسال طلب لتصديق حسابي
           </v-btn>
           <br><br/>
@@ -44,7 +44,6 @@
 import axios from 'axios';
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import FormData from 'form-data';
 export default {
     components: {
     Navbar,
@@ -60,7 +59,7 @@ export default {
   },
   methods: {
       certifyme(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/certified",
@@ -79,7 +78,7 @@ export default {
 
       },
       submitFiles() {
-         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
           if (this.files) {
               let formData = new FormData();
               for (let file of this.files) {
@@ -105,7 +104,20 @@ export default {
           } else {
               console.log("there are no files.");
           }
+      },
+       Validate() {
+      if (this.$refs.form) {
+        const fd = new FormData();
+        fd.append('image', this.file);
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        axios.post('http://127.0.0.1:8000/api/certified', fd, option)
+          .then((response) => {
+            console.log(response.data.message);
+          })
+          .catch(() => {
+          });
       }
+    },
       
   },
 };

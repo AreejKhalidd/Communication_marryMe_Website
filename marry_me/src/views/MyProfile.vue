@@ -97,10 +97,11 @@
           <v-divider id="Grey" dark></v-divider>
           <br />
           <v-row>
-          <h3 id="Black">
+            <v-divider class="test" dark></v-divider>
+          <h3 id="Black" >
             الاسئله  
           </h3>
-          <v-card width="700" class="mx-auto ">
+          <v-card width="700" class="mx-auto " hover="true">
             <v-list two-line>
               <template v-for="i in Info.length">
                 <v-divider :key="i" ></v-divider>
@@ -121,13 +122,13 @@
                         اخفاء السؤال 
                       </v-btn>
                       
-                      <v-btn @click="showAnswers=true; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                      <v-btn @click="showAnswers=true; currentID = Info[i-1][0][0].id; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
                         <v-icon left>
                           mdi-pencil
                         </v-icon>
                         تعديل الاجابه 
                       </v-btn>
-                      <div v-if="showAnswers">
+                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">
                         قم ياختيار اجابه اخري
                         <v-list>
                             <template v-for="answer in Answers">
@@ -220,24 +221,24 @@ export default {
         answer:''
       },
       updataBoolean:false,
-       radioGroup: '',
+      radioGroup: '',
+      currentID:'',
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => this.IsaNumber(value) || "Not a Valid Number",
       },
-     
     };
   },
   methods: {
-    
     previewImage() {
       this.url = URL.createObjectURL(this.file);
+      this.useravatar();
     },
     RemoveAvatar() {
-      this.file = SignupAvatar;
+      this.avatarurl = '';
+      this.file='';
       this.url=SignupAvatar;
     },
-    
     IsaNumber(value) {
       const phoneno = /^\d{11}$/;
       if (value.match(phoneno)) {
@@ -248,7 +249,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -266,7 +267,7 @@ export default {
         });
     },
     getUserQA() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/show-user",
@@ -283,7 +284,7 @@ export default {
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -292,7 +293,7 @@ export default {
 
     },
     HideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/hide",
@@ -307,7 +308,7 @@ export default {
        this.getUserQA();
     },
     UnHideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/unhide",
@@ -322,7 +323,7 @@ export default {
        this.getUserQA();
     },
     getAllAnswers(id) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/get-question-answers",
@@ -336,7 +337,7 @@ export default {
        });
     },
     ChangeAnswer(quesID) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
@@ -354,25 +355,21 @@ export default {
        });
     },
     saveChanges() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
-       axios({
-       method: 'post',
-       url: "http://127.0.0.1:8000/api/EditInfo",
-       headers: {Authorization: token},
-       data: {
-         phone :this.PhoneNumber,
-         image :this.file,
-         }
-       }).then(response => {
-       console.log(response.data.message);
-       this.updataBoolean = true;
-       })
-       .catch((error) => {
-       console.log('There is error:'+error);
-       });
+      if (this.$refs.form.validate()) {
+        const fd = new FormData();
+        fd.append('image', this.file);
+        fd.append('phone', this.PhoneNumber);
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        axios.post('http://127.0.0.1:8000/api/EditInfo', fd, option)
+          .then((response) => {
+            console.log(response.data.message);
+          })
+          .catch(() => {
+          });
+      }
     },
   },
-  mounted() {
+  created() {
     this.getUserInfo();
   },
   computed: {
@@ -409,11 +406,15 @@ export default {
   align-items: center;
 }
 
-
 .preview {
   background-color: #ffffff;
   max-width: 100%;
   max-height: 100%;
 }
 
+.test {
+       border-width: 10px ;
+       border-color: #ff6265;
+       height: 100%;
+}
 </style>
