@@ -4,7 +4,7 @@
     <Navbar/>
     <Sidebar/>
       <div class="searchlist" align="center">
-        <h4 class="headerpref"> {{this.msgtoshow}} </h4>
+        <h4 class="headerpref" style="color: rgba(255,98,101,1);"> {{this.msgtoshow}} </h4>
  <v-card outlined shaped style="max-width: 20rem;" class="cardd" v-for="(user, index) in userstoshow" :key="index">
             <v-list-item three-line align="center">
                 <v-list-item-content align="center">
@@ -172,7 +172,7 @@ font-size:12px;
    background-color:white;
 }
 .searchlist{
-  margin-top:42px;
+  margin-top:8px;
   background-color:white;
 }
 .page{

@@ -2,7 +2,7 @@
   <div text-variant="dark" class="sb" > 
          
             <div class="sidee">
-                <b-sidebar id="sidebar-right" title="الاختيارات" right shadow>
+                <b-sidebar id="sidebar-right" style="color: rgba(255,98,101,1);" title="الاختيارات" right shadow>
                     <div class="px-6 py-2">
                             <nav class="mb-5">
                             <b-nav vertical type="dark" variant="light" text-variant="dark">

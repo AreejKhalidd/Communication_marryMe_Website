@@ -5,7 +5,7 @@
         <Sidebar/>
      <div class="usercard"  >      
          <v-card outlined shaped style="max-width: 50rem; max-height: 150rem;" class="cardd">
-              <h5 class="headerpref">    مستخدم عن طريق بحثك </h5>
+              <h5 class="headerpref" style="color: rgba(255,98,101,1);">    مستخدم عن طريق بحثك </h5>
             <v-list-item three-line align="center">
                 <v-list-item-content align="center">
                      <v-row align="center">                      
@@ -292,7 +292,7 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   margin-bottom:3px;
 }
 .usercard{
-  margin-top:42px;
+  margin-top:8px;
   text-align:center;
 }
 .bars{
