@@ -248,7 +248,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -266,7 +266,7 @@ export default {
         });
     },
     getUserQA() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/show-user",
@@ -283,7 +283,7 @@ export default {
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -292,7 +292,7 @@ export default {
 
     },
     HideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/hide",
@@ -307,7 +307,7 @@ export default {
        this.getUserQA();
     },
     UnHideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/unhide",
@@ -322,7 +322,7 @@ export default {
        this.getUserQA();
     },
     getAllAnswers(id) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/get-question-answers",
@@ -336,7 +336,7 @@ export default {
        });
     },
     ChangeAnswer(quesID) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
@@ -347,13 +347,14 @@ export default {
          }
        }).then(response => {
        console.log(response.data.message);
+       this.getUserQA();
        })
        .catch((error) => {
        console.log('There is error:'+error);
        });
     },
     saveChanges() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA0MzEzOCwiZXhwIjoxNjMyMDcxOTM4LCJuYmYiOjE2MzIwNDMxMzgsImp0aSI6Ik96MVBQcURBNzcwbHJ5ZXUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.i0OH6EN_FwF2zBe447dX-Cwgq4xsHz0a__ASycmyiTg");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
