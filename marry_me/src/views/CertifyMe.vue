@@ -52,7 +52,7 @@ export default {
    },
   data() {
    return {
-        file:[],
+        file:'',
         files:null,
        certifyMsg:'',
        boolean: false
@@ -60,12 +60,12 @@ export default {
   },
   methods: {
       certifyme(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/certified",
                 headers: {Authorization: token},
-                data: {imagee :this.file}
+                data: {image :this.file}
                 }).then(response => {
                 this.certifyMsg=response.data.message;
                 this.boolean=!this.boolean;
@@ -79,7 +79,7 @@ export default {
 
       },
       submitFiles() {
-         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1MTg4NCwiZXhwIjoxNjMyMDgwNjg0LCJuYmYiOjE2MzIwNTE4ODQsImp0aSI6ImVnRUxDMDVmRUZ3WmN6MmciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-ueOvctSNcONf6P0CDnNcxzGKEdQQZQTCmzbiTt07EE");
           if (this.files) {
               let formData = new FormData();
               for (let file of this.files) {
