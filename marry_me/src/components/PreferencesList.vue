@@ -1,54 +1,54 @@
 <template>
-   <div  align="center" >
-     <div class="preflist" align="center">
-        <h4 class="headerpref" align="center" style="color: rgba(255,98,101,1);">   
-قائمة التفضيلات الخاصة بك   </h4>
-       <v-card outlined shaped style="max-width: 20rem; max-height: 60rem;" class="cardd" v-for="(user, index) in users" :key="index">
-            <v-list-item three-line align="center">
-                <v-list-item-content align="center">
-                    <v-row align="center">                      
-                           <div v-if="user.user[0].image != NULL " >
-                              <v-img v-bind:src="user.user[0].image" align="center" style="max-width: 20rem; max-height: 60rem;"  alt="User's image" >
-                              </v-img>
-                            </div>  
-                            <div v-if="user.user[0].image != '' "  >
-                                <v-img src="user.user[0].image" align="center" style="max-width: 20rem; max-height: 60rem;" alt="User's image" >
-                                </v-img>
-                           </div> 
-                            <div v-if="user.user[0].image == '' "  >
-                                <v-img src="../assets/UserDefaultAvatar.png" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
-                                </v-img>
-                           </div> 
-                           <div v-if="user.user[0].image == NULL "  >
-                                <img v-bind:src="img" class="lazy" align="center" style="max-width: 20rem; max-height: 60rem;"   alt="User's image" >
-                                
-                           </div>    
-                    </v-row  >
-                    <div class="ms-auto">
-                       {{ user.user[0].name}} : الاسم
-                    </div>
-                    <div>
-                      {{ user.user[0].age}} : العمر
-                    </div>
-                 </v-list-item-content>
-            </v-list-item>
-                <v-card-actions>
-                  <v-row align="center" justify="center">
-                    <v-col>
-                        <b-button variant="primary" small
-                        style="width: 200px" rounded class="btns-prf" @click="gotouserinfo(user)">المزيد</b-button>
-                    </v-col>
-                  </v-row>
-                </v-card-actions>
-    </v-card>
-   </div>
-</div>
+  <div  align="center" >
+         <h4 class="hp" align="center" style="color: rgba(255,98,101,1);">   
+                                       قائمة التفضيلات الخاصة بك   </h4>
+        <v-card
+          :loading="loading"         
+          max-width="300"
+          v-for="(user, index) in users" :key="index"
+          class="card"
+        >
+          <template slot="progress">
+            <v-progress-linear
+              color="deep-purple"
+              height="10"
+              indeterminate
+            ></v-progress-linear>
+          </template>
+
+          <v-img
+            v-if="user.user[0].image != NULL "
+            height="250"
+            v-bind:src="user.user[0].image"
+          ></v-img>
+
+          <v-img
+            v-if="user.user[0].image == NULL "
+            height="250"
+            v-bind:src="img"
+          ></v-img>
+
+            <div>{{ user.user[0].name}} : الاسم</div>
+            <div>{{ user.user[0].age}} : العمر</div>
+
+          <v-divider class="mx-4"></v-divider>
+                 
+          <v-card-actions>
+                      <v-btn  :icon="fav"  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="fav"/></v-btn>
+                      <v-btn :icon="startChat"  v-if="VIP === 1" rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
+                      <v-btn  :icon="startChat" v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
+                      <v-btn  :icon="block" rounded="circle"  class="btns-logo" title="حظر" @click="addtoblocks(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="block"/></v-btn>
+                      <v-btn color="deep-purple lighten-2" class="btn" text @click="gotouserinfo(user)"> المزيد </v-btn>
+          </v-card-actions>
+        </v-card>
+  </div>
 </template>
 
 
 <script>
 import axios from "axios";
 import img from "../assets/UserDefaultAvatar.png";
+import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
 export default{
        props:{
         
@@ -58,13 +58,27 @@ export default{
                 users:  [
                     
                 ],
+                VIP: "",
                 img:img,  
+                      loading: false,
+                     selection: 1,
             }
       },
-
+            computed: {
+    fav() {
+      return faHeart
+    },
+    startChat(){
+      return faComment
+    },
+    block(){
+      return faBan
+    },
+    
+    },
 
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAyNzk4MiwiZXhwIjoxNjMyMDMxNTgyLCJuYmYiOjE2MzIwMjc5ODIsImp0aSI6ImRlZjBNeGJmRktJeUdHNHEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XeOzByPLFX7xxLF9ABLPaTqAMSttrp0fE06AaWSG6hs");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA4MTAzNiwiZXhwIjoxNjMyMDg0NjM2LCJuYmYiOjE2MzIwODEwMzYsImp0aSI6Imt0YVVHVkVWMHpnR21hekIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.KX700ROmLbo8S-IJT2RRK6VbMoufl9Zi7BwH4_Nr4II");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -77,6 +91,19 @@ export default{
                     console.log('There is error:'+error);
                     return "error occoured"
                 });
+
+          axios({
+            method: 'get',
+            url: "http://127.0.0.1:8000/api/profile",
+            headers: {Authorization: token}
+          }).then(response => {
+          console.log(response.data)
+          this.VIP=response.data.VIP;
+                })
+                        .catch((error) => {
+                        console.log('There is error:'+error);
+                        return "error occoured"
+          });
        } ,
   
     methods:
@@ -93,96 +120,68 @@ export default{
                     name: 'Userinfo',
                     params: { user:user }
                     })
-        }
+        },
+              reserve () {
+        this.loading = true
+
+        setTimeout(() => (this.loading = false), 2000)
+      },
     }
 }
 </script> 
 
 
 <style scoped>
-.cardd{
-    display:inline-block;
+.card{
+  display:inline-block;
+    background-color: white;
+    
+    box-shadow: 0px 6px 0px white;
+    border: solid 2px rgba(255,98,101,1);
+    border-radius:30px;
+
     margin-right:5px;
     margin-left:5px;
-    margin-top:5px;
+    margin-top:3px;
     margin-bottom:5px;
-    background-color: rgb(211,211,211);
-    bg-variant:dark;
-     text-variant:grey;
-     width:30%;
-    padding-radius:9px;
-        border-radius:15px;
-        height:400px;
 }
-.cardd:hover{
-       box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
-  -webkit-transform: scale(1.1);
+.card:hover{
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  -webkit-transform: scale(1.01);
   transform: scale(1.1);
   border-radius:15px;
 }
-.btns-prf{
-width:80px;
-height:30px;
-  background-color: rgba(255,98,101,1);
-  color:black;
-  border-radius: 12px;
-  margin-bottom:4px;
-  margin-top:1px;
-    margin-right:2px;
-    margin-left:1px;
+.btns-logo{
+margin-right:1px;
+background-color: white;
+variant:outline-secondary;
 color:black;
-font-size:12px;
-}
-.btns-prf:hover {
-  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-  background-color:rgba(255,98,101,1);
-  color:grey;
-  border-radius: 12px;
-  variant:outline-secondary;
-  cursor:pointer;
-font-size:12px;
-}
-.btns-pref{
-width:100px;
-height:30px;
-background-color: rgba(255,98,101,1);
-color:black;
-font-size:12px;
-    margin-right:2px;
-    margin-left:1px;
-    margin-top:1px;
-    margin-bottom:1px;
-}
-.btns-pref:hover {
-  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-  background-color:rgba(255,98,101,1);
-  color:grey;
-  border-radius: 12px;
-  variant:outline-secondary;
-  cursor:pointer;
-font-size:12px;
+border-radius: 40%;
+border: 0;
+height: 40px;
+width: 40px;
 }
 .btns-logo:hover{
-      box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   -webkit-transform: scale(1.05);
-  transform: scale(1.05);
-  background-color:rgba(255,98,101,1);
+  transform: scale(1.02);
+  background-color:white;
   color:grey;
-  border-radius: 12px;
+  border-radius: 40%;
   variant:outline-secondary;
   cursor:pointer;
-font-size:12px;
+  font-size:12px;
 }
-.headerpref{
-    margin-top:6px;
-    margin-bottom:5px;
+.btn{
+ margin-left:auto;
+ variant:outline-secondary;
+ color:black;
+  background-color: white;
+  box-shadow: 0px 6px 0px white;
+  border: solid 1px rgba(255,98,101,1);
+  border-radius:30px;
 }
-.preflist{
-  margin-top:7px;
-  background-color:white;
+.hp{
+  margin-top:10px;
 }
 </style>

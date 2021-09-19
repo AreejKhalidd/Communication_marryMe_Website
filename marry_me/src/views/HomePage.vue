@@ -30,7 +30,7 @@ import axios from "axios";
     }
   },
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAyNzk4MiwiZXhwIjoxNjMyMDMxNTgyLCJuYmYiOjE2MzIwMjc5ODIsImp0aSI6ImRlZjBNeGJmRktJeUdHNHEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XeOzByPLFX7xxLF9ABLPaTqAMSttrp0fE06AaWSG6hs");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3MDk3OSwiZXhwIjoxNjMyMDc0NTc5LCJuYmYiOjE2MzIwNzA5NzksImp0aSI6IjBCeW5YQUdJYVFkVU1JQ20iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ffAVGEMcdoUAaP2YmWUTqyY6waAVkDSKy6W1RxglOv4");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
