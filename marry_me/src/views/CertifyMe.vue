@@ -26,9 +26,10 @@
           <v-row>
           <v-spacer></v-spacer>
           <v-btn @click="submitFiles" rounded outlined color="#FF6265">
-            تصديق حسابي
+            قم بارسال طلب لتصديق حسابي
           </v-btn>
-          <h6> {{this.certifyMsg}} </h6>
+          <br><br/>
+          <h6 v-if="boolean"> ...تم ارسال الطلب بنجاح </h6>
           </v-row>
         </v-form>
         <br/>
@@ -43,6 +44,7 @@
 import axios from 'axios';
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import FormData from 'form-data';
 export default {
     components: {
     Navbar,
@@ -53,11 +55,12 @@ export default {
         file:[],
         files:null,
        certifyMsg:'',
+       boolean: false
    }
   },
   methods: {
       certifyme(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTcxNTY4OCwiZXhwIjoxNjMxNzE5Mjg4LCJuYmYiOjE2MzE3MTU2ODgsImp0aSI6IlhFODI3R09sVE00RUpMOFAiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.HhMionzoAqE-kKrGB3pKCw0wN97cP7oxbabGVwSkFlQ");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/certified",
@@ -65,6 +68,7 @@ export default {
                 data: {imagee :this.file}
                 }).then(response => {
                 this.certifyMsg=response.data.message;
+                this.boolean=!this.boolean;
                 console.log(this.file);
                     })
                             .catch((error) => {
@@ -75,17 +79,25 @@ export default {
 
       },
       submitFiles() {
+         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
           if (this.files) {
               let formData = new FormData();
               for (let file of this.files) {
                   formData.append("files", file, file.name);
+                  console.log(file);
               }
-              formData.append("test", "foo bar");
               axios
-                  .post("http://127.0.0.1:8000/api/certified", formData)
+                  .post("http://127.0.0.1:8000/api/certified", formData,{headers: {
+                  'accept': 'application/json',
+                  'Accept-Language': 'en-US,en;q=0.8',
+                  'Content-Type': `multipart/form-data`,
+                  'Authorization': token
+                   }
+                })
                   .then(response => {
                       console.log("Success!");
                       console.log({ response });
+                      console.log(...formData );
                   })
                   .catch(error => {
                       console.log({ error });

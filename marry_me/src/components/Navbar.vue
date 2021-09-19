@@ -1,6 +1,6 @@
 <template>
-<div id="app" >
-    <b-navbar type="light" varient="light" class="bar">
+<div class="nb" >
+    <b-navbar class="bar">
       <span></span>
 
           <b-navbar-nav class="mr-auto ml-5 me-3"> 
@@ -13,17 +13,20 @@
           <b-navbar-nav class="ms-auto">    
              <b-button  size="sm"  class="btns"  variant="outline-secondary"   @click="gotosearch()">البحث   </b-button>
                 <span></span>
-              <input type="text"  v-model="search"  placeholder="   ...البحث بالاسم " size="sm" class="in" />
-            <b-nav-item href="/">المحادثات</b-nav-item>
+              <input type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
+            <b-nav-item href="/chat">المحادثات</b-nav-item>
             <b-nav-item href="/my_profile">الصفحة الشخصية</b-nav-item>
-            <b-nav-item href="/homepage">الصفحة الرئيسية</b-nav-item>    
+            <b-nav-item href="/homepage">الصفحة الرئيسية</b-nav-item> 
+            
             </b-navbar-nav>
       </b-collapse>
-
-      <b-navbar-nav>
-        <b-navbar-brand  href="#" disabled><b-img  src="marry_me.jpeg" height=30px width=30px v-bind="mainProps" rounded="circle" alt="Circle image"></b-img> </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      </b-navbar-nav>
+        
+         
+    <b-navbar-brand >
+      <button v-b-toggle.sidebar-right size="sm" title="فتح الشريط الجانبي" >
+        <font-awesome-icon title="فتح الشريط الجانبي" rounded="circle" style="color: #FE6265;font-size: 30px;" :icon="list" class="icon"/>
+      </button>
+     </b-navbar-brand>
 
     </b-navbar>
 
@@ -35,19 +38,32 @@
 
 <script>
 import axios from "axios";
-
+import {faFolder,faList} from '@fortawesome/free-solid-svg-icons'
 export default{
    data() {
     return {
       VIP: "",
       dosearch:false,
       search:"",
+      q:"",
       users:[],
       msg:"",
     }
   },
- methods:{
-       
+   computed: {
+    folder() {
+      return faFolder
+     },
+     list() {
+      return faList
+     },
+    },
+  methods:{
+         watch: {
+            '$route.query.q'() {
+                this.gotosearch();
+            }
+        },
       logout(){
           const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
           axios({
@@ -57,6 +73,8 @@ export default{
           }).then(response => {
           console.log(response.data)
           alert("You are logged out..");
+                this.$store.state.usertoken = null;
+           localStorage.clear();
           this.$router.push('/');
                 })
                         .catch((error) => {
@@ -65,21 +83,22 @@ export default{
                         //return to login page
                 });
       },
-      gotosearch(){
 
-        if(this.VIP===0)
-        {
+
+      gotosearch()
+      {
+   
                 this.dosearch=true;
             console.log(this.dosearch)
             console.log(this.search);
-            if(this.searchFree==="")
+            if(this.search==="")
             {
-                this.msg="Suggested Users";
+                this.msg="المستخدمين المرجحين لك";
             }
             else{
-              this.msg="Users by your search"
+              this.msg="الناتج عن بحثك"
             }
-              const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc2MzY5OCwiZXhwIjoxNjMxNzY3Mjk4LCJuYmYiOjE2MzE3NjM2OTgsImp0aSI6IncwY1hYZU4xMGNZVXluaWEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.4tb6rLMkNuhRtEGCl9pOLEAhoPcZf0HAXN5mSLb6A0s");
+              const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjAwNjEyNSwiZXhwIjoxNjMyMDA5NzI1LCJuYmYiOjE2MzIwMDYxMjUsImp0aSI6IllBZkR4OFk2MjBzcGtMQnciLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.0Aok8zuObQqSdtZgALjnJgnnl5-QqCR1xy_iWnZfzs4");
               axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/filter",
@@ -93,28 +112,18 @@ export default{
               console.log(response.data)
               console.log(this.users)
                 let id=Math.floor(Math.random() * 10);
-                console.log(id);
-              this.$router.push({name: 'SearchResult',params:{msg:this.msg, users: JSON.stringify(this.users) }});
+                console.log(id); console.log("searchh 3laa");console.log(this.search);
+              this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
                     })
                             .catch((error) => {
                             console.log('There is error:'+error);
                             return "error occoured"
                     });
             }
-            else
-            {
-              console.log('lisa vip users');
-            }
-        
-
       },
-      gotosearchVip(){
-
-      }
-  },
 
   mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc2MzY5OCwiZXhwIjoxNjMxNzY3Mjk4LCJuYmYiOjE2MzE3NjM2OTgsImp0aSI6IncwY1hYZU4xMGNZVXluaWEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.4tb6rLMkNuhRtEGCl9pOLEAhoPcZf0HAXN5mSLb6A0s");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkzNjYwOCwiZXhwIjoxNjMxOTQwMjA4LCJuYmYiOjE2MzE5MzY2MDgsImp0aSI6IkY0cDVDWFhTbmpuN0ZyMTgiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.aLn4tx1uAjhzUCKrEM82l4YQsc9I84El6tnT7TKgDcE");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
@@ -151,6 +160,8 @@ export default{
     height:30px;
     width:150px;
     border-radius:15px;
+    padding-radius:15px;
+    border: solid 1px #b1b8c9;
     background-color:white;
 }
 .btns{
@@ -189,6 +200,18 @@ export default{
   color:grey;
   border-radius: 12px;
 }
+.btn-ss{
+  background-color: white;
+  color:black;
+  border-radius: 12px;
+  margin-bottom:4px;
+  margin-top:5px;
+  margin-right:20px;
+  margin-left:20px;
+  width:20px;
+  height:20px;
+  variant:outline-secondary;
+}
 span:not(:last-child) {
     margin-right: 5px;
 }
@@ -222,6 +245,9 @@ span:not(:last-child) {
           color: rgba(0,0,0,.50);
           font-weight: 100;
       }
+    }
+    .nb{
+      background-color: white;
     }
   }
 
