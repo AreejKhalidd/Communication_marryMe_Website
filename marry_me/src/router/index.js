@@ -13,6 +13,7 @@ import requests from '../views/Request'
 import questions from '../views/Quizzes'
 import SearchResult from '../views/SearchResult'
 import Userinfoforsearch from '../views/Userinfoforsearch'
+import UserProfile from '../components/Profile'
 
 Vue.use(VueRouter)
 
@@ -92,6 +93,12 @@ const routes = [{
         path: '/userinfoforsearch',
         name: 'Userinfoforsearch',
         component: Userinfoforsearch,
+        props: true
+    },
+    {
+        path: '/userProfile/:id',
+        name: 'UserProfile',
+        component: UserProfile,
         props: true
     },
 ]

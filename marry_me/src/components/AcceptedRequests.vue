@@ -1,7 +1,7 @@
 
 <template>
 
-  <v-card v-if="status !== 1 && status!==2" :id="id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
+  <v-card v-if="status === 1" :id="id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
     <v-list class="list-style" three-line>
       <template>
 
@@ -16,33 +16,28 @@
           </v-list-item-content>
 
           <div class="text-center">
-              <template>
-                <!--                <font-awesome-icon-->
-                <!--                    @click="decision(id,sender_id,1)"-->
-                <!--                    style="color: green;cursor: pointer;font-size: 25px;margin-left: 10px;margin-top: 3px  "-->
-                <!--                    :icon="checkIcon"/>-->
+            <template>
+              <!--                <font-awesome-icon-->
+              <!--                    @click="decision(id,sender_id,1)"-->
+              <!--                    style="color: green;cursor: pointer;font-size: 25px;margin-left: 10px;margin-top: 3px  "-->
+              <!--                    :icon="checkIcon"/>-->
 
-                <v-btn
-                    @click="decision(id,sender_id,1)"
-                    style="background-color: green;color: #EEEEEE;margin-right: 10px;margin-bottom: 5px" depressed>
-                  قبول
-                </v-btn>
-                <v-btn
-                    @click="decision(id,sender_id,2)"
-                    style="background-color: red;margin-right: 10px;color: #EEEEEE;margin-bottom: 5px" depressed>
-                  رفض
-                </v-btn>
-                <v-icon
+              <v-btn
+                  @click="decision(id,sender_id,2)"
+                  style="background-color: red;margin-right: 10px;color: #EEEEEE;margin-bottom: 5px" depressed>
+                رفض
+              </v-btn>
+              <v-icon
 
-                    color="primary"
-                    class="mr-8"
-                    style="cursor: pointer;font-size: 27px"
-                    @click="redirect"
-                    title="صفحته الشخصية"
-                >
-                  mdi-home
-                </v-icon>
-              </template>
+                  color="primary"
+                  class="mr-8"
+                  style="cursor: pointer;font-size: 27px"
+                  @click="redirect"
+                  title="صفحته الشخصية"
+              >
+                mdi-home
+              </v-icon>
+            </template>
           </div>
         </v-list-item>
       </template>
@@ -65,7 +60,7 @@ export default {
     }
   },
 
-  name: "RecRequests",
+  name: "AcceptedRequests",
   props: {
     name: String,
     age: Number,
@@ -101,9 +96,9 @@ export default {
 
 <style scoped>
 @media screen and (max-width: 1024px) {
- .font_name{
-   font-size: 24px;
- }
+  .font_name{
+    font-size: 24px;
+  }
   .font_age{
     font-size: 20px;
   }
