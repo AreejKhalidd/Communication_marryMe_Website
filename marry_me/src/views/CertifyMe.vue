@@ -14,7 +14,6 @@
             <br>
                     <v-file-input 
                     v-model="files"
-                    ref="myfile"
                     accept="image/*"
                     prepend-icon="mdi-camera-plus"
                     color="#FF6265"
@@ -25,11 +24,18 @@
           <br />
           <v-row>
           <v-spacer></v-spacer>
-          <v-btn @click="submitFiles" rounded outlined color="#FF6265">
+          <v-btn @click="Validate" rounded outlined color="#FF6265">
             قم بارسال طلب لتصديق حسابي
           </v-btn>
           <br><br/>
-          <h6 v-if="boolean"> ...تم ارسال الطلب بنجاح </h6>
+          <v-alert
+              v-show="this.boolean"
+              color="#ff6265"
+              dark
+              type="success"
+            >
+            ...تم ارسال الطلب بنجاح 
+          </v-alert>
           </v-row>
         </v-form>
         <br/>
@@ -44,7 +50,6 @@
 import axios from 'axios';
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import FormData from 'form-data';
 export default {
     components: {
     Navbar,
@@ -52,60 +57,28 @@ export default {
    },
   data() {
    return {
-        file:[],
-        files:null,
-       certifyMsg:'',
+       files:[],
        boolean: false
    }
   },
-  methods: {
-      certifyme(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
-                axios({
-                method: 'post',
-                url: "http://127.0.0.1:8000/api/certified",
-                headers: {Authorization: token},
-                data: {imagee :this.file}
-                }).then(response => {
-                this.certifyMsg=response.data.message;
-                this.boolean=!this.boolean;
-                console.log(this.file);
-                    })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            alert(error)
-                            return "error occoured"
-                    });
-
-      },
-      submitFiles() {
-         const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
-          if (this.files) {
-              let formData = new FormData();
-              for (let file of this.files) {
-                  formData.append("files", file, file.name);
-                  console.log(file);
-              }
-              axios
-                  .post("http://127.0.0.1:8000/api/certified", formData,{headers: {
-                  'accept': 'application/json',
-                  'Accept-Language': 'en-US,en;q=0.8',
-                  'Content-Type': `multipart/form-data`,
-                  'Authorization': token
-                   }
-                })
-                  .then(response => {
-                      console.log("Success!");
-                      console.log({ response });
-                      console.log(...formData );
-                  })
-                  .catch(error => {
-                      console.log({ error });
-                  });
-          } else {
-              console.log("there are no files.");
+  methods: {                  
+       Validate() {
+          if (this.$refs.form.validate()) {
+            const fd = new FormData();
+            for (let file of this.files) {
+                    fd.append("image[]", file);
+            }
+            const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+            axios.post('http://127.0.0.1:8000/api/certified', fd, option)
+              .then((response) => {
+                console.log(response.data.message);
+                this.boolean = true;
+              })
+              .catch(() => {
+                console.log("error occured");
+              });
           }
-      }
+      },
       
   },
 };

@@ -1,26 +1,33 @@
 <template>
-  <div text-variant="dark" class="sb" > 
-         
-            <div class="sidee">
-                <b-sidebar id="sidebar-right" title="الاختيارات" right shadow>
+  <div text-variant="dark" class="sb" >         
+            <div >
+                <b-sidebar id="sidebar-right"  class="sidee" style="color: white; background-color:white; background:white;" title="الاختيارات" right shadow>
                     <div class="px-6 py-2">
                             <nav class="mb-5">
                             <b-nav vertical type="dark" variant="light" text-variant="dark">
-                                    <button class="btns" @click="goTofavs()">
-                                        قائمة المعجب بهم
-                                    </button>
-                                    <button class="btns" @click="goToblocks()" >
-                                      قائمة المحظورين
-                                    </button>
-                                    <button v-if="VIP === 1 " class="btns" @click="goTolikedme()">
-                                         قائمة المعجبين بي
-                                    </button>
-                                    <button class="btns" @click="goTorequests()">
-                                        قائمة طلبات الصداقة
-                                    </button>
-                                    <button class="btns" @click="goTocertify()">
-                                        تصديق حسابي
-                                    </button>
+    <v-list-item to="favUsers">
+      <span class="link" style="text-align:center;margin-left:auto"> قائمة المعجب بهم</span>
+      <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="fav"/>     
+    </v-list-item>  
+    <v-list-item to="blockedUsers">
+      <span class="link" style="text-align:center;margin-left:auto">قائمة المحظورين</span>
+      <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="block"/>     
+    </v-list-item>  
+    <v-list-item to="allRequests">
+      <span class="link" style="text-align:center;margin-left:auto">قائمة طلبات الصداقة</span>
+      <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="req"/>     
+    </v-list-item>  
+    <v-list-item to="followersList" v-if="VIP === 1 " >
+      <span class="link" style="text-align:center;margin-left:auto">قائمة المعجبين بي</span>
+      <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="favme"/>     
+    </v-list-item> 
+    <v-list-item to="certifyme" style="background-color:#f5f5f5;">
+      <span class="link" style="text-align:center;margin-left:auto;background-color:#f5f5f5;">تصديق حسابي</span>
+      <font-awesome-icon style="color: #FE6265;font-size:40px;margin-left:auto" :icon="certify"/>     
+    </v-list-item>
+
+
+                                  
                             </b-nav> 
                             </nav>
                     </div>
@@ -32,21 +39,30 @@
 
 <script>
 import axios from 'axios';
-import {faFolder,faList} from '@fortawesome/free-solid-svg-icons'
+import {faHeart,faBan,faStar,faPlus,faCheck} from '@fortawesome/free-solid-svg-icons'
 export default{
   data() {
     return {
       VIP: "",
     }
   },
-        computed: {
-    folder() {
-      return faFolder
+  computed: {
+     fav() {
+      return faHeart
     },
-    list() {
-      return faList
-     },
+     favme() {
+      return faStar
     },
+    block(){
+      return faBan
+    },
+    req(){
+       return faPlus
+    },
+    certify(){
+       return faCheck
+    }
+  },
  methods:{
       goToblocks(){
          this.$router.push('/blockedUsers'); 
@@ -89,9 +105,11 @@ export default{
    box-shadow:0px 2px 5px #777;
 }
 .btns{
-  background-color: rgba(255,98,101,1);
+  background-color: 	#f5f5f5;
+  
+  border: solid 1px rgba(255,98,101,1);
+  border-radius:30px;
   color:black;
-  border-radius: 12px;
   margin-bottom:4px;
   margin-top:1px;
   width: 100%;
@@ -105,12 +123,14 @@ export default{
   align-items: center;
 }
 .btns:hover {
-  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+  
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-  background-color:rgba(255,98,101,1);
+    background-color: 	#f5f5f5;
+  
+  border: solid 1px rgba(255,98,101,1);
+  border-radius:30px;
   color:grey;
-  border-radius: 12px;
   variant:outline-secondary;
   cursor:pointer;
 }
@@ -128,7 +148,7 @@ export default{
 
 }
 .btn-ss{
-  background-color: white;
+  background-color: 	#f5f5f5;
   color:black;
   border-radius: 12px;
   margin-bottom:4px;
@@ -156,7 +176,7 @@ height: 60px;
 width: 60px;
 }
 .btns-logo:hover{
-box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+
   -webkit-transform: scale(1.05);
   transform: scale(1.05);
   background-color:white;
@@ -167,10 +187,17 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   font-size:12px;
 }
 .sb{
-  background-color:white;
+  background-color: 	#f5f5f5;
+  color:white;
+  
+}
+.sidee{
+  background-color: 	#f5f5f5;
+  color:white;
+  box-shadow:1px 2px 5px rgba(255,98,101,1); 
 }
 .icon{
-  background-color:white;
+  background-color:#f5f5f5;
   margin-right:auto;
   margin-left:auto;
 }

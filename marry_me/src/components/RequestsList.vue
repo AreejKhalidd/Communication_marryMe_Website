@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5MzI2NSwiZXhwIjoxNjMyMDIyMDY1LCJuYmYiOjE2MzE5OTMyNjUsImp0aSI6InhHekRKRlN0M3lMVU5OU0siLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.RMnYYLEKKVFQCV9gBWnJMEkOFlJcfzXA6BJPXlJgUHk");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1NjIxMCwiZXhwIjoxNjMyMTAzMDEwLCJuYmYiOjE2MzIwNTYyMTAsImp0aSI6IkRoNDJwUk5McVM4b3Y5anoiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QrsKt8UGJWQT2bx2tWBT1VxU6obV2SdaYhpMcVC3kSk");
       axios({
         method: 'delete',
         url: "http://127.0.0.1:8000/api/deleteRequest",

@@ -97,10 +97,19 @@
           <v-divider id="Grey" dark></v-divider>
           <br />
           <v-row>
-          <h3 id="Black">
+            <v-divider class="test" dark></v-divider>
+          <v-alert
+              border="left"
+              color="#ff6265"
+              dark
+              rounded 
+            >
+           <h3 id="Black" >
             الاسئله  
           </h3>
-          <v-card width="700" class="mx-auto ">
+          </v-alert>
+          <br><br/>
+          <v-card width="700" class="mx-auto " hover="true">
             <v-list two-line>
               <template v-for="i in Info.length">
                 <v-divider :key="i" ></v-divider>
@@ -121,19 +130,18 @@
                         اخفاء السؤال 
                       </v-btn>
                       
-                      <v-btn @click="showAnswers=true; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                      <v-btn @click="showAnswers=true; currentID = Info[i-1][0][0].id; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
                         <v-icon left>
                           mdi-pencil
                         </v-icon>
                         تعديل الاجابه 
                       </v-btn>
-                      <div v-if="showAnswers">
-                        قم ياختيار اجابه اخري
+                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">                        
                         <v-list>
                             <template v-for="answer in Answers">
                               <v-list-item :key="answer">
                                   <v-list-item-content >
-                                   <v-radio-group v-model="radioGroup">
+                                   <v-radio-group v-model="radioGroup" >
                                     <v-radio
                                       :label="answer.answer"
                                       :value="answer.id"
@@ -162,8 +170,9 @@
           <div>
             <br><br/>
             <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
-              تحديث البروفايل
+              تحديث الحساب
             </v-btn>
+            <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
@@ -218,25 +227,25 @@ export default {
         id:'',
         answer:''
       },
-      newAnswer:'',
-       radioGroup: '',
+      updataBoolean:false,
+      radioGroup: '',
+      currentID:'',
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => this.IsaNumber(value) || "Not a Valid Number",
       },
-     
     };
   },
   methods: {
-    
     previewImage() {
       this.url = URL.createObjectURL(this.file);
+      this.useravatar();
     },
     RemoveAvatar() {
-      this.file = SignupAvatar;
+      this.avatarurl = '';
+      this.file='';
       this.url=SignupAvatar;
     },
-    
     IsaNumber(value) {
       const phoneno = /^\d{11}$/;
       if (value.match(phoneno)) {
@@ -247,7 +256,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -265,7 +274,7 @@ export default {
         });
     },
     getUserQA() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/show-user",
@@ -282,7 +291,7 @@ export default {
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -291,7 +300,7 @@ export default {
 
     },
     HideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/hide",
@@ -306,7 +315,7 @@ export default {
        this.getUserQA();
     },
     UnHideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTkyMzA3MCwiZXhwIjoxNjMxOTUxODcwLCJuYmYiOjE2MzE5MjMwNzAsImp0aSI6Im9vdmlMUW9tZTE3eWJDVHoiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FWbzIOulPf1OAZ0qTKzQDt5pqnC_E3R23fni8qiVMiI");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/unhide",
@@ -321,7 +330,7 @@ export default {
        this.getUserQA();
     },
     getAllAnswers(id) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/get-question-answers",
@@ -335,7 +344,7 @@ export default {
        });
     },
     ChangeAnswer(quesID) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
@@ -346,30 +355,29 @@ export default {
          }
        }).then(response => {
        console.log(response.data.message);
+       this.getUserQA();
        })
        .catch((error) => {
        console.log('There is error:'+error);
        });
     },
     saveChanges() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTk5NjM2NywiZXhwIjoxNjMyMDI1MTY3LCJuYmYiOjE2MzE5OTYzNjcsImp0aSI6InZ6YTFwczE2UjVnZU53ZmIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.7jDv5hhHLU2sbWorfufQ6nNwO7WH-iII0edsjBvAX-8");
-       axios({
-       method: 'post',
-       url: "http://127.0.0.1:8000/api/EditInfo",
-       headers: {Authorization: token},
-       data: {
-         phone :this.PhoneNumber,
-         image :this.url,
-         }
-       }).then(response => {
-       console.log(response.data.message);
-       })
-       .catch((error) => {
-       console.log('There is error:'+error);
-       });
+      if (this.$refs.form.validate()) {
+        const fd = new FormData();
+        fd.append('image', this.file);
+        fd.append('phone', this.PhoneNumber);
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        axios.post('http://127.0.0.1:8000/api/EditInfo', fd, option)
+          .then((response) => {
+            console.log(response.data.message);
+            this.updataBoolean = true;
+          })
+          .catch(() => {
+          });
+      }
     },
   },
-  mounted() {
+  created() {
     this.getUserInfo();
   },
   computed: {
@@ -406,11 +414,15 @@ export default {
   align-items: center;
 }
 
-
 .preview {
   background-color: #ffffff;
   max-width: 100%;
   max-height: 100%;
 }
 
+.test {
+       border-width: 10px ;
+       border-color: #ff6265;
+       height: 100%;
+}
 </style>
