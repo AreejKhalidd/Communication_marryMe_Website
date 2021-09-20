@@ -98,9 +98,17 @@
           <br />
           <v-row>
             <v-divider class="test" dark></v-divider>
-          <h3 id="Black" >
+          <v-alert
+              border="left"
+              color="#ff6265"
+              dark
+              rounded 
+            >
+           <h3 id="Black" >
             الاسئله  
           </h3>
+          </v-alert>
+          <br><br/>
           <v-card width="700" class="mx-auto " hover="true">
             <v-list two-line>
               <template v-for="i in Info.length">
@@ -128,13 +136,12 @@
                         </v-icon>
                         تعديل الاجابه 
                       </v-btn>
-                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">
-                        قم ياختيار اجابه اخري
+                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">                        
                         <v-list>
                             <template v-for="answer in Answers">
                               <v-list-item :key="answer">
                                   <v-list-item-content >
-                                   <v-radio-group v-model="radioGroup">
+                                   <v-radio-group v-model="radioGroup" >
                                     <v-radio
                                       :label="answer.answer"
                                       :value="answer.id"
@@ -249,7 +256,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -267,7 +274,7 @@ export default {
         });
     },
     getUserQA() {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/show-user",
@@ -284,7 +291,7 @@ export default {
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -293,7 +300,7 @@ export default {
 
     },
     HideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/hide",
@@ -308,7 +315,7 @@ export default {
        this.getUserQA();
     },
     UnHideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/unhide",
@@ -323,7 +330,7 @@ export default {
        this.getUserQA();
     },
     getAllAnswers(id) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/get-question-answers",
@@ -337,7 +344,7 @@ export default {
        });
     },
     ChangeAnswer(quesID) {
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'post',
        url: "http://127.0.0.1:8000/api/EditInfo",
@@ -359,10 +366,11 @@ export default {
         const fd = new FormData();
         fd.append('image', this.file);
         fd.append('phone', this.PhoneNumber);
-        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3OTU5MywiZXhwIjoxNjMyMTA4MzkzLCJuYmYiOjE2MzIwNzk1OTMsImp0aSI6InRPc3NTUjZzU0RVWjU4SkUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.TpjIO5us9-5-lcKgJ2hefFcniCHRYEGnk0hDoeSSOes'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
         axios.post('http://127.0.0.1:8000/api/EditInfo', fd, option)
           .then((response) => {
             console.log(response.data.message);
+            this.updataBoolean = true;
           })
           .catch(() => {
           });
