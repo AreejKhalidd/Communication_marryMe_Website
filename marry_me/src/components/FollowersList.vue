@@ -9,12 +9,25 @@
             <v-img :src="img"></v-img>
           </v-list-item-avatar>
 
-          <v-list-item-content style="text-align: right;margin: 0 50px 0 20px">
+          <v-list-item-content style="text-align: right;margin: 0 50px 0 0">
             <v-list-item-title style="font-weight: bolder;font-size: 25px">الأسم : {{ name }}</v-list-item-title>
             <v-list-item-subtitle style="font-weight: bolder;font-size: 17px">العمر : {{ age }}</v-list-item-subtitle>
           </v-list-item-content>
+          <template >
+            <v-icon
+                large
+                color="primary"
+                style="cursor: pointer;margin-left: 30px"
+                @click="redirect"
+                title="صفحته الشخصية"
+            >
+              mdi-home
+            </v-icon>
+          </template>
         </v-list-item>
+
       </template>
+
     </v-list>
   </v-card>
 </template>
@@ -27,7 +40,12 @@ export default {
     }
   },
   name: "FollowersList",
-  props: ["name", "age", "id", "img"]
+  props: ["name", "age", "id", "img","user1_id"],
+  methods:{
+    redirect(){
+      this.$router.push('/userProfile/'+this.user1_id)
+    }
+  }
 }
 </script>
 
