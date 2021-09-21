@@ -53,18 +53,17 @@ export default{
        props:{
         
       },
-      data(){
+  data(){
             return{
-                users:  [
-                    
+                users:  [                   
                 ],
                 VIP: "",
                 img:img,  
                       loading: false,
                      selection: 1,
-            }
-      },
-            computed: {
+              }
+  },
+  computed: {
     fav() {
       return faHeart
     },
@@ -75,9 +74,9 @@ export default{
       return faBan
     },
     
-    },
+  },
 
-     mounted(){
+  mounted(){
           const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA4MTAzNiwiZXhwIjoxNjMyMDg0NjM2LCJuYmYiOjE2MzIwODEwMzYsImp0aSI6Imt0YVVHVkVWMHpnR21hekIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.KX700ROmLbo8S-IJT2RRK6VbMoufl9Zi7BwH4_Nr4II");
           axios({
                     method: 'get',
@@ -104,14 +103,10 @@ export default{
                         console.log('There is error:'+error);
                         return "error occoured"
           });
-       } ,
+    },
   
     methods:
     {
-        addtofav(user){
-          console.log(user.id);
-          this.$router.push('/userinfo');
-        },
         gotouserinfo(user){
           console.log(user.id);
           console.log("hiiiiiiii");
@@ -121,12 +116,79 @@ export default{
                     params: { user:user }
                     })
         },
-              reserve () {
-        this.loading = true
-
-        setTimeout(() => (this.loading = false), 2000)
-      },
-    }
+        reserve () {
+         this.loading = true
+         setTimeout(() => (this.loading = false), 2000)
+        },
+        addtofavs(id){
+                  const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1NDI1NCwiZXhwIjoxNjMyMDU3ODU0LCJuYmYiOjE2MzIwNTQyNTQsImp0aSI6IkU3clprRDdEZUFTSlBySEkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.p1gTZzDW3i4VaVlJESMSF38O6yIEGaPOuPmVb5ZduCI");
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/addFriend",
+                  headers: {Authorization: token},
+                  data: {recevier_id :id}
+                  }).then(response => {
+                  console.log(response.data)
+                  alert(response.data.message);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              alert("error:You added this user before,"+ error.message);
+                              return "error occoured"
+                      });
+        },
+        addtoblocks(id){
+                  const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/blockFriend",
+                  headers: {Authorization: token},
+                  data: {reciever_id :id}
+                  }).then(response => {
+                  console.log(response.data)
+                  alert(response.data.message);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              alert("you can not block this user"+error)
+                              return "error occoured"
+                      });
+        },
+        startchat(id){
+                  const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1NDI1NCwiZXhwIjoxNjMyMDU3ODU0LCJuYmYiOjE2MzIwNTQyNTQsImp0aSI6IkU3clprRDdEZUFTSlBySEkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.p1gTZzDW3i4VaVlJESMSF38O6yIEGaPOuPmVb5ZduCI");
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/startchat",
+                  headers: {Authorization: token},
+                  data: {userid2 :id}
+                  }).then(response => {
+                  console.log(response.data.user)
+                  alert("Done start chatting");
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              alert(error)
+                              return "error occoured"
+                      });
+        },
+        requestchat(id){
+                  const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYzOTA5MywiZXhwIjoxNjMxNjQyNjkzLCJuYmYiOjE2MzE2MzkwOTMsImp0aSI6InNMSG1PSzNIU0NaalRwZ28iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.FcH-n38bSClAmgwTTA5kNL2W7Rbxm1LsWvY78TaYvQg");
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/request",
+                  headers: {Authorization: token},
+                  data: {recevier :id}
+                  }).then(response => {
+                  console.log(response.data)
+                  alert("Done sending request to chat");
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              alert("You Make this request before!"+error)
+                              return "error occoured"
+                      });
+          }          
+  },
 }
 </script> 
 
