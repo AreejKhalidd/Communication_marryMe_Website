@@ -13,14 +13,11 @@ import requests from '../views/Request'
 import questions from '../views/Quizzes'
 import SearchResult from '../views/SearchResult'
 import Userinfoforsearch from '../views/Userinfoforsearch'
-<<<<<<< HEAD
 import Login from '../views/Login';
 import ResetPassword from '../views/ResetPassword';
 import Register from '../views/Register';
 import ForgotPassword from '../views/ForgotPassword';
-=======
 import UserProfile from '../components/Profile'
->>>>>>> 649419f26f26b7a681a1c7818a48c29dd9c8cbe9
 
 Vue.use(VueRouter)
 
@@ -103,7 +100,6 @@ const routes = [{
         props: true
     },
     {
-<<<<<<< HEAD
         path: '/login',
         name: 'Login',
         component: Login,
@@ -122,12 +118,12 @@ const routes = [{
         path: '/resetpassword',
         name: 'ResetPassword',
         component: ResetPassword,
-=======
+    },
+    {
         path: '/userProfile/:id',
         name: 'UserProfile',
         component: UserProfile,
         props: true
->>>>>>> 649419f26f26b7a681a1c7818a48c29dd9c8cbe9
     },
 ]
 

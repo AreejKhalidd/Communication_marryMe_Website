@@ -29,7 +29,7 @@ export default {
   },
   methods:{
     redirect(){
-      this.$router.push({ name: 'Home' })
+      this.$router.push({ name: 'Login' })
     }
   }
 }

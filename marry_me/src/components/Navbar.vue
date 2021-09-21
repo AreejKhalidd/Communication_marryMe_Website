@@ -97,7 +97,7 @@ export default{
          this.certusers=true;
       },
       logout(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI2MTk2NCwiZXhwIjoxNjMyMjY1NTY0LCJuYmYiOjE2MzIyNjE5NjQsImp0aSI6ImluZHFuTmNXSkJZc1FPTlUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wgI5qATfQHZbAw-pmuqVAxylssPHVIdBG8AKFurNzbA");
           axios({
             method: 'post',
             url: "http://127.0.0.1:8000/api/logout",
@@ -105,9 +105,10 @@ export default{
           }).then(response => {
           console.log(response.data)
           alert("You are logged out..");
-                this.$store.state.usertoken = null;
+               
+                console.log("logged out");
            localStorage.clear();
-          this.$router.push('/');
+          this.$router.push('/login');
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
@@ -119,7 +120,7 @@ export default{
 
       gotosearch()
       {
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1MjU1OSwiZXhwIjoxNjMyMjU2MTU5LCJuYmYiOjE2MzIyNTI1NTksImp0aSI6IkFocVFPZENWWjVxRzk2UjEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ceDm8xcwoMuEQSldH_-sABlu4UkLsmgBCAKfe6VQbxE");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI2MTk2NCwiZXhwIjoxNjMyMjY1NTY0LCJuYmYiOjE2MzIyNjE5NjQsImp0aSI6ImluZHFuTmNXSkJZc1FPTlUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wgI5qATfQHZbAw-pmuqVAxylssPHVIdBG8AKFurNzbA");
           if(this.VIP==1)
           {             
               this.dosearch=true;
