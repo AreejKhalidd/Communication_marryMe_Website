@@ -12,6 +12,10 @@ import requests from '../views/Request'
 import questions from '../views/Quizzes'
 import SearchResult from '../views/SearchResult'
 import Userinfoforsearch from '../views/Userinfoforsearch'
+import Login from '../views/Login';
+import ResetPassword from '../views/ResetPassword';
+import Register from '../views/Register';
+import ForgotPassword from '../views/ForgotPassword';
 
 Vue.use(VueRouter)
 
@@ -87,6 +91,26 @@ const routes = [{
         name: 'Userinfoforsearch',
         component: Userinfoforsearch,
         props: true
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login,
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register,
+    },
+    {
+        path: '/forgotpassword',
+        name: 'ForgotPassword',
+        component: ForgotPassword,
+    },
+    {
+        path: '/resetpassword',
+        name: 'ResetPassword',
+        component: ResetPassword,
     },
 ]
 
