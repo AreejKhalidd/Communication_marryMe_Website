@@ -44,24 +44,69 @@
               </v-list-item-group>
             </v-list>
           </v-navigation-drawer>
+          <v-main>
+            <v-container>
+              <v-tabs style="min-width: 200px!important;"  v-if="!error">
+                <v-tab @click="all=true;sent=true;req=true;accept=false;reject=false;callMounted();flag_all=true">كل الطلبات</v-tab>
+                <v-tab  @click="all=true;sent=true;req=false;accept=false;reject=false;callMounted();flag_all=true;">المرسلة</v-tab>
+                <v-tab  @click="all=true;sent=false;req=true;accept=false;reject=false;callMounted();flag_all=true">المرسلة لي</v-tab>
+                <v-tab  @click="sent=false;req=false;accept=true;reject=false;callMounted();flag_all=false">الطلبات المقبولة</v-tab>
+                <v-tab  @click="sent=false;req=false;accept=false;reject=true;callMounted();flag_all=false"> الطلبات المرفوضة</v-tab>
 
-          <h1 v-if="!error && error3!==0" class="subheader">الطلبات الذي ارسلتها</h1>
+              </v-tabs>
+              <div v-if="!error">
+                <br>
+                <br>
 
-          <RequestsList v-for="request in requests.requests_sent" :id="request.id" :key="request.id"
-                        :age="request.age"
-                        :img="request.image" :name="request.name"
-                        style="margin: 20px !important;"/>
-          <h1 v-if="!error && error2" class="subheader" style="margin-top: 50px">الطلبات الذي ارسلت إليك</h1>
+              </div>
+              <div v-if="all && sent">
 
-          <RecRequest v-for="request in requests.requests_received" :id="request.id"
-                      :sender_id="request.sender_id"
-                      :status="request.status"
-                      :key="request.id"
-                      :age="request.age"
-                      :img="request.image" :name="request.name"
-                      style="margin: 20px !important;"/>
-          <ErrorPage v-if="error" style="margin: 50px !important;"/>
-          <EmptyPage v-if="error3===0 && !error2 &&!error" style="margin: 50px !important;"/>
+                <h1 id="head" v-if="!error &&this.counter!==0" class="subheader">الطلبات الذي ارسلتها</h1>
+                <RequestsList v-for="request in requests.requests_sent" :id="request.id" :key="request.id"
+                              :age="request.age"
+                              :req_id="request.req_id"
+                              :status="request.status"
+                              :img="request.image" :name="request.name"
+                              :mess="this.message"
+                              :count="decCount"/>
+              </div>
+              <div  v-if="all && req">
+                <h1 v-if="!error && this.counter_dec!==0" class="subheader" style="margin-top: 50px">الطلبات الذي ارسلت
+                  إليك</h1>
+
+                <RecRequest v-for="request in requests.requests_received" :id="request.id"
+                            :sender_id="request.sender_id"
+                            :status="request.status"
+                            :key="request.id"
+                            :age="request.age"
+                            :img="request.image" :name="request.name"
+                            :count="reqCount"/>
+              </div>
+              <div  v-if=" accept">
+
+                <AcceptedRequests v-for="request in requests.requests_received" :id="request.id"
+                            :sender_id="request.sender_id"
+                            :status="request.status"
+                            :key="request.id"
+                            :age="request.age"
+                            :img="request.image" :name="request.name"
+                            :count="reqCount"/>
+              </div>
+              <div  v-if="reject">
+
+                <RejectedRequests v-for="request in requests.requests_received" :id="request.id"
+                            :sender_id="request.sender_id"
+                            :status="request.status"
+                            :key="request.id"
+                            :age="request.age"
+                            :img="request.image" :name="request.name"
+                            :count="reqCount"/>
+              </div>
+              <ErrorPage v-if="error" style="margin: 50px !important;"/>
+              <EmptyPage  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style="margin: 50px !important;"/>
+
+            </v-container>
+          </v-main>
 
         </v-card>
 
@@ -79,53 +124,55 @@ import RecRequest from '@/components/RecRequest.vue'
 import AnotherSideBar from '@/components/AnotherSideBar.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
 import EmptyPage from '@/components/EmptyPage.vue'
+import AcceptedRequests from '@/components/AcceptedRequests.vue'
+import RejectedRequests from '@/components/RejectedRequests.vue'
 
 import axios from "axios";
 
 export default {
   name: "Request",
   components: {
+
     RequestsList,
     AnotherSideBar,
     ErrorPage,
     RecRequest,
-    EmptyPage
+    EmptyPage,
+    AcceptedRequests,
+    RejectedRequests
   },
   data() {
     return {
+      all:true,
+      sent:true,
+      req:true,
+      accept:false,
+      reject:false,
       requests: [],
       drawer: false,
       group: null,
       error: false,
-      error2: false,
-      error3: null
+      flag_all:true,
+      counter: 0,
+      counter_dec: 0
     }
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMTcyNjgzMiwiZXhwIjoxNjMxNzMwNDMyLCJuYmYiOjE2MzE3MjY4MzIsImp0aSI6IjBrdEdySUxLUXdCdWZqdTAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.pnOp4pH2Go7nlfkK8mc44Vug0lbs3QtYrYjY20oemO8");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
     axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
-          this.error = false;
-          console.log(response.statusText);
-          console.log(this.error2)
           this.requests = response.data
+          this.error = false;
           let filteredItem =
               this.requests.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
 
-          if(filteredItem.length ===0){
-            this.error2 = false;
-          }else {
-            this.error2 = true;
-          }
-          this.error3 = this.requests.requests_sent.length;
-          console.log(this.error3);
+          this.counter_dec = filteredItem.length;
+          this.counter = this.requests.requests_sent.length;
         })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            this.error = true;
-          }
+        .catch(() => {
+          this.error = true;
         });
 
   },
@@ -134,6 +181,36 @@ export default {
       this.drawer = false
     },
   },
+  methods:{
+    decCount(){
+  //    if(this.counter!==0){
+        this.counter--;
+    //  }
+    },
+    reqCount(){
+   //   if(this.counter_dec!==0){
+        this.counter_dec--;
+   //   }
+    },
+    callMounted(){
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
+      axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
+          .then(response => {
+            // If request is good...
+            this.requests = response.data
+            this.error = false;
+            let filteredItem =
+                this.requests.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
+
+            this.counter_dec = filteredItem.length;
+            this.counter = this.requests.requests_sent.length;
+          })
+          .catch(() => {
+            this.error = true;
+          });
+
+    }
+  }
 
 
 }

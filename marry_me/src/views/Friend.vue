@@ -47,6 +47,7 @@
 
           <FriendList style="margin: 20px !important;" v-for="friend in friends" :key="friend.id" :id="friend.id"
                       :name="friend.name" :age="friend.age"
+                      :user2_id="friend.user_2"
                       :img="friend.user2_image"/>
           <ErrorPage style="margin: 50px !important;" v-if="error"/>
 
@@ -83,7 +84,7 @@ export default {
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTY1NjcwOCwiZXhwIjoxNjMxNjYwMzA4LCJuYmYiOjE2MzE2NTY3MDgsImp0aSI6IjBMR1ljNnFlaGRmMkdqMXYiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.CmAIkEtLDlbvJUd5ckI-Ux8T-2QzkMt3cfxMuz5zVpw");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
     axios.get("http://127.0.0.1:8000/api/getAllFriends", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
@@ -92,10 +93,9 @@ export default {
           this.friends = response.data
           console.log(this.friends)
         })
-        .catch((error) => {
-          if (error.response.status === 403) {
-            this.error = true;
-          }
+        .catch(() => {
+
+          this.error = true;
         });
   },
   watch: {

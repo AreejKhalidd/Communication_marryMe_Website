@@ -20,12 +20,25 @@
                 width="500"
             >
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
+                <v-icon
+                    large
+
                     v-bind="attrs"
                     v-on="on"
-                    style="background-color: #FE6265" depressed color="error">
-                  إزالة
-                </v-btn>
+                    style="color: red" depressed>
+                >
+                  mdi-delete
+                </v-icon>
+                <v-icon
+                    large
+                    color="primary"
+                    class="mr-8"
+                    style="cursor: pointer"
+                    @click="redirect"
+                    title="صفحته الشخصية"
+                >
+                  mdi-home
+                </v-icon>
               </template>
 
               <v-card>
@@ -73,10 +86,10 @@ export default {
     }
   },
   name: "BlockList",
-  props: ["name", "age", "id", "img"],
+  props: ["name", "age", "id", "img","blocked_id"],
   methods: {
     remove(id) {
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTYyOTU0NCwiZXhwIjoxNjMxNjMzMTQ0LCJuYmYiOjE2MzE2Mjk1NDQsImp0aSI6Ik0xZExvR3YxUDZhN2hlRGkiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mwG7VR2G0jziHZb8YX1oYHidOw7hh9w7GfP-s-wGtwk");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
       axios({
         method: 'delete',
         url: "http://127.0.0.1:8000/api/removeBlock",
@@ -87,6 +100,9 @@ export default {
       });
       this.dialog = false;
       document.getElementById(id).style.display='none';
+    },
+    redirect(){
+      this.$router.push('/userProfile/'+this.blocked_id)
     }
   }
 }

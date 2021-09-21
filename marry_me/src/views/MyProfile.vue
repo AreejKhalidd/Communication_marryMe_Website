@@ -97,28 +97,67 @@
           <v-divider id="Grey" dark></v-divider>
           <br />
           <v-row>
-          <h3 id="Black">
+            <v-divider class="test" dark></v-divider>
+          <v-alert
+              border="left"
+              color="#ff6265"
+              dark
+              rounded 
+            >
+           <h3 id="Black" >
             الاسئله  
           </h3>
-          <h5  color="#ff6265">
-            بامكانك اخفاء سؤال واحد فقط  
-          </h5>
-          <v-card width="700" class="mx-auto ">
+          </v-alert>
+          <br><br/>
+          <v-card width="700" class="mx-auto " hover="true">
             <v-list two-line>
               <template v-for="i in Info.length">
                 <v-divider :key="i" ></v-divider>
                 <v-list-item :key="i">
                     <v-list-item-content >
                       <v-list-item-title>{{Info[i-1][0][0].question}}</v-list-item-title>
-                      <v-list-item-subtitle>{{Info[i-1][1][0].answer}}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{Info[i-1][2][0].answer}}</v-list-item-subtitle>
                       <br><br/>
                       <div>
-                      <v-btn v-if="vip" @click="HideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+
+                      <h6 v-if="vip && Info[i-1][1][0].hidden" id="form"> هذا السؤال غير ظاهر للمسنخدمين الاخرين</h6>
+                      <v-btn v-if="vip && Info[i-1][1][0].hidden" @click="UnHideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                        اظهار السؤال 
+                      </v-btn>
+
+                      <h6 v-if="vip && !Info[i-1][1][0].hidden" id="form"> هذا السؤال ظاهر للمسنخدمين الاخرين </h6>
+                      <v-btn v-if="vip && !Info[i-1][1][0].hidden" @click="HideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
                         اخفاء السؤال 
                       </v-btn>
-                      <v-btn @click="HideData" rounded outlined color="#FF6265" style="width: 130px">
+                      
+                      <v-btn @click="showAnswers=true; currentID = Info[i-1][0][0].id; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                        <v-icon left>
+                          mdi-pencil
+                        </v-icon>
                         تعديل الاجابه 
                       </v-btn>
+                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">                        
+                        <v-list>
+                            <template v-for="answer in Answers">
+                              <v-list-item :key="answer">
+                                  <v-list-item-content >
+                                   <v-radio-group v-model="radioGroup" >
+                                    <v-radio
+                                      :label="answer.answer"
+                                      :value="answer.id"
+                                    ></v-radio>
+                                  </v-radio-group>
+                              </v-list-item-content>
+                            </v-list-item>
+                            </template>  
+                          </v-list>
+                          <v-btn @click="showAnswers=false; ChangeAnswer(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 30px">
+                                  تعديل  
+                          </v-btn>
+                          <v-btn @click="showAnswers=false;" rounded outlined color="#FF6265" style="width: 30px">
+                                  الغاء  
+                          </v-btn>
+                      </div>
                       </div>
                     </v-list-item-content>
                   </v-list-item>
@@ -130,15 +169,16 @@
           <v-spacer></v-spacer>
           <div>
             <br><br/>
-            <v-btn  rounded outlined color="#FF6265" style="width: 230px">
-              تحديث البروفايل
+            <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
+              تحديث الحساب
             </v-btn>
+            <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <br/>
             <v-btn @click="DeleteAccount" rounded outlined color="#FF6265" style="width: 230px">
-             حذف الاكونت
+             حذف الحساب
             </v-btn>
             <v-btn v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
                VIP التحديث الي 
@@ -168,7 +208,7 @@ export default {
       avatarurl: null,
       url: SignupAvatar,
       file: '',
-      ID:'',
+      ID:null,
       Name: "",
       Email: "",
       PhoneNumber: "",
@@ -180,25 +220,32 @@ export default {
       vip:"",
       CurrentlyBanned:"",
       DeleteMsg:"",
+      showAnswers: false,
+       Info:[],
+      Answers:[],
+      answer:{
+        id:'',
+        answer:''
+      },
+      updataBoolean:false,
+      radioGroup: '',
+      currentID:'',
       rules: {
         required: (value) => !!value || "Required.",
         number: (value) => this.IsaNumber(value) || "Not a Valid Number",
       },
-      Questions:[],
-      Answers:[],
-      Info:[]
     };
   },
   methods: {
-    
     previewImage() {
       this.url = URL.createObjectURL(this.file);
+      this.useravatar();
     },
     RemoveAvatar() {
-      this.file = SignupAvatar;
+      this.avatarurl = '';
+      this.file='';
       this.url=SignupAvatar;
     },
-    
     IsaNumber(value) {
       const phoneno = /^\d{11}$/;
       if (value.match(phoneno)) {
@@ -209,7 +256,7 @@ export default {
     getUserInfo() {
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.get('http://127.0.0.1:8000/api/profile', option)
         .then((response) => {
           this.ID = response.data.id;
@@ -223,23 +270,28 @@ export default {
           this.NumberOfBans = response.data.ban_count;
           this.Certified=response.data.certified;
           this.vip=response.data.VIP;
-          
+          this.getUserQA();
         });
     },
     getUserQA() {
-      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-     const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI'}` } };//temp for testing the request
-      axios.get('http://127.0.0.1:8000/api/show-user', option)
-        .then((response) => {
-          this.Info = response.data;
-          console.log(this.Info.length);
-        });
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
+       axios({
+       method: 'get',
+       url: "http://127.0.0.1:8000/api/show-user",
+       headers: {Authorization: token},
+       params: {user_id :this.ID}
+       }).then(response => {
+       this.Info = response.data;
+       console.log(this.Info);
+       })
+       .catch((error) => {
+       console.log('There is error:'+error);
+       });
     },
     DeleteAccount(){
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTczNzM0NywiZXhwIjoxNjMxNzQwOTQ3LCJuYmYiOjE2MzE3MzczNDcsImp0aSI6Ilo4eldhYVY1cXIwNW1NeEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.9ahhIRn-zmCTgnTvyfsBfADxkENSvoWW24zpPq4Tt8M'}` } };//temp for testing the request
+      const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}` } };//temp for testing the request
       axios.delete('http://127.0.0.1:8000/api/delete', option)
         .then((response) => {
           this.DeleteMsg=response.data.message;
@@ -248,24 +300,85 @@ export default {
 
     },
     HideData(id){
-       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMTc0MzkxOSwiZXhwIjoxNjMxNzQ3NTE5LCJuYmYiOjE2MzE3NDM5MTksImp0aSI6InVZa3FpSXk2bFJYbkN0am0iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.rqfcunIBg1kRaIl8I-k8Tw9G9Uxe5QzkZ4RM1XS38nI");
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
        axios({
        method: 'get',
        url: "http://127.0.0.1:8000/api/hide",
        headers: {Authorization: token},
        params: {question_id :id}
        }).then(response => {
-       this.Info = response.data;
-       console.log(this.Info);
+         console.log(response.data.message)
        })
        .catch((error) => {
        console.log('There is error:'+error);
        });
-    }
+       this.getUserQA();
+    },
+    UnHideData(id){
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
+       axios({
+       method: 'get',
+       url: "http://127.0.0.1:8000/api/unhide",
+       headers: {Authorization: token},
+       params: {question_id :id}
+       }).then(response => {
+         console.log(response.data.message)
+       })
+       .catch((error) => {
+       console.log('There is error:'+error);
+       });
+       this.getUserQA();
+    },
+    getAllAnswers(id) {
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
+       axios({
+       method: 'get',
+       url: "http://127.0.0.1:8000/api/get-question-answers",
+       headers: {Authorization: token},
+       params: {id :id}
+       }).then(response => {
+       this.Answers = response.data;
+       })
+       .catch((error) => {
+       console.log('There is error:'+error);
+       });
+    },
+    ChangeAnswer(quesID) {
+       const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4");
+       axios({
+       method: 'post',
+       url: "http://127.0.0.1:8000/api/EditInfo",
+       headers: {Authorization: token},
+       data: {
+         question_id :quesID,
+         new_answer :this.radioGroup,
+         }
+       }).then(response => {
+       console.log(response.data.message);
+       this.getUserQA();
+       })
+       .catch((error) => {
+       console.log('There is error:'+error);
+       });
+    },
+    saveChanges() {
+      if (this.$refs.form.validate()) {
+        const fd = new FormData();
+        fd.append('image', this.file);
+        fd.append('phone', this.PhoneNumber);
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjEzMDk5OSwiZXhwIjoxNjMyMTU5Nzk5LCJuYmYiOjE2MzIxMzA5OTksImp0aSI6IkpMZkx6YjhxNGQwREdWUlYiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.K7L6heU2am7eXPtVzsq3syqtx6COAj9C5SkWFgH05t4'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        axios.post('http://127.0.0.1:8000/api/EditInfo', fd, option)
+          .then((response) => {
+            console.log(response.data.message);
+            this.updataBoolean = true;
+          })
+          .catch(() => {
+          });
+      }
+    },
   },
   created() {
     this.getUserInfo();
-    this.getUserQA();
   },
   computed: {
     useravatar() {
@@ -301,10 +414,15 @@ export default {
   align-items: center;
 }
 
-
 .preview {
   background-color: #ffffff;
   max-width: 100%;
   max-height: 100%;
+}
+
+.test {
+       border-width: 10px ;
+       border-color: #ff6265;
+       height: 100%;
 }
 </style>
