@@ -1,28 +1,28 @@
 <template>
-  <div class="sidee" >         
+  <div  >         
             <div >
-                <b-sidebar id="sidebar-right" bg-variant="light" class="sidee" title="الاختيارات" right shadow>
+                <b-sidebar id="sidebar-right" bg-variant="white" class="sidee" title="الاختيارات" right shadow>
                     <div class="px-6 py-2">
                             <nav class="mb-5">
                             <b-nav vertical >
     <v-list-item to="favUsers"  >
-      <span class="link" style="text-align:center;margin-left:auto"> قائمة المعجب بهم</span>
+      <span class="link" style="text-align:center;margin-left:auto;"> قائمة المعجب بهم</span>
       <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="fav"/>     
     </v-list-item>  
     <v-list-item to="blockedUsers"  >
-      <span class="link" style="text-align:center;margin-left:auto">قائمة المحظورين</span>
+      <span class="link" style="text-align:center;margin-left:auto;">قائمة المحظورين</span>
       <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="block"/>     
     </v-list-item>  
     <v-list-item to="allRequests"  >
-      <span class="link" style="text-align:center;margin-left:auto">قائمة طلبات الصداقة</span>
+      <span class="link" style="text-align:center;margin-left:auto;">قائمة طلبات الصداقة</span>
       <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="req"/>     
     </v-list-item>  
     <v-list-item to="followersList" v-if="VIP === 1 "  >
-      <span class="link" style="text-align:center;margin-left:auto">قائمة المعجبين بي</span>
+      <span class="link" style="text-align:center;margin-left:auto;">قائمة المعجبين بي</span>
       <font-awesome-icon style="color: #FE6265;font-size: 40px;margin-left:auto" :icon="favme"/>     
     </v-list-item> 
     <v-list-item to="certifyme" >
-      <span class="link" style="text-align:center;margin-left:auto;;">تصديق حسابي</span>
+      <span class="link" style="text-align:center;margin-left:auto;">تصديق حسابي</span>
       <font-awesome-icon style="color: #FE6265;font-size:40px;margin-left:auto" :icon="certify"/>     
     </v-list-item>
 
@@ -102,7 +102,8 @@ export default{
 
 <style>
 .sidee{
-  background-color: black; /*	#f5f5f5 */;
+  
+  background-color: 	#757575;
   box-shadow:1px 2px 5px rgba(255,98,101,1); 
 }
 .icon{
