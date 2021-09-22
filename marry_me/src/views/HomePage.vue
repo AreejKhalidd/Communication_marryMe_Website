@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="hp">
     <Navbar v-if="error==false" />
     <Sidebar v-if="error==false" />
       <v-app v-if="error==true">
@@ -40,7 +40,7 @@ import ErrorPage from '@/components/ErrorPage.vue'
            }
      },
      mounted(){
-          const token = 'Bearer '.concat("yJ0eiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI2MTk2NCwiZXhwIjoxNjMyMjY1NTY0LCJuYmYiOjE2MzIyNjE5NjQsImp0aSI6ImluZHFuTmNXSkJZc1FPTlUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wgI5qATfQHZbAw-pmuqVAxylssPHVIdBG8AKFurNzbA");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMxNTQzMywiZXhwIjoxNjMyNTQ1ODMzLCJuYmYiOjE2MzIzMTU0MzMsImp0aSI6IkpVUE5RZnNoT2o0UlpnUWIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fsDGY9hDNTSO0XdJyEvUmDMMvUYJzaINBWZw7ugyd_U");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
@@ -59,5 +59,7 @@ import ErrorPage from '@/components/ErrorPage.vue'
 </script>
 
 <style scoped>
-
+.hp{
+background-color: white;
+}
 </style>

@@ -88,7 +88,7 @@ const routes = [{
         component: questions
     },
     {
-        path: '/searchResult',
+        path: '/searchResult/:searchname',
         name: 'SearchResult',
         component: SearchResult,
         props: true

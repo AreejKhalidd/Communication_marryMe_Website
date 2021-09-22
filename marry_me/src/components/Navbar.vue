@@ -12,14 +12,22 @@
       <b-collapse id="nav-collapse" is-nav class="inform" >
           <b-navbar-nav align="center"> 
                <b-button  size="sm"  class="b" variant="outline-light"   @click="gotosearch()">البحث   </b-button>
-                <span></span>      <span></span>           <span></span>
-                <b-dropdown  :text="catg" class="dp" variant="white">
+                <span></span>  
+                <input type="number" 
+                  class="age"
+                 v-model.number="age"  min=20 max=80  v-if="ageusers==true"/>
+                <input type="number" 
+                  class="age"
+                 v-model.number="bancount"  min=1 max=49  v-if="banusers==true"/>
+                <span v-if="ageusers==true"></span>             
+                <b-dropdown  :text="catg" class="dp" variant="white" v-if="VIP === 1">
                     <b-dropdown-item-button @click="vipcatg()">VIP المستخدمين</b-dropdown-item-button>
                     <b-dropdown-item-button @click="freecatg()">المستخدمين المجانين</b-dropdown-item-button>
-                    <b-dropdown-item-button @click="certcatg()" >المستخدمين المحظورين</b-dropdown-item-button>
-                    <b-dropdown-item-button @click="bancatg()">المستخدمين المعتمدين</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="bancatg()" > المستخدمين المحظورين بعدد</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="certcatg()">المستخدمين المعتمدين</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="agecatg()"> عمر المستخدمين </b-dropdown-item-button>
                 </b-dropdown>
-                <span></span> <span></span>  <span></span> 
+                <span></span> 
               <input align="center" type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
           </b-navbar-nav > 
       </b-collapse>
@@ -50,22 +58,23 @@
 import axios from "axios";
 import {faFolder,faList} from '@fortawesome/free-solid-svg-icons'
 export default{
-   data() {
+  data() {
     return {
       VIP: "",
       dosearch:false,
       search:"",
-      q:"",
       users:[],
-      msg:"",
       catg:"بحث من خلال..",
       banusers:null,
       vipusers:null,
       freeusers:null,
       certusers:null,
+      ageusers:null,
+      age:20,
+      bancount:1,
     }
   },
-   computed: {
+  computed: {
     folder() {
       return faFolder
      },
@@ -73,12 +82,9 @@ export default{
       return faList
      },
   },
+
   methods:{
-         watch: {
-            '$route.query.q'() {
-                this.gotosearch();
-            }
-        },
+
 
       vipcatg(){
          this.catg="VIPالمستخدمين";
@@ -95,6 +101,10 @@ export default{
       certcatg(){
          this.catg="المستخدمين المعتمدين";
          this.certusers=true;
+      },
+      agecatg(){
+         this.catg="عمر المستخدمين";
+         this.ageusers=true;
       },
       logout(){
           const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI2MTk2NCwiZXhwIjoxNjMyMjY1NTY0LCJuYmYiOjE2MzIyNjE5NjQsImp0aSI6ImluZHFuTmNXSkJZc1FPTlUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wgI5qATfQHZbAw-pmuqVAxylssPHVIdBG8AKFurNzbA");
@@ -120,176 +130,15 @@ export default{
 
       gotosearch()
       {
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI2MTk2NCwiZXhwIjoxNjMyMjY1NTY0LCJuYmYiOjE2MzIyNjE5NjQsImp0aSI6ImluZHFuTmNXSkJZc1FPTlUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.wgI5qATfQHZbAw-pmuqVAxylssPHVIdBG8AKFurNzbA");
-          if(this.VIP==1)
-          {             
               this.dosearch=true;
               console.log(this.dosearch)
               console.log(this.search);
-              if(this.search==="")
-              {
-                  this.msg="المستخدمين المرجحين لك";
-              }
-              else{
-                this.msg="الناتج عن بحثك"
-              }
-              if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null)
-              {
-                axios({
-                  method: 'post',
-                  url: "http://127.0.0.1:8000/api/filter",
-                  headers: {Authorization: token},
-                  data: {name :this.search}
-                }).then(response => {
-                console.log(response.data)
-                this.users=response.data
-
-                console.log("kkkkkkkkk")
-                console.log(response.data)
-                console.log(this.users)
-                  let id=Math.floor(Math.random() * 10);
-                  console.log(id); console.log("searchh 3laa");console.log(this.search);
-                this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                      })
-                              .catch((error) => {
-                              console.log('There is error:'+error);
-                              return "error occoured"
-                      });
-              }
-              else{
-                if(this.banusers == true)
-                {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.search,ban:1}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data
-
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                      let id=Math.floor(Math.random() * 10);
-                      console.log(id); console.log("searchh 3laa");console.log(this.search);
-                    this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                          })
-                                  .catch((error) => {
-                                  console.log('There is error:'+error);
-                                  return "error occoured"
-                          });
-
-                }
-                else if (this.freeusers==true)
-                {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.search,VIP:0}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data
-
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                      let id=Math.floor(Math.random() * 10);
-                      console.log(id); console.log("searchh 3laa");console.log(this.search);
-                    this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                          })
-                                  .catch((error) => {
-                                  console.log('There is error:'+error);
-                                  return "error occoured"
-                          });
-                }
-                else if (this.vipusers==true)
-                {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.search,VIP:1}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data
-
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                      let id=Math.floor(Math.random() * 10);
-                      console.log(id); console.log("searchh 3laa");console.log(this.search);
-                    this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                          })
-                                  .catch((error) => {
-                                  console.log('There is error:'+error);
-                                  return "error occoured"
-                          });
-                }
-                
-                else if (this.certusers==true)
-                {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.search,certified:1}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data
-
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                      let id=Math.floor(Math.random() * 10);
-                      console.log(id); console.log("searchh 3laa");console.log(this.search);
-                    this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                          })
-                                  .catch((error) => {
-                                  console.log('There is error:'+error);
-                                  return "error occoured"
-                          });
-                }
-              }
-        }
-        else{
-              this.dosearch=true;
-              console.log(this.dosearch)
-              console.log(this.search);
-              if(this.search==="")
-              {
-                  this.msg="المستخدمين المرجحين لك";
-              }
-              else{
-                this.msg="الناتج عن بحثك"
-              }
-                axios({
-                  method: 'post',
-                  url: "http://127.0.0.1:8000/api/filter",
-                  headers: {Authorization: token},
-                  data: {name :this.search}
-                }).then(response => {
-                console.log(response.data)
-                this.users=response.data
-
-                console.log("kkkkkkkkk")
-                console.log(response.data)
-                console.log(this.users)
-                  let id=Math.floor(Math.random() * 10);
-                  console.log(id); console.log("searchh 3laa");console.log(this.search);
-                this.$router.replace({name: 'SearchResult',query:{searchname:this.search},params:{msg:this.msg, users: JSON.stringify(this.users) }});
-                      })
-                              .catch((error) => {
-                              console.log('There is error:'+error);
-                              return "error occoured"
-                      });
-        }
+              this.$router.push({name: 'SearchResult',params:{VIP:this.VIP,searchname:this.search,banusers:this.banusers,freeusers:this.freeusers,vipusers:this.vipusers,certusers:this.certusers,age:this.age,bancount:this.bancount }});
       }
    },
 
   mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1MjU1OSwiZXhwIjoxNjMyMjU2MTU5LCJuYmYiOjE2MzIyNTI1NTksImp0aSI6IkFocVFPZENWWjVxRzk2UjEiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ceDm8xcwoMuEQSldH_-sABlu4UkLsmgBCAKfe6VQbxE");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMxNTQzMywiZXhwIjoxNjMyNTQ1ODMzLCJuYmYiOjE2MzIzMTU0MzMsImp0aSI6IkpVUE5RZnNoT2o0UlpnUWIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fsDGY9hDNTSO0XdJyEvUmDMMvUYJzaINBWZw7ugyd_U");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
@@ -309,6 +158,7 @@ export default{
 
 
 <style scoped> 
+
 .alert {
   padding: 20px;
   background-color: #f44336; /* Red */
@@ -333,8 +183,20 @@ export default{
     border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
     background-color:	#f5f5f5;
-    
-
+}
+.age{
+    height:30px;
+    width:60px;
+    padding-radius:15px;
+    margin-bottom:4px;
+    margin-top:1px;
+    border: solid 1px rgba(255,98,101,1);
+    border-radius:10px;
+    background-color:	white;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    opacity: 1;
 }
 .dp{
     height:30px;
@@ -434,9 +296,11 @@ span:not(:last-child) {
       }
     }
     .nb{
-      background-color: #f5f5f5;
+      background-color: #f5f5f5; 
     }
   }
+
+
 
 </style>
  

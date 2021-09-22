@@ -4,7 +4,7 @@
      <Sidebar/>
     <div class="page"> 
        <h4 class="hp" align="center">   {{this.msgtoshow}}  </h4>
-          <v-card class="card" v-for="(user, index) in userstoshow" :key="index">
+          <v-card class="card" v-for="(user, index) in users" :key="index">
               <v-list class="list-style" three-line>
                 <template>
                   <v-list-item style="max-width: 1300px">
@@ -27,18 +27,32 @@
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import img from "../assets/UserDefaultAvatar.png";
+import axios from "axios";
  export default {
     name: "SearchResult",
     components: {
     Navbar,
     Sidebar,
    },
-   props: { users:[] , msg:null },
+   props: { users:[] ,searchname:null,VIP:null,
+            banusers:null,
+            vipusers:null,
+            freeusers:null,
+            certusers:null,
+            ageusers:null,
+            age:null,
+            bancount:null,
+          },
    data() {
     return {   
-                userstoshow:JSON.parse(this.users),
-                msgtoshow:this.msg,
-                img:img,
+                
+                msgtoshow:"",
+                img:img,                
+        }
+    },
+  watch: {
+        '$route.params.searchname'() {
+            this.gotosearch();
         }
     },
 
@@ -57,9 +71,325 @@ import img from "../assets/UserDefaultAvatar.png";
             let v=user.VIP;
             let bd=user.birth_day;
           this.$router.push({name: 'Userinfoforsearch',params: { id:i,email:e,name:n,age:a,image:im,gender:gen,online:on ,v:v, birth_day:bd  }})
+        },
+      gotosearch(){    
+      console.log(this.users);
+      console.log("hena fl search");
+      if(this.searchname== ""){
+        this.msgtoshow="المستخدمين المرجحين لك";
+      }
+      else{
+        this.msgtoshow="الناتج عن بحثك"
+      }
+      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMyNTUzNSwiZXhwIjoxNjMyNTU1OTM1LCJuYmYiOjE2MzIzMjU1MzUsImp0aSI6IjFSYWFmVkg3VjFlaVhVeWQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.s0QUP4lb1lodpC12acuv_F2Pajm_qqi_21wDyjuGxTQ");                  
+          if(this.VIP==1)
+          {             
+              if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
+              {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+              }
+              else{
+                if(this.banusers != null)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,ban_count:this.bancount}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
 
+                }
+                else if (this.freeusers==true)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,vip:0}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+                else if (this.vipusers==true)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,vip:1}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }             
+                else if (this.certusers==true) 
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,certified:1}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+                else if(this.ageusers!=null){
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,age:this.age}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+              }
         }
+        else{
+                axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data
+
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured"
+                      });
+        }
+      
+    }
     },
+    mounted(){
+      
+      console.log(this.users);
+      console.log("hena fl search");
+      if(this.searchname== ""){
+        this.msgtoshow="المستخدمين المرجحين لك";
+      }
+      else{
+        this.msgtoshow="الناتج عن بحثك"
+      }
+      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMyNTUzNSwiZXhwIjoxNjMyNTU1OTM1LCJuYmYiOjE2MzIzMjU1MzUsImp0aSI6IjFSYWFmVkg3VjFlaVhVeWQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.s0QUP4lb1lodpC12acuv_F2Pajm_qqi_21wDyjuGxTQ");                  
+          if(this.VIP==1)
+          {             
+              if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
+              {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+              }
+              else{
+                if(this.banusers != null)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,ban_count:this.bancount}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+
+                }
+                else if (this.freeusers==true)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,vip:0}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+                else if (this.vipusers==true)
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,vip:1}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }             
+                else if (this.certusers==true) 
+                {
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,certified:1}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+                else if(this.ageusers!=null){
+                    axios({
+                      method: 'post',
+                      url: "http://127.0.0.1:8000/api/filter",
+                      headers: {Authorization: token},
+                      data: {name :this.searchname,age:this.age}
+                    }).then(response => {
+                    console.log(response.data)
+                    this.users=response.data
+                    console.log("kkkkkkkkk")
+                    console.log(response.data)
+                    console.log(this.users)
+                    console.log("searchh 3laa");console.log(this.searchname);
+                          })
+                            .catch((error) => {
+                            console.log('There is error:'+error);
+                            return "error occoured"
+                          });
+                }
+              }
+        }
+        else{
+                axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data
+
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured"
+                      });
+        }
+      
+    }
     
 
 }
