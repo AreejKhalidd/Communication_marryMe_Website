@@ -5,9 +5,10 @@
         prominent
         type="error"
         icon="mdi-cloud-alert"
-        style="direction: rtl"
+        style="direction: rtl;padding-left: 50px"
+
     >
-      لا يوجد اي طلبات أرسلتها أو طلبات أرسلت إليك حتي الأن.
+      لا يوجد اي طلبات حاليا لعرضها
     </v-alert>
     <v-btn
         depressed

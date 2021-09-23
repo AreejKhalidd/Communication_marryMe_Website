@@ -1,11 +1,14 @@
 <template>
-  <div class="homepage">
-    <Navbar/>
-    <Sidebar/>
+  <div class="hp">
+    <Navbar v-if="error==false" />
+    <Sidebar v-if="error==false" />
+      <v-app v-if="error==true">
+            <ErrorPage style="margin: 50px !important;" v-if="error"/>
+      </v-app>
     <div v-if="VIP === 0">
-    <SlidingCards/>
+    <SlidingCards v-if="error==false"/>
     </div>
-    <PreferencesList/>
+    <PreferencesList v-if="error==false"/>
   </div>
 </template>
 
@@ -15,7 +18,7 @@ import Sidebar from '@/components/Sidebar.vue'
 import PreferencesList from '@/components/PreferencesList.vue'
 import SlidingCards from '@/components/SlidingCards.vue'
 import axios from "axios";
-
+import ErrorPage from '@/components/ErrorPage.vue'
  export default {
     name: "HomePage",
     components: {
@@ -23,14 +26,21 @@ import axios from "axios";
     Sidebar,
     PreferencesList,
     SlidingCards,
+    ErrorPage,
    },
       data() {
-    return {
-      VIP: "",
-    }
+        return {
+          VIP: "",
+          error: false,
+        }
   },
+     methods:{
+           redirect(){
+             this.$router.push({ name: 'Login' })
+           }
+     },
      mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3MDk3OSwiZXhwIjoxNjMyMDc0NTc5LCJuYmYiOjE2MzIwNzA5NzksImp0aSI6IjBCeW5YQUdJYVFkVU1JQ20iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ffAVGEMcdoUAaP2YmWUTqyY6waAVkDSKy6W1RxglOv4");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMxNTQzMywiZXhwIjoxNjMyNTQ1ODMzLCJuYmYiOjE2MzIzMTU0MzMsImp0aSI6IkpVUE5RZnNoT2o0UlpnUWIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fsDGY9hDNTSO0XdJyEvUmDMMvUYJzaINBWZw7ugyd_U");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
@@ -41,6 +51,7 @@ import axios from "axios";
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
+                        this.error = true;
                         return "error occoured"
                 });
   },
@@ -48,7 +59,7 @@ import axios from "axios";
 </script>
 
 <style scoped>
-.homepage{
-  background-color:white;
+.hp{
+background-color: white;
 }
 </style>

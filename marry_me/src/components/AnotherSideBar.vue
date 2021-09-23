@@ -45,6 +45,7 @@
 <script>
 import {faHeart,faFan,faAngry,faUserFriends} from '@fortawesome/free-solid-svg-icons'
 
+
 export default {
   name: "SlideBar",
   computed: {

@@ -47,22 +47,27 @@
           <v-main>
             <v-container>
               <v-tabs style="min-width: 200px!important;"  v-if="!error">
-                <v-tab @click="all=true;sent=true;req=true;accept=false;reject=false;callMounted()">كل الطلبات</v-tab>
-                <v-tab  @click="all=true;sent=true;req=false;accept=false;reject=false;callMounted()">المرسلة</v-tab>
-                <v-tab  @click="all=true;sent=false;req=true;accept=false;reject=false;callMounted()">المرسلة لي</v-tab>
-                <v-tab  @click="sent=false;req=false;accept=true;reject=false;callMounted()">الطلبات المقبولة</v-tab>
-                <v-tab  @click="sent=false;req=false;accept=false;reject=true;callMounted()"> الطلبات المرفوضة</v-tab>
-              </v-tabs>
-              <br>
-              <br>
+                <v-tab @click="all=true;sent=true;req=true;accept=false;reject=false;callMounted();flag_all=true">كل الطلبات</v-tab>
+                <v-tab  @click="all=true;sent=true;req=false;accept=false;reject=false;callMounted();flag_all=true;">المرسلة</v-tab>
+                <v-tab  @click="all=true;sent=false;req=true;accept=false;reject=false;callMounted();flag_all=true">المرسلة لي</v-tab>
+                <v-tab  @click="sent=false;req=false;accept=true;reject=false;callMounted();flag_all=false">الطلبات المقبولة</v-tab>
+                <v-tab  @click="sent=false;req=false;accept=false;reject=true;callMounted();flag_all=false"> الطلبات المرفوضة</v-tab>
 
+              </v-tabs>
+              <div v-if="!error">
+                <br>
+                <br>
+
+              </div>
               <div v-if="all && sent">
+
                 <h1 id="head" v-if="!error &&this.counter!==0" class="subheader">الطلبات الذي ارسلتها</h1>
                 <RequestsList v-for="request in requests.requests_sent" :id="request.id" :key="request.id"
                               :age="request.age"
                               :req_id="request.req_id"
                               :status="request.status"
                               :img="request.image" :name="request.name"
+                              :mess="this.message"
                               :count="decCount"/>
               </div>
               <div  v-if="all && req">
@@ -98,7 +103,7 @@
                             :count="reqCount"/>
               </div>
               <ErrorPage v-if="error" style="margin: 50px !important;"/>
-              <EmptyPage v-if="this.counter_dec===0 &&this.counter===0 &&!error" style="margin: 50px !important;"/>
+              <EmptyPage  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style="margin: 50px !important;"/>
 
             </v-container>
           </v-main>
@@ -147,13 +152,14 @@ export default {
       drawer: false,
       group: null,
       error: false,
+      flag_all:true,
       counter: 0,
       counter_dec: 0
     }
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
     axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
@@ -177,17 +183,17 @@ export default {
   },
   methods:{
     decCount(){
-      if(this.counter!==0){
+  //    if(this.counter!==0){
         this.counter--;
-      }
+    //  }
     },
     reqCount(){
-      if(this.counter_dec!==0){
+   //   if(this.counter_dec!==0){
         this.counter_dec--;
-      }
+   //   }
     },
     callMounted(){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
       axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
