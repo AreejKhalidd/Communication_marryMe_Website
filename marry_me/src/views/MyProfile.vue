@@ -362,6 +362,18 @@ export default {
        });
     },
     saveChanges() {
+      if(!this.file){
+        const fd = new FormData();
+        fd.append('image', this.file);
+        const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1ODI5NCwiZXhwIjoxNjMyNDg4Njk0LCJuYmYiOjE2MzIyNTgyOTQsImp0aSI6Imc2VnR1TG42UFNVbGlFYVkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.X2FBWU2iydp-agPiFxVKsTF30bCMmSuBP-e_T4sLDWo'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+        axios.post('http://127.0.0.1:8000/api/deleteImage', fd, option)
+          .then((response) => {
+            console.log(response.data.message);
+            this.updataBoolean = true;
+          })
+          .catch(() => {
+          });
+      }
       if (this.$refs.form.validate()) {
         const fd = new FormData();
         fd.append('image', this.file);
