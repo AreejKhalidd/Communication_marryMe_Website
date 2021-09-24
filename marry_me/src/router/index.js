@@ -12,7 +12,6 @@ import CertifyMe from '../views/CertifyMe'
 import requests from '../views/Request'
 import questions from '../views/Quizzes'
 import SearchResult from '../views/SearchResult'
-import Userinfoforsearch from '../views/Userinfoforsearch'
 import Login from '../views/Login';
 import ResetPassword from '../views/ResetPassword';
 import Register from '../views/Register';
@@ -91,12 +90,6 @@ const routes = [{
         path: '/searchResult/:searchname',
         name: 'SearchResult',
         component: SearchResult,
-        props: true
-    },
-    {
-        path: '/userinfoforsearch',
-        name: 'Userinfoforsearch',
-        component: Userinfoforsearch,
         props: true
     },
     {
