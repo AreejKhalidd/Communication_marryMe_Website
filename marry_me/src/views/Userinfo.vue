@@ -1,15 +1,15 @@
 <template>
- <div class="page" >
+ <v-main class="page" >
     <Navbar/>
     <Sidebar/>
-      <div class="mt-5 mb-2" >
-                      <h4 class="font-italic"> مستخدم من قائمة التفضيلات الخاصة بك </h4>
-                      <v-divider class="mx-4"></v-divider>
-            <v-container>
-                <v-row>
-                  <v-col>
+                      <h4 class="font-italic mt-3"> بيانات المستخدم</h4>
+                      <v-divider  dark></v-divider>
+      <div class="list" >
+            <v-container >
+                <v-row >
+                  <v-col>                                                  
                       <v-img
-                      v-bind:src="user.user[0].image"
+                      :src="useravatar"
                       id="img"           
                       rounded             
                       class="my-auto mx-5"
@@ -18,40 +18,58 @@
                       >
                     </v-img>
                   </v-col>
-                  <v-col>
-                    <v-list>
+                  <v-col >
+                    <v-list class="s" >
                       <v-list-item >      
-                           {{ user.user[0].name}} : الاسم              
-                      </v-list-item>
-                      <v-list-item >      
-                           {{ user.user[0].age}} : العمر              
-                      </v-list-item>
-                      <v-list-item >      
-                           {{ user.user[0].birth_day}} : تاريخ الميلاد              
-                      </v-list-item>
-                      <v-list-item >      
-                           {{ user.user[0].email}} : البريد الإلكتروني             
-                      </v-list-item>
-                      <v-list-item v-if="user.user[0].VIP === 1">      
-                                 VIP المستخدم            
-                      </v-list-item>
-                      <v-list-item v-if="user.user[0].online === 1">      
-                                المستخدم نشط الان          
-                      </v-list-item>
-                    </v-list>
+                            الاسم    : {{ Name}}           
+                      </v-list-item >
+                      <v-list-item   >      
+                            رقم التليفون : {{ PhoneNumber }}              
+                      </v-list-item >
+                      <v-list-item   >      
+                            تاريخ الميلاد  : {{ BirthDay }}             
+                      </v-list-item  >
+                      <v-list-item    >      
+                            البريد:  {{ Email }}        
+                      </v-list-item >
+                      <v-list-item  >      
+                            النوع  :    {{ Gender }}        
+                      </v-list-item >
+                      <v-list-item  >      
+                            عدد مرات الابلاغ  :  {{ NumberOfReports }}          
+                      </v-list-item >
+                      <v-list-item  >      
+                           عدد مرات الحظر     :  {{ NumberOfBans }}        
+                      </v-list-item >
+                      <v-list-item  v-if="vip === 1" >      
+                                  المستخدم VIP         
+                      </v-list-item >
+                      <v-list-item  v-if="Certified === 1" >      
+                           <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon>   المستخدم مصرح حسابه           
+                      </v-list-item >                                         
+                    </v-list>  
+                                   
+                  </v-col>  
+                 </v-row>
+
+                 <v-row>
+                   <v-col>
+                    <div class="b">
+                    <button  v-if="vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                    <button  v-if="vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                    <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
+                    </div>
                   </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                      <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>
-                      <button  v-if="VIP === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                      <button  v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                      <button  rounded="circle" class="btns-logo" title="حظر" @click="addtoblocks(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="block"/></button>
-                    </v-col>
-                </v-row>
+                 </v-row>
+
+
+
+                 
             </v-container>
+
+            
         </div> 
- </div>
+ </v-main>
 </template>
 
 <script>
@@ -66,11 +84,24 @@ export default {
     Navbar,
     Sidebar,
    },
-    props: { user:Object,},
   data() {
     return {
-      VIP: "",
-      img:img,
+      avatarurl: null,
+      userId:this.$route.params.id,
+      url: img,
+      file: '',
+      ID: null,
+      Name: "",
+      Email: "",
+      PhoneNumber: "",
+      BirthDay: "",
+      Gender: "",
+      NumberOfReports: "",
+      NumberOfBans: "",
+      Certified: "",
+      vip: "",
+      CurrentlyBanned: "",
+      currentID: '',
     }
   }, 
       computed: {
@@ -83,9 +114,18 @@ export default {
     block(){
       return faBan
     },
+    useravatar() {
+      if (this.avatarurl) return this.avatarurl;
+      return this.url;
+    },
     
     }, 
     methods:{
+            
+        previewImage() {
+          this.url = URL.createObjectURL(this.file);
+          this.useravatar();
+        },
         addtofavs(id){
                 const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA1NDI1NCwiZXhwIjoxNjMyMDU3ODU0LCJuYmYiOjE2MzIwNTQyNTQsImp0aSI6IkU3clprRDdEZUFTSlBySEkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.p1gTZzDW3i4VaVlJESMSF38O6yIEGaPOuPmVb5ZduCI");
                 axios({
@@ -157,19 +197,27 @@ export default {
       }          
     },
     mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjA3MDk3OSwiZXhwIjoxNjMyMDc0NTc5LCJuYmYiOjE2MzIwNzA5NzksImp0aSI6IjBCeW5YQUdJYVFkVU1JQ20iLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ffAVGEMcdoUAaP2YmWUTqyY6waAVkDSKy6W1RxglOv4");
-          axios({
-            method: 'get',
-            url: "http://127.0.0.1:8000/api/profile",
-            headers: {Authorization: token}
-          }).then(response => {
-          console.log(response.data)
-          this.VIP=response.data.VIP;
-                })
-                        .catch((error) => {
-                        console.log('There is error:'+error);
-                        return "error occoured"
-          });
+        const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQzNjU3MiwiZXhwIjoxNjMyODQ2OTcyLCJuYmYiOjE2MzI0MzY1NzIsImp0aSI6IlB2WmhDeXVCMlhZRWVza3AiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.1Rhg6gS9mNSkKqVt-H4IzVknLRJaYpw0O5zgA0NMV7g");
+        axios({
+          method: 'post',
+          url: "http://127.0.0.1:8000/api/getUser",
+          headers: {Authorization: AuthStr},
+          data: {id :this.userId}
+        }).then((response) => {
+              this.ID = response.data.id;
+              this.Name = response.data.name;
+              this.Email = response.data.email;
+              this.PhoneNumber = response.data.phone;
+              this.BirthDay = response.data.birth_day;
+              this.Gender = response.data.gender;
+              this.avatarurl = response.data.image;
+              this.NumberOfReports = response.data.reports;
+              this.NumberOfBans = response.data.ban_count;
+              this.Certified = response.data.certified;
+              this.vip = response.data.VIP;
+            }).catch((error) => {
+          console.log(error.response.statusText)
+        });
   },
 }
 </script>
@@ -197,6 +245,8 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
 }
 .page{
   background-color:white;
+  background-color: #ffffff;
+  flex-direction: column;
 }
 #img{
   border-radius: 50%;
@@ -229,4 +279,19 @@ width: 60px;
   cursor:pointer;
   font-size:12px;
 }
+.list{
+ 
+  direction: rtl; 
+   margin-left:45% ;
+ 
+  
+
+}
+.page{
+    
+}
+.b{
+ margin-right:65% ;
+}
+
 </style>

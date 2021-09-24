@@ -28,16 +28,15 @@
             v-bind:src="img"
           ></v-img>
 
-            <div>{{ user.user[0].name}} : الاسم</div>
-            <div>{{ user.user[0].age}} : العمر</div>
+            <div> الاسم : {{ user.user[0].name}} </div>
+            <div> العمر : {{ user.user[0].age}} </div>
 
           <v-divider class="mx-4"></v-divider>
                  
           <v-card-actions>
-                      <v-btn  :icon="fav"  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="fav"/></v-btn>
                       <v-btn :icon="startChat"  v-if="VIP === 1" rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
                       <v-btn  :icon="startChat" v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
-                      <v-btn  :icon="block" rounded="circle"  class="btns-logo" title="حظر" @click="addtoblocks(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="block"/></v-btn>
+                      <v-btn  :icon="fav"  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="fav"/></v-btn>
                       <v-btn color="deep-purple lighten-2" class="btn" text @click="gotouserinfo(user)"> المزيد </v-btn>
           </v-card-actions>
         </v-card>
@@ -50,9 +49,7 @@ import axios from "axios";
 import img from "../assets/UserDefaultAvatar.png";
 import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
 export default{
-       props:{
-        
-      },
+
   data(){
             return{
                 users:  [                   
@@ -77,7 +74,7 @@ export default{
   },
 
   mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMxNTQzMywiZXhwIjoxNjMyNTQ1ODMzLCJuYmYiOjE2MzIzMTU0MzMsImp0aSI6IkpVUE5RZnNoT2o0UlpnUWIiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fsDGY9hDNTSO0XdJyEvUmDMMvUYJzaINBWZw7ugyd_U");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQ0MTg1MiwiZXhwIjoxNjMyODUyMjUyLCJuYmYiOjE2MzI0NDE4NTIsImp0aSI6IkJMVDd1N2thVTZkc0ZDWEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pxa6E0Zr-pUOgfNh5oCEv6G-JhHa5Owr_pJ7CMcCn3I");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -108,12 +105,13 @@ export default{
     methods:
     {
         gotouserinfo(user){
-          console.log(user.id);
+          console.log("ehh if agebo ezay");
+          console.log(user.user[0].id);
           console.log("hiiiiiiii");
           this.$router
           .push({
                     name: 'Userinfo',
-                    params: { user:user }
+                    params: { id:user.user[0].id }
                     })
         },
         reserve () {
@@ -196,16 +194,15 @@ export default{
 <style scoped>
 .card{
   display:inline-block;
-    background-color: white;
-    
+    background-color: white;   
     box-shadow: 0px 6px 0px white;
     border: solid 2px rgba(255,98,101,1);
     border-radius:30px;
-
     margin-right:5px;
     margin-left:5px;
     margin-top:3px;
     margin-bottom:5px;
+    direction: rtl;
 }
 .card:hover{
   box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
@@ -235,7 +232,7 @@ width: 40px;
   font-size:12px;
 }
 .btn{
- margin-left:auto;
+ margin-right:auto;
  variant:outline-secondary;
  color:black;
   background-color: white;
@@ -244,6 +241,9 @@ width: 40px;
   border-radius:30px;
 }
 .hp{
-  margin-top:10px;
+  margin-top:10px; 
+}
+.data{
+  direction: rtl;
 }
 </style>

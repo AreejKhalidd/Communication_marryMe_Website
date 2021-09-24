@@ -61,16 +61,8 @@ import axios from "axios";
         gotouserinfo(user,index){
           console.log(user);
           console.log(index);
-            let e=user.email;
-            let n=user.name;
-            let a=user.age;
-            let im=user.image;
-            let gen=user.gender;
             let i= user.id;
-            let on =user.online;
-            let v=user.VIP;
-            let bd=user.birth_day;
-          this.$router.push({name: 'Userinfoforsearch',params: { id:i,email:e,name:n,age:a,image:im,gender:gen,online:on ,v:v, birth_day:bd  }})
+          this.$router.push({name: 'Userinfo',params: { id:i }})
         },
       gotosearch(){    
       console.log(this.users);
@@ -81,7 +73,7 @@ import axios from "axios";
       else{
         this.msgtoshow="الناتج عن بحثك"
       }
-      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMyNTUzNSwiZXhwIjoxNjMyNTU1OTM1LCJuYmYiOjE2MzIzMjU1MzUsImp0aSI6IjFSYWFmVkg3VjFlaVhVeWQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.s0QUP4lb1lodpC12acuv_F2Pajm_qqi_21wDyjuGxTQ");                  
+      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQ0MTg1MiwiZXhwIjoxNjMyODUyMjUyLCJuYmYiOjE2MzI0NDE4NTIsImp0aSI6IkJMVDd1N2thVTZkc0ZDWEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pxa6E0Zr-pUOgfNh5oCEv6G-JhHa5Owr_pJ7CMcCn3I");                  
           if(this.VIP==1)
           {             
               if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
@@ -241,7 +233,7 @@ import axios from "axios";
       else{
         this.msgtoshow="الناتج عن بحثك"
       }
-      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMyNTUzNSwiZXhwIjoxNjMyNTU1OTM1LCJuYmYiOjE2MzIzMjU1MzUsImp0aSI6IjFSYWFmVkg3VjFlaVhVeWQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.s0QUP4lb1lodpC12acuv_F2Pajm_qqi_21wDyjuGxTQ");                  
+      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQ0MTg1MiwiZXhwIjoxNjMyODUyMjUyLCJuYmYiOjE2MzI0NDE4NTIsImp0aSI6IkJMVDd1N2thVTZkc0ZDWEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pxa6E0Zr-pUOgfNh5oCEv6G-JhHa5Owr_pJ7CMcCn3I");                  
           if(this.VIP==1)
           {             
               if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
@@ -403,6 +395,7 @@ import axios from "axios";
 .page{
   margin-top:8px;
   background-color:white;
+   direction: rtl;
 }
 .card{
     box-shadow:5px 5px 5px rgba(255,98,101,1);
