@@ -10,7 +10,7 @@
       indicators
       background="#ccc"
       img-width="1024"
-      img-height="350"
+      img-height="450"
       style="text-shadow: 1px 1px 2px #000;"
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
@@ -22,7 +22,7 @@
                 text=" يمكنه بدء المحادثة فورا مع الطرف الاخر بدون ارسال طلب VIPمستخدم  "
                 color="black"
                 :img-src="chat"
-                style="width:100%; max-height: 350px;background: rgba(255,98,101,1); font-color:black; color:black;"
+                style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"
                 
                 ></b-carousel-slide>
 
@@ -32,7 +32,7 @@
                 text=" يمكنه ان يخفي بعد البيانات الخاصة به VIPمستخدم  "
                 color="black"
                 :img-src="hide"
-                style="width:100%; max-height: 350px;background: rgba(255,98,101,1); font-color:black; color:black;"
+                style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"
                 ></b-carousel-slide>
                  <b-carousel-slide
                 align="center"
@@ -40,7 +40,7 @@
                 text=" يمكنه ان يري من قام بالاعجاب به VIPمستخدم  "
                 color="black"
                 :img-src="like"
-                style="width:100%; max-height: 350px;background: rgba(255,98,101,1); font-color:black; color:black;"
+                style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"
                 ></b-carousel-slide>
 
     </b-carousel>
@@ -49,9 +49,9 @@
 
 
 <script>
-import chat from "../assets/chat.png";
-import hide from "../assets/hide.jpg";
-import like from "../assets/likee.jpg";
+import chat from "../assets/chattt.png";
+import hide from "../assets/hideee.jpg";
+import like from "../assets/like.jpg";
   export default {
     data() {
       return {
@@ -75,7 +75,7 @@ import like from "../assets/likee.jpg";
 
 <style>
 .sc{
-    height:350px;
+    height:30%;
     width:100%;
     align:center;
     
