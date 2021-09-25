@@ -1,26 +1,30 @@
 <template>
- <div class="all">
-     <Navbar/>
-     <Sidebar/>
-    <div class="page"> 
-       <h4 class="hp" align="center">   {{this.msgtoshow}}  </h4>
-          <v-card class="card" v-for="(user, index) in users" :key="index">
-              <v-list class="list-style" three-line>
-                <template>
-                  <v-list-item style="max-width: 1300px">
-                    <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
-                      <v-img v-bind:src="user.image"></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content class="info">
-                      <v-list-item-title class="textt">الأسم : {{ user.name }}</v-list-item-title>
-                      <v-list-item-title  class="textt">العمر : {{ user.age }}</v-list-item-title >
-                  </v-list-item-content>
-                  <v-btn class="btn" @click="gotouserinfo(user,index)"> المزيد </v-btn>
-                </v-list-item>
-              </template>
-            </v-list>
-      </v-card>
-    </div>
+  <div id="app">
+    <v-app>
+      <div class="all">
+          <Navbar/>
+          <Sidebar/>
+        <div class="page"> 
+            <h4 class="hp" align="center">   {{this.msgtoshow}}  </h4>
+              <v-card class="card" v-for="(user, index) in users" :key="index">
+                  <v-list class="list-style" three-line>
+                    <template class="back">
+                      <v-list-item style="max-width: 1300px">
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
+                          <v-img v-bind:src="user.image"></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content class="shift">
+                          <v-list-item-title class="textt">الأسم : {{ user.name }}</v-list-item-title>
+                          <v-list-item-title  class="textt">العمر : {{ user.age }}</v-list-item-title >
+                      </v-list-item-content>
+                      <v-btn class="btn" @click="gotouserinfo(user,index)"> المزيد </v-btn>
+                    </v-list-item>
+                  </template>
+                </v-list>
+          </v-card>
+        </div>
+      </div>
+    </v-app>
   </div>
 </template>    
 <script>
@@ -73,7 +77,7 @@ import axios from "axios";
       else{
         this.msgtoshow="الناتج عن بحثك"
       }
-      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQ0MTg1MiwiZXhwIjoxNjMyODUyMjUyLCJuYmYiOjE2MzI0NDE4NTIsImp0aSI6IkJMVDd1N2thVTZkc0ZDWEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pxa6E0Zr-pUOgfNh5oCEv6G-JhHa5Owr_pJ7CMcCn3I");                  
+      const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");                  
           if(this.VIP==1)
           {             
               if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
@@ -393,16 +397,16 @@ import axios from "axios";
   background-color:white;
 }
 .page{
+
   margin-top:8px;
   background-color:white;
-   direction: rtl;
+  
 }
 .card{
     box-shadow:5px 5px 5px rgba(255,98,101,1);
-    
     background-color: white;
     margin:15px;
-    direction: rtl;
+   
 }
 .btn{
  margin-left:auto;
@@ -416,9 +420,16 @@ import axios from "axios";
 }
 .textt{
   font-weight: bolder;
-  font-size: 20px
+  font-size: 20px;
+  background:white;
+  margin-left:60%;
+   direction: rtl;
+  }
+.back{
+  background-color:white;
 }
 .info{
-  text-align: right;margin: 0 50px 0 20px
+  text-align: right;margin: 0 50px 0 20px;
+  background:white;
 }
 </style>

@@ -1,75 +1,78 @@
 <template>
- <v-main class="page" >
-    <Navbar/>
-    <Sidebar/>
-                      <h4 class="font-italic mt-3"> بيانات المستخدم</h4>
-                      <v-divider  dark></v-divider>
-      <div class="list" >
-            <v-container >
-                <v-row >
-                  <v-col>                                                  
-                      <v-img
-                      :src="useravatar"
-                      id="img"           
-                      rounded             
-                      class="my-auto mx-5"
-                      max-height="200"
-                      max-width="200"
-                      >
-                    </v-img>
-                  </v-col>
-                  <v-col >
-                    <v-list class="s" >
-                      <v-list-item >      
-                            الاسم    : {{ Name}}           
-                      </v-list-item >
-                      <v-list-item   >      
-                            رقم التليفون : {{ PhoneNumber }}              
-                      </v-list-item >
-                      <v-list-item   >      
-                            تاريخ الميلاد  : {{ BirthDay }}             
-                      </v-list-item  >
-                      <v-list-item    >      
-                            البريد:  {{ Email }}        
-                      </v-list-item >
-                      <v-list-item  >      
-                            النوع  :    {{ Gender }}        
-                      </v-list-item >
-                      <v-list-item  >      
-                            عدد مرات الابلاغ  :  {{ NumberOfReports }}          
-                      </v-list-item >
-                      <v-list-item  >      
-                           عدد مرات الحظر     :  {{ NumberOfBans }}        
-                      </v-list-item >
-                      <v-list-item  v-if="vip === 1" >      
-                                  المستخدم VIP         
-                      </v-list-item >
-                      <v-list-item  v-if="Certified === 1" >      
-                           <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon>   المستخدم مصرح حسابه           
-                      </v-list-item >                                         
-                    </v-list>  
-                                   
-                  </v-col>  
-                 </v-row>
+ <div id="app">
+   <v-app id="content">
+        <Navbar/>
+        <Sidebar/>   
+      <div class=" mr-2 align-left">  
+                          <h4 class="font-italic mt-3"> بيانات المستخدم</h4>
+                          <v-divider  dark></v-divider>
+          <div class="list" >
+              <v-content fluid id="content">
+                <v-container fluid  id="container">
+                        <v-layout row left wrap justify-space-around>
+                         
+                    <v-row >
+                      <v-col >                                                  
+                          <v-img
+                          :src="useravatar"
+                          id="img"           
+                          rounded             
+                          class="my-auto mx-5"
+                          max-height="200"
+                          max-width="200"
+                          >
+                        </v-img>
+                      </v-col>
+                      <v-col wrap align="start">
+                        <v-list >
+                          <v-list-item >      
+                                الاسم    : {{ Name}}           
+                          </v-list-item >
+                          <v-list-item   >      
+                                رقم التليفون : {{ PhoneNumber }}              
+                          </v-list-item >
+                          <v-list-item   >      
+                                تاريخ الميلاد  : {{ BirthDay }}             
+                          </v-list-item  >
+                          <v-list-item    >      
+                                البريد:  {{ Email }}        
+                          </v-list-item >
+                          <v-list-item  >      
+                                النوع  :    {{ Gender }}        
+                          </v-list-item >
+                          <v-list-item  >      
+                                عدد مرات الابلاغ  :  {{ NumberOfReports }}          
+                          </v-list-item >
+                          <v-list-item  >      
+                                عدد مرات الحظر     :  {{ NumberOfBans }}        
+                          </v-list-item >
+                          <v-list-item  v-if="vip === 1" >      
+                                      المستخدم VIP         
+                          </v-list-item >
+                          <v-list-item  v-if="Certified === 1" >      
+                                <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon>   المستخدم مصرح حسابه           
+                          </v-list-item >                                         
+                        </v-list>                                         
+                      </v-col> 
+                      </v-row>
 
-                 <v-row>
-                   <v-col>
-                    <div class="b">
-                    <button  v-if="vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                    <button  v-if="vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                    <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
-                    </div>
-                  </v-col>
-                 </v-row>
-
-
-
-                 
-            </v-container>
-
-            
-        </div> 
- </v-main>
+                      <v-row>                        
+                        <v-col>
+                        <div class="b">
+                        <button  v-if="vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  v-if="vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
+                        </div>
+                      </v-col>
+                      
+                      </v-row>
+                   </v-layout>  
+                </v-container>
+              </v-content>
+            </div>
+          </div>      
+      </v-app> 
+ </div>
 </template>
 
 <script>
@@ -248,6 +251,11 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
   flex-direction: column;
 }
+.d{
+  
+  
+  
+}
 #img{
   border-radius: 50%;
   border: solid 2px #ff6265;
@@ -282,7 +290,7 @@ width: 60px;
 .list{
  
   direction: rtl; 
-   margin-left:45% ;
+ margin-left:45% ;
  
   
 
@@ -292,6 +300,7 @@ width: 60px;
 }
 .b{
  margin-right:65% ;
+  
 }
 
 </style>

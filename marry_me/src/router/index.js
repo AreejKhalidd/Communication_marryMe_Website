@@ -16,7 +16,7 @@ import Login from '../views/Login';
 import ResetPassword from '../views/ResetPassword';
 import Register from '../views/Register';
 import ForgotPassword from '../views/ForgotPassword';
-import UserProfile from '../components/Profile'
+import UserProfile from '../components/Profile';
 
 Vue.use(VueRouter)
 
@@ -118,6 +118,7 @@ const routes = [{
         component: UserProfile,
         props: true
     },
+
 ]
 
 const router = new VueRouter({

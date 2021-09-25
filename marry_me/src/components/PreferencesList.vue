@@ -1,5 +1,5 @@
 <template>
-  <div  align="center" >
+      <div>
          <h4 class="hp" align="center" style="color: rgba(255,98,101,1);">   
                                        قائمة التفضيلات الخاصة بك   </h4>
         <v-card
@@ -8,6 +8,7 @@
           v-for="(user, index) in users" :key="index"
           class="card"
         >
+          
           <template slot="progress">
             <v-progress-linear
               color="deep-purple"
@@ -28,16 +29,18 @@
             v-bind:src="img"
           ></v-img>
 
-            <div> الاسم : {{ user.user[0].name}} </div>
+            <div>الاسم : {{ user.user[0].name}} </div>
             <div> العمر : {{ user.user[0].age}} </div>
 
           <v-divider class="mx-4"></v-divider>
                  
-          <v-card-actions>
+          <v-card-actions class="c">
                       <v-btn :icon="startChat"  v-if="VIP === 1" rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
                       <v-btn  :icon="startChat" v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
                       <v-btn  :icon="fav"  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="fav"/></v-btn>
-                      <v-btn color="deep-purple lighten-2" class="btn" text @click="gotouserinfo(user)"> المزيد </v-btn>
+              <div class="cc">      
+                      <v-btn color="deep-purple lighten-2"   class="btn" text @click="gotouserinfo(user)" left> المزيد </v-btn>
+              </div >   
           </v-card-actions>
         </v-card>
   </div>
@@ -74,7 +77,7 @@ export default{
   },
 
   mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjQ0MTg1MiwiZXhwIjoxNjMyODUyMjUyLCJuYmYiOjE2MzI0NDE4NTIsImp0aSI6IkJMVDd1N2thVTZkc0ZDWEUiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pxa6E0Zr-pUOgfNh5oCEv6G-JhHa5Owr_pJ7CMcCn3I");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
           axios({
                     method: 'get',
                     url: "http://127.0.0.1:8000/api/preference",
@@ -192,6 +195,7 @@ export default{
 
 
 <style scoped>
+
 .card{
   display:inline-block;
     background-color: white;   
@@ -232,18 +236,25 @@ width: 40px;
   font-size:12px;
 }
 .btn{
- margin-right:auto;
  variant:outline-secondary;
  color:black;
   background-color: white;
   box-shadow: 0px 6px 0px white;
   border: solid 1px rgba(255,98,101,1);
   border-radius:30px;
+
+
 }
+
 .hp{
   margin-top:10px; 
 }
-.data{
+.c{
   direction: rtl;
+  
+}
+.cc{
+  direction: rtl;
+  margin-right:90px;
 }
 </style>

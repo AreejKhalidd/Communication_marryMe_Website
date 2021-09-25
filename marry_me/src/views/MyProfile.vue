@@ -1,196 +1,198 @@
 <template>
-  <v-main id="content">
-    <Navbar/>
-    <Sidebar/>
-    <v-row>
-      <v-col cols="12" id="Black">
-        <br />
-        <br />
-        <h1 class="text-center">حسابي الشخصي</h1>
-
-        <br />
-        <v-form ref="form" id="form" >
-          <v-row>
-            <v-img
-              id="avatar"
-              class="preview"
-              rounded
-              :src="useravatar"
-              max-height="200"
-              max-width="200"
-            >
-            </v-img>
-            <v-file-input
-              @change="previewImage"
-              hide-input
-              v-model="file"
-              accept="image/*"
-              prepend-icon="mdi-camera-plus"
-              color="#FF6265"
-            ></v-file-input>
-          </v-row>
+  <v-app>
+    <v-main id="content">
+      <Navbar/>
+      <Sidebar/>
+      <v-row>
+        <v-col cols="12" id="Black">
           <br />
           <br />
-          <v-btn @click="RemoveAvatar" rounded outlined style="width: 230px" color="#FF6265" small>
-            ازالة صورة الملف الشخصي
-          </v-btn>
+          <h1 class="text-center">حسابي الشخصي</h1>
 
           <br />
-          <br />
-          <v-divider id="Grey" dark></v-divider>
-          <br />
-          <v-row>
-          <h3 id="Black">
-            {{ Name }}
-          </h3>
-          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle</v-icon>
-          </v-row>
-          <br />
-          <h3 id="Grey">
-            {{ Email }}
-          </h3>
-          <br />
-          <br />
-        <v-row>
-        <v-text-field
-          v-model="PhoneNumber"
-          style="width:200px"
-          label="رقم الموبايل"
-              color="#FF6265"
-              :rules="[rules.number, rules.required]"
-        ></v-text-field>
-
-            <v-text-field
-              v-model="BirthDay"
-              label="تاريخ الميلاد"
-              style="width:200px"
-              color="#FF6265"
-              disabled
-            ></v-text-field>
-            <v-text-field
-              v-model="Gender"
-              label="النوع"
-              style="width:200px"
-              color="#FF6265"
-              disabled
-            ></v-text-field>
+          <v-form ref="form" id="form" >
+            <v-row>
+              <v-img
+                id="avatar"
+                class="preview"
+                rounded
+                :src="useravatar"
+                max-height="200"
+                max-width="200"
+              >
+              </v-img>
+              <v-file-input
+                @change="previewImage"
+                hide-input
+                v-model="file"
+                accept="image/*"
+                prepend-icon="mdi-camera-plus"
+                color="#FF6265"
+              ></v-file-input>
             </v-row>
+            <br />
+            <br />
+            <v-btn @click="RemoveAvatar" rounded outlined style="width: 230px" color="#FF6265" small>
+              ازالة صورة الملف الشخصي
+            </v-btn>
+
+            <br />
+            <br />
+            <v-divider id="Grey" dark></v-divider>
             <br />
             <v-row>
-        <v-text-field
-          v-model="NumberOfReports"
-          style="width:200px"
-          label="عدد مرات الابلاغ"
-          color="#FF6265"
-          disabled
-        ></v-text-field>
-            <v-text-field
-              v-model="NumberOfBans"
-              label="عدد مرات الحظر"
-              style="width:200px"
-              color="#FF6265"
-              disabled
-            ></v-text-field>
+            <h3 id="Black">
+              {{ Name }}
+            </h3>
+            <v-icon v-if="Certified" color="#FF6265">mdi-check-circle</v-icon>
             </v-row>
             <br />
-          <br />
-          <v-divider id="Grey" dark></v-divider>
-          <br />
+            <h3 id="Grey">
+              {{ Email }}
+            </h3>
+            <br />
+            <br />
           <v-row>
-            <v-divider class="test" dark></v-divider>
-          <v-alert
-              border="left"
-              color="#ff6265"
-              dark
-              rounded 
-            >
-           <h3 id="Black" >
-            الاسئله  
-          </h3>
-          </v-alert>
-          <br><br/>
-          <v-card width="700" class="mx-auto " hover="true">
-            <v-list two-line>
-              <template v-for="i in Info.length">
-                <v-divider :key="i" ></v-divider>
-                <v-list-item :key="i">
-                    <v-list-item-content >
-                      <v-list-item-title>{{Info[i-1][0][0].question}}</v-list-item-title>
-                      <v-list-item-subtitle>{{Info[i-1][2][0].answer}}</v-list-item-subtitle>
-                      <br><br/>
-                      <div>
+          <v-text-field
+            v-model="PhoneNumber"
+            style="width:200px"
+            label="رقم الموبايل"
+                color="#FF6265"
+                :rules="[rules.number, rules.required]"
+          ></v-text-field>
 
-                      <h6 v-if="vip && Info[i-1][1][0].hidden" id="form"> هذا السؤال غير ظاهر للمسنخدمين الاخرين</h6>
-                      <v-btn v-if="vip && Info[i-1][1][0].hidden" @click="UnHideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
-                        اظهار السؤال 
-                      </v-btn>
-
-                      <h6 v-if="vip && !Info[i-1][1][0].hidden" id="form"> هذا السؤال ظاهر للمسنخدمين الاخرين </h6>
-                      <v-btn v-if="vip && !Info[i-1][1][0].hidden" @click="HideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
-                        اخفاء السؤال 
-                      </v-btn>
-                      
-                      <v-btn @click="showAnswers=true; currentID = Info[i-1][0][0].id; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
-                        <v-icon left>
-                          mdi-pencil
-                        </v-icon>
-                        تعديل الاجابه 
-                      </v-btn>
-                      <div v-if="showAnswers && currentID == Info[i-1][0][0].id">                        
-                        <v-list>
-                            <template v-for="answer in Answers">
-                              <v-list-item :key="answer">
-                                  <v-list-item-content >
-                                   <v-radio-group v-model="radioGroup" >
-                                    <v-radio
-                                      :label="answer.answer"
-                                      :value="answer.id"
-                                    ></v-radio>
-                                  </v-radio-group>
-                              </v-list-item-content>
-                            </v-list-item>
-                            </template>  
-                          </v-list>
-                          <v-btn @click="showAnswers=false; ChangeAnswer(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 30px">
-                                  تعديل  
-                          </v-btn>
-                          <v-btn @click="showAnswers=false;" rounded outlined color="#FF6265" style="width: 30px">
-                                  الغاء  
-                          </v-btn>
-                      </div>
-                      </div>
-                    </v-list-item-content>
-                  </v-list-item>
-              </template>  
-            </v-list>
-          </v-card>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <div>
+              <v-text-field
+                v-model="BirthDay"
+                label="تاريخ الميلاد"
+                style="width:200px"
+                color="#FF6265"
+                disabled
+              ></v-text-field>
+              <v-text-field
+                v-model="Gender"
+                label="النوع"
+                style="width:200px"
+                color="#FF6265"
+                disabled
+              ></v-text-field>
+              </v-row>
+              <br />
+              <v-row>
+          <v-text-field
+            v-model="NumberOfReports"
+            style="width:200px"
+            label="عدد مرات الابلاغ"
+            color="#FF6265"
+            disabled
+          ></v-text-field>
+              <v-text-field
+                v-model="NumberOfBans"
+                label="عدد مرات الحظر"
+                style="width:200px"
+                color="#FF6265"
+                disabled
+              ></v-text-field>
+              </v-row>
+              <br />
+            <br />
+            <v-divider id="Grey" dark></v-divider>
+            <br />
+            <v-row>
+              <v-divider class="test" dark></v-divider>
+            <v-alert
+                border="left"
+                color="#ff6265"
+                dark
+                rounded 
+              >
+              <h3 id="Black" >
+              الاسئله  
+            </h3>
+            </v-alert>
             <br><br/>
-            <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
-              تحديث الحساب
-            </v-btn>
-            <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
+            <v-card width="700" class="mx-auto " hover="true">
+              <v-list two-line>
+                <template v-for="i in Info.length">
+                  <v-divider :key="i" ></v-divider>
+                  <v-list-item :key="i">
+                      <v-list-item-content >
+                        <v-list-item-title>{{Info[i-1][0][0].question}}</v-list-item-title>
+                        <v-list-item-subtitle>{{Info[i-1][2][0].answer}}</v-list-item-subtitle>
+                        <br><br/>
+                        <div>
+
+                        <h6 v-if="vip && Info[i-1][1][0].hidden" id="form"> هذا السؤال غير ظاهر للمسنخدمين الاخرين</h6>
+                        <v-btn v-if="vip && Info[i-1][1][0].hidden" @click="UnHideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                          اظهار السؤال 
+                        </v-btn>
+
+                        <h6 v-if="vip && !Info[i-1][1][0].hidden" id="form"> هذا السؤال ظاهر للمسنخدمين الاخرين </h6>
+                        <v-btn v-if="vip && !Info[i-1][1][0].hidden" @click="HideData(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                          اخفاء السؤال 
+                        </v-btn>
+                        
+                        <v-btn @click="showAnswers=true; currentID = Info[i-1][0][0].id; getAllAnswers(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 130px">
+                          <v-icon left>
+                            mdi-pencil
+                          </v-icon>
+                          تعديل الاجابه 
+                        </v-btn>
+                        <div v-if="showAnswers && currentID == Info[i-1][0][0].id">                        
+                          <v-list>
+                              <template v-for="answer in Answers">
+                                <v-list-item :key="answer">
+                                    <v-list-item-content >
+                                      <v-radio-group v-model="radioGroup" >
+                                      <v-radio
+                                        :label="answer.answer"
+                                        :value="answer.id"
+                                      ></v-radio>
+                                    </v-radio-group>
+                                </v-list-item-content>
+                              </v-list-item>
+                              </template>  
+                            </v-list>
+                            <v-btn @click="showAnswers=false; ChangeAnswer(Info[i-1][0][0].id)" rounded outlined color="#FF6265" style="width: 30px">
+                                    تعديل  
+                            </v-btn>
+                            <v-btn @click="showAnswers=false;" rounded outlined color="#FF6265" style="width: 30px">
+                                    الغاء  
+                            </v-btn>
+                        </div>
+                        </div>
+                      </v-list-item-content>
+                    </v-list-item>
+                </template>  
+              </v-list>
+            </v-card>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
-            <br/>
-            <v-btn @click="DeleteAccount" rounded outlined color="#FF6265" style="width: 230px">
-             حذف الحساب
-            </v-btn>
-            <v-btn v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
-               VIP التحديث الي 
-            </v-btn>
-          </div>
-          </v-row>
-        </v-form>
-        <br />
+            <div>
+              <br><br/>
+              <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
+                تحديث الحساب
+              </v-btn>
+              <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <v-spacer></v-spacer>
+              <br/>
+              <v-btn @click="DeleteAccount" rounded outlined color="#FF6265" style="width: 230px">
+                حذف الحساب
+              </v-btn>
+              <v-btn v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
+                  VIP التحديث الي 
+              </v-btn>
+            </div>
+            </v-row>
+          </v-form>
           <br />
-      </v-col>
-    </v-row>
-  </v-main>
+            <br />
+        </v-col>
+      </v-row>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
