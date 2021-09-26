@@ -84,21 +84,43 @@
                         </v-col>
                       </v-row>
 
-                      <v-row>    
+                      <v-row> 
+ <v-col >
+    <v-alert v-if="donerchat" type="success" color="#FF6265" align="center" dismissible @click="rerchat()">  
+     {{msg}}    
+    </v-alert>
+    <v-alert v-if="donefav" type="success" color="#FF6265" dismissible @click="refav()">  
+     {{msg}}
+    </v-alert> 
+
+    <v-alert v-if="doneschat" type="success" color="#FF6265" dismissible @click="reschat()" >
+      <v-row align="center">
+        <v-col>
+          هل انت متاكد من بدء المحادثة؟
+        </v-col>
+        <v-col class="shrink">
+          <v-btn  color= "#FF6265"  @click="gochat()">بدء المحادثة</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>  
+    <v-alert v-if="errorrchat" type="warning" color="#FF6265" align="center" dismissible @click="rerchat()">  
+     {{msg}}    
+    </v-alert>
+    <v-alert v-if="errorfav" type="warning" color="#FF6265" dismissible @click="refav()">  
+     {{msg}}
+    </v-alert>
+    <v-alert v-if="errorschat" type="warning" color="#FF6265" dismissible @click="reschat()">  
+     {{msg}}
+    </v-alert>
+ </v-col>   
                         <v-col>                             
                         <div class="b">
                         <button  v-if="me_vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
                         <button  v-if="me_vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
+                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                                                                  
                         </div>
-                       </v-col>      
+                       </v-col> 
                       </v-row>
-
-
-
-                      
-
-
                    </v-layout>  
                 </v-container>
 
@@ -140,6 +162,13 @@ export default {
       currentID: '',
       me_vip:"",
       info:[],
+      donefav:false,
+      donerchat:false,
+      doneschat:false,
+      errorrchat:false,
+      errorfav:false,
+      errorschat:false,
+      msg:"",
     }
   }, 
       computed: {
@@ -158,8 +187,31 @@ export default {
     },
     
     }, 
+    
     methods:{
-            
+      
+
+        refav(){
+            this.donefav=false;
+            this.errorfav=false;
+            this.msg="";
+        } , 
+        rerchat(){
+            this.donerchat=false;
+            this.errorrchat=false;
+            this.msg="";
+        } , 
+        gochat(){
+            this.doneschat=false;
+            this.errorschat=false;
+            this.msg=""; 
+           this.$router.push({name: 'Chat'});
+        },
+        reschat(){
+            this.doneschat=false;
+            this.errorschat=false;
+            this.msg=""; 
+        } , 
         previewImage() {
           this.url = URL.createObjectURL(this.file);
           this.useravatar();
@@ -174,11 +226,15 @@ export default {
                   params : { recevier_id :id }
                   }).then(response => {
                   console.log(response.data.message);
-                  alert("تم اضافة الي قائمة المفضلين");
+                  ///alert("تم اضافة الي قائمة المفضلين");///
+                  this.msg="تم اضافة المستخدم الي قائمة المفضلين";
+                  this.donefav=true;
                       })
                               .catch((error) => {
                               console.log('There is error:'+error);
-                              alert("لقد قمت باضافة المستخدم من قبل..");
+                              this.errorfav=true;
+                              this.msg="لقد قمت باضافة المستخدم من قبل..";
+                            ///  alert("لقد قمت باضافة المستخدم من قبل.."); ///
                               return "error occoured"
                       });
         },
@@ -191,23 +247,35 @@ export default {
                 headers: {Authorization: token},
                 params: {userid2:id}
                 }).then(response => {
-                console.log(response.data.user)
-                alert("You can start chat now");
-                 console.log(response.status);
-                this.$router.push('/chat');
+                console.log(response.data);
+                this.doneschat=true;
+                this.msg="يمكنم الان بدء المحادثة";
+               /// alert("You can start chat now");
+                 console.log(response.status); ///
                     })
                             .catch((error) => {
                             console.log('There is error:'+error);
                             console.log(error.response.status);
-                            if(error.response.status==400)
-                               alert("you have to choose user to start chat with")
-                            else if (error.response.status==403)
-                               alert("this user blocked you, cannot send msg")
-                            
-                            else if (error.response.status==404)
-                               alert("No user with this info to start chat with")
-                            else if (error.response.status==405)
-                                alert("can not send more than 4 msgs to this account or you may dont have access to this chat")
+                            if(error.response.status==400){
+                              /// alert("you have to choose user to start chat with");///
+                              this.errorschat=true;
+                              this.msg="عليك اختيار مستخدم لبدء المحادثة ";
+                            }
+                            else if (error.response.status==403){
+                               ///alert("this user blocked you, cannot send msg");///
+                              this.errorschat=true;
+                              this.msg="هذا المستخدم قام بحذ لك..لا يمن ان تبدء المحادثة معه ";
+                               }                         
+                            else if (error.response.status==404){
+                              /// alert("No user with this info to start chat with");///
+                              this.errorschat=true;
+                              this.msg="لا يوجد معلومات عن هذا المستخدم ";
+                               }
+                            else if (error.response.status==405){
+                               // alert("can not send more than 4 msgs to this account or you may dont have access to this chat");///
+                              this.errorschat=true;
+                              this.msg="لقد قمت بالرسال اكثر من 4 رسائل او لا يمكنك ارسال رسالة لهذا المستخدم";
+                              }                            
                             else
                                alert("you cannot start chat..")
                             return "error occoured"
@@ -223,12 +291,15 @@ export default {
                 data: {recevier :id}
                 }).then(response => {
                 console.log(response.status);
-                alert("Done sending request to chat");
+                ///alert("تم ارسال طلب محادثة للمستخدم");///
+                this.msg="تم ارسال طلب محادثة للمستخدم"
+                this.donerchat=true;
                     })
                             .catch((error) => {
                             console.log('There is error:'+error);
-                            
-                            alert("You Make this request before!")
+                            this.errorrchat=true;
+                            this.msg="لقد قمت بالرسال طلب محادثة من قبل";
+                           /// alert("لقد قمت بالرسال طلب محادثة من قبل")///
                             return "error occoured"
                     });
 
@@ -362,7 +433,7 @@ width: 60px;
 
 }
 .b{
- margin-right:35% ;
+ margin-left:20% ;
   
 }
 .title{
