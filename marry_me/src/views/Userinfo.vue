@@ -3,11 +3,12 @@
    <v-app id="content">
         <Navbar/>
         <Sidebar/>   
-      <div class=" mr-2 align-left">  
-                          <h4 class="font-italic mt-3"> بيانات المستخدم</h4>
+      <div >  
+                          <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
+                                       بيانات عن المستخدم  </h4>
                           <v-divider  dark></v-divider>
-          <div class="list" >  
-                <v-container grid-list-xl>
+          <div class="page">  
+                <v-container grid-list-xl >
                         <v-layout row justify-space-between>           
                     <v-row >
                       <v-col >                                                  
@@ -16,54 +17,88 @@
                           id="img"           
                           rounded             
                           class="my-auto mx-5"
-                          max-height="200"
-                          max-width="200"
+                          max-height="25%"
+                          max-width="15%"
                           >
                         </v-img>
                       </v-col>
-                      <v-col >
+                       <v-col class="list">
+                           <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;"> معلومات شخصية عن المستخدم </h6> 
                         <v-list >
-                          <v-list-item >      
-                                الاسم    : {{ Name}}           
-                          </v-list-item >
-                          <v-list-item   >      
-                                رقم التليفون : {{ PhoneNumber }}              
-                          </v-list-item >
-                          <v-list-item   >      
-                                تاريخ الميلاد  : {{ BirthDay }}             
-                          </v-list-item  >
-                          <v-list-item    >      
-                                البريد:  {{ Email }}        
-                          </v-list-item >
-                          <v-list-item  >      
-                                النوع  :    {{ Gender }}        
-                          </v-list-item >
-                          <v-list-item  >      
-                                عدد مرات الابلاغ  :  {{ NumberOfReports }}          
-                          </v-list-item >
-                          <v-list-item  >      
-                                عدد مرات الحظر     :  {{ NumberOfBans }}        
-                          </v-list-item >
-                          <v-list-item  v-if="vip === 1" >      
-                                      المستخدم VIP         
-                          </v-list-item >
-                          <v-list-item  v-if="Certified === 1" >      
-                                <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon>   المستخدم مصرح حسابه           
-                          </v-list-item >                                         
-                        </v-list>                                         
-                      </v-col> 
+                          <v-list-title style="font-size: 20px; align:right;">  الاسم :</v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ Name}} </v-list-subtitle>                      
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;">رقم التليفون :</v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ PhoneNumber }} </v-list-subtitle>
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;">تاريخ الميلاد  :</v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ BirthDay }}  </v-list-subtitle>                  
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;">البريد:</v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ Email }}  </v-list-subtitle>
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;"> النوع  :   </v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ Gender }}  </v-list-subtitle>
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  </v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle>
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : </v-list-title>
+                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfBans }} </v-list-subtitle> 
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم</v-list-title>
+                          <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
+                        </v-list >
+                        <v-list >
+                          <v-list-title style="font-size: 20px;align:right;" v-if="Certified === 1" > المستخدم  </v-list-title>
+                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
+                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
+                        </v-list>                                      
+                       </v-col> 
+                       <v-col align="center">
+                         <v-divider  vertical></v-divider>
+                       </v-col>
+                        <v-col>
+                            <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;">  اسئلة عن المستخدم </h6> 
+                        <div class="list" v-for="(data, index) in info" :key="index">
+                              <div v-if="data[1][0].hidden==0">
+                                <v-list>
+                                  <v-list-title style="font-size: 20px"> السؤال : 
+                                    <v-list-subtitle style="font-size: 15px;display:inline;"> :{{data[0][0].question}} </v-list-subtitle>
+                                    </v-list-title>
+                                </v-list>
+                                <v-list>
+                                    <v-list-title style="font-size: 20px"> اجابة المستخدم : 
+                                  <v-list-subtitle style="font-size: 15px;display:inline;">:{{ data[2][0].answer}}</v-list-subtitle>
+                                  </v-list-title>
+                                </v-list>
+                              </div>
+                        </div>                               
+                        </v-col>
                       </v-row>
 
-                      <v-row>                        
-                        <v-col>
+                      <v-row>    
+                        <v-col>                             
                         <div class="b">
-                        <button  v-if="vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  v-if="vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
+                        <button  v-if="me_vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  v-if="me_vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                      
                         </div>
-                      </v-col>
-                      
+                       </v-col>      
                       </v-row>
+
+
+
+                      
+
+
                    </v-layout>  
                 </v-container>
 
@@ -103,8 +138,8 @@ export default {
       vip: "",
       CurrentlyBanned: "",
       currentID: '',
-      questions:[],
-      answers:[],
+      me_vip:"",
+      info:[],
     }
   }, 
       computed: {
@@ -130,57 +165,56 @@ export default {
           this.useravatar();
         },
         addtofavs(id){
+          console.log(id);
                 const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
                 axios({
-                method: 'post',
-                url: "http://127.0.0.1:8000/api/addFriend",
-                headers: {Authorization: token},
-                data: {recevier_id :id}
-                }).then(response => {
-                console.log(response.data)
-                alert(response.data.message);
-                    })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            alert("error:You added this user before,"+ error.message);
-                            return "error occoured"
-                    });
-            },
-        addtoblocks(id){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-                axios({
-                method: 'post',
-                url: "http://127.0.0.1:8000/api/blockFriend",
-                headers: {Authorization: token},
-                data: {reciever_id :id}
-                }).then(response => {
-                console.log(response.data)
-                alert(response.data.message);
-                    })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            alert("you can not block this user"+error)
-                            return "error occoured"
-                    });
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/addFriend",
+                  headers: {Authorization: token},
+                  params : { recevier_id :id }
+                  }).then(response => {
+                  console.log(response.data.message);
+                  alert("تم اضافة الي قائمة المفضلين");
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              alert("لقد قمت باضافة المستخدم من قبل..");
+                              return "error occoured"
+                      });
         },
         startchat(id){
+          console.log(id);
                 const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/startchat",
                 headers: {Authorization: token},
-                data: {userid2 :id}
+                params: {userid2:id}
                 }).then(response => {
                 console.log(response.data.user)
-                alert("Done start chatting");
+                alert("You can start chat now");
+                 console.log(response.status);
+                this.$router.push('/chat');
                     })
                             .catch((error) => {
                             console.log('There is error:'+error);
-                            alert(error)
+                            console.log(error.response.status);
+                            if(error.response.status==400)
+                               alert("you have to choose user to start chat with")
+                            else if (error.response.status==403)
+                               alert("this user blocked you, cannot send msg")
+                            
+                            else if (error.response.status==404)
+                               alert("No user with this info to start chat with")
+                            else if (error.response.status==405)
+                                alert("can not send more than 4 msgs to this account or you may dont have access to this chat")
+                            else
+                               alert("you cannot start chat..")
                             return "error occoured"
                     });
         },
-      requestchat(id){
+      requestchat(id){ 
+               console.log(id);
                 const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
                 axios({
                 method: 'post',
@@ -188,12 +222,13 @@ export default {
                 headers: {Authorization: token},
                 data: {recevier :id}
                 }).then(response => {
-                console.log(response.data)
+                console.log(response.status);
                 alert("Done sending request to chat");
                     })
                             .catch((error) => {
                             console.log('There is error:'+error);
-                            alert("You Make this request before!"+error)
+                            
+                            alert("You Make this request before!")
                             return "error occoured"
                     });
 
@@ -201,6 +236,18 @@ export default {
     },
     mounted(){
         const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+        axios({
+            method: 'get',
+            url: "http://127.0.0.1:8000/api/profile",
+            headers: {Authorization: AuthStr}
+          }).then(response => {
+          console.log(response.data)
+          this.me_vip=response.data.VIP;
+                })
+                        .catch((error) => {
+                        console.log('There is error:'+error);
+                        return "error occoured"
+          });
         axios({
           method: 'post',
           url: "http://127.0.0.1:8000/api/getUser",
@@ -227,9 +274,12 @@ export default {
           headers: {Authorization: AuthStr},
           params:  { user_id : this.userId}
         }).then((response) => {
-              console.log("questionssssssssssss");
-              console.log(response.data.questions);
+                            console.log(response.data);
+              console.log("all dataaa");
               console.log(response.data);
+              this.info= response.data;
+              console.log("infoo");
+              console.log(this.info);
              //// this.questions = response.data.questions;
              this.answers= response.data.answers;///
             }).catch((error) => {
@@ -304,17 +354,18 @@ width: 60px;
 .list{
  
   direction: rtl; 
- margin-left:45% ;
- 
-  
-
+   align:right;
+   text-align:right;
+   align-text:right;
 }
 .page{
-    
+
 }
 .b{
- margin-right:65% ;
+ margin-right:35% ;
   
 }
-
+.title{
+  margin-top:5px;
+}
 </style>
