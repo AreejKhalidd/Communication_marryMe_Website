@@ -87,7 +87,8 @@ export default{
                 users:  [                   
                 ],
                 VIP: "",
-                img:img,  
+                avatarurl: null,
+                img: img,  
                 loading: false,
                 selection: 1,
                 donefav:false,

@@ -18,6 +18,10 @@ import Register from '../views/Register';
 import ForgotPassword from '../views/ForgotPassword';
 import UserProfile from '../components/Profile';
 
+
+import UsersList from '../views/UsersList';
+import UserinfoforAdmin from '../views/UserinfoforAdmin';
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -117,6 +121,16 @@ const routes = [{
         name: 'UserProfile',
         component: UserProfile,
         props: true
+    },
+    {
+        path: '/userslist',
+        name: 'UsersList',
+        component: UsersList,
+    },
+    {
+        path: '/userinfoforAdmin',
+        name: 'UserinfoforAdmin',
+        component: UserinfoforAdmin,
     },
 
 ]
