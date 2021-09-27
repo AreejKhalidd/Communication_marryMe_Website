@@ -19,7 +19,7 @@
                  <b-carousel-slide
                 align="center"
                 caption="مميزات في المحادثات"
-                text=" يمكنه بدء المحادثة فورا مع الطرف الاخر بدون ارسال طلب VIPمستخدم  "
+                text="  مستخدمVIP يمكنه بدء المحادثة فورا مع الطرف الاخر بدون ارسال طلب  "
                 color="black"
                 :img-src="chat"
                 style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"
@@ -29,7 +29,7 @@
                 <b-carousel-slide
                 align="center"
                 caption="المميزات خاصة"
-                text=" يمكنه ان يخفي بعد البيانات الخاصة به VIPمستخدم  "
+                text="  مستخدم VIP يمكنه ان يخفي بعد البيانات الخاصة به    "
                 color="black"
                 :img-src="hide"
                 style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"
@@ -37,7 +37,7 @@
                  <b-carousel-slide
                 align="center"
                 caption="المميزات اخري"
-                text=" يمكنه ان يري من قام بالاعجاب به VIPمستخدم  "
+                text=" مستخدم VIP  يمكنه ان يري من قام بالاعجاب به   "
                 color="black"
                 :img-src="like"
                 style="width:100%; max-height: 450px;background: rgba(255,98,101,1); font-color:black; color:black;"

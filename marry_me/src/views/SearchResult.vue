@@ -10,8 +10,11 @@
                   <v-list class="list-style" three-line>
                     <template class="back">
                       <v-list-item style="max-width: 1300px">
-                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.image != NULL ">
                           <v-img v-bind:src="user.image"></v-img>
+                      </v-list-item-avatar>
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.image == NULL ">
+                          <v-img v-bind:src="img"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content class="shift">
                           <v-list-item-title class="textt">الأسم : {{ user.name }}</v-list-item-title>

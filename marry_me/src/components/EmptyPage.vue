@@ -8,21 +8,15 @@
         style="direction: rtl;padding-left: 50px"
 
     >
-      لا يوجد اي طلبات حاليا لعرضها
+     {{msg}}
     </v-alert>
-    <v-btn
-        depressed
-        color="primary"
-        @click="redirect()"
-    >
-      إرسال طلبات
-    </v-btn>
   </div>
 </template>
 
 <script>
 export default {
   name: "EmptyPage",
+  props:["msg"],
   methods:{
     redirect(){
       this.$router.push({ name: 'Home' })

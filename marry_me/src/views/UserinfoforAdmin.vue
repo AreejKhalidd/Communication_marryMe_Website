@@ -1,8 +1,6 @@
 <template>
  <div id="app">
-   <v-app id="content">
-        <Navbar/>
-        <Sidebar/>   
+   <v-app id="content">  
       <div >  
                           <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
                                        بيانات عن المستخدم  </h4>
@@ -115,9 +113,8 @@
  </v-col>   
                         <v-col>                             
                         <div class="b">
-                        <button  v-if="me_vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  v-if="me_vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>                                                                                  
+                        <span class="mt-3" align="center" style="font-size: 20px;color: rgba(255,98,101,1);" >مسح حساب المستخدم</span>
+                        <button rounded="circle" class="btns-logo" title="مسح حساب المستخدم"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="remove"/></button>                                                                               
                         </div>
                        </v-col> 
                       </v-row>
@@ -132,15 +129,11 @@
 
 <script>
 import axios from "axios";
-import Navbar from '@/components/Navbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
 import img from "../assets/UserDefaultAvatar.png";
-import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
 export default {
-    name: "Userinfo",
+    name: "UserinfoforAdmin",
     components: {
-    Navbar,
-    Sidebar,
    },
   data() {
     return {
@@ -172,14 +165,8 @@ export default {
     }
   }, 
       computed: {
-    fav() {
-      return faHeart
-    },
-    startChat(){
-      return faComment
-    },
-    block(){
-      return faBan
+    remove() {
+      return faTimes
     },
     useravatar() {
       if (this.avatarurl) return this.avatarurl;
