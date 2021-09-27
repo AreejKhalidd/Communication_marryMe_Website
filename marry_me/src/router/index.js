@@ -71,7 +71,7 @@ const routes = [{
         component: follower
     },
     {
-        path: '/userinfo',
+        path: '/userinfo/:id',
         name: 'Userinfo',
         component: Userinfo,
         props: true
@@ -149,7 +149,7 @@ const routes = [{
         component: UsersList,
     },
     {
-        path: '/userinfoforAdmin',
+        path: '/userinfoforAdmin/:id',
         name: 'UserinfoforAdmin',
         component: UserinfoforAdmin,
     },

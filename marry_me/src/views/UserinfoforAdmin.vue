@@ -127,6 +127,7 @@
  </div>
 </template>
 
+
 <script>
 import axios from "axios";
 import img from "../assets/UserDefaultAvatar.png";
@@ -346,6 +347,9 @@ export default {
   },
 }
 </script>
+
+
+
 <style scoped>
 .btns-logo{
 margin-right:4px;
@@ -425,5 +429,19 @@ width: 60px;
 }
 .title{
   margin-top:5px;
+}
+.carddd{
+  display:inline-block;
+  width:200px;
+  height:100px;
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-left:10px;
+}
+.numbers{
+   margin-top:10px;
+   font-weight:bold;
+   font-family: 'Arial';
+   font-size: 2rem;
 }
 </style>

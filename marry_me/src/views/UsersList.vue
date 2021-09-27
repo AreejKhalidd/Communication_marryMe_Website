@@ -7,14 +7,15 @@
                      <div>                         
                         اظهار للمستخدمين من خلال                
                         <b-dropdown  :text="catg" class="dp" align="right" variant="white">
-                          <b-dropdown-item-button @click="allcatg()">All Users </b-dropdown-item-button>
+                          <b-dropdown-item-button @click="allcatg()">جميع المستخدمين </b-dropdown-item-button>
                           <b-dropdown-item-button @click="vipcatg()">VIP </b-dropdown-item-button>
-                          <b-dropdown-item-button >Free</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="freecatg()">name</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="bancatg()" >email</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="certcatg()">gender</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="freecatg()">Free</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="namecatg()">name</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="emailcatg()" >email</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="femalecatg()">Female</b-dropdown-item-button>
                           <b-dropdown-item-button @click="agecatg()"> date of creation  </b-dropdown-item-button>
-                          <b-dropdown-item-button @click="certcatg()">birthday</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="certcatg()">certified</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="onlinecatg()">online</b-dropdown-item-button>
                         </b-dropdown>  
                      </div>
               <div v-id="all">
@@ -48,13 +49,15 @@ export default {
   data() {
     return {   
                 users:[],
-                catg:"كل المستخدمين", 
-                filtered:":List of All users",
+                catg:"جميع المستخدمين", 
+                filtered:"قائمة بجميع المستخدمين ",
                 all:true,
                 vip:false, 
                 free:false, 
                 name:false, 
                 email:false, 
+                online:false,
+                cert:false,
                 age:false,
                 gender:false,
                 bd:false, 
@@ -103,7 +106,8 @@ export default {
                   console.log(response.data);
                   /// All_Users_info///
                   this.users=response.data.All_Users_info;  
-                  this.filtered = "list of all users ";
+                  this.filtered = "قائمة بجميع المستخدمين ";
+                  this.catg="جميع المستخدمين";
                             this.all=true;
                             this.vip=false;
                             this.free=false;
@@ -112,7 +116,9 @@ export default {
                             this.gender=false;
                             this.email=false;
                             this.datacreation=false
+                            this.online=false;
                             this.bd=false; 
+                            this.cert=false,
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -143,7 +149,9 @@ export default {
                             this.name=false;
                             this.gender=false;
                             this.email=false;
+                            this.online=false;
                             this.datacreation=false;
+                            this.cert=false,
                             this.bd=false;  
                   console.log("data hena");
                   console.log(this.users);
@@ -161,7 +169,7 @@ export default {
                   method: 'get',
                   url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
                   headers: {Authorization: token},
-                  params:{VIP:'0'}
+                  params:{free:1}
                   }).then(response => {
                   console.log("ehhh?");
                   console.log(response.data);
@@ -171,6 +179,75 @@ export default {
                             this.all=false;   
                             this.vip=false;
                             this.free=true;
+                            this.age=false;
+                            this.name=false;
+                            this.gender=false;
+                            this.email=false;
+                            this.online=false;
+                            this.datacreation=false;
+                            this.cert=false,
+                            this.bd=false;  
+                  console.log("data hena");
+                  console.log(this.users);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured";
+                              
+                      });
+        },
+        onlinecatg(){
+                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+                console.log("ehhh?");
+                axios({
+                  method: 'get',
+                  url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
+                  headers: {Authorization: token},
+                  params:{online:1}
+                  }).then(response => {
+                  console.log("ehhh?");
+                  console.log(response.data);
+                  this.users=response.data.Users_info;  
+                  this.filtered= "list of online users ";
+                            this.catg="online user";
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.gender=false;
+                            this.email=false;
+                            this.online=true;
+                            this.datacreation=false;
+                            this.bd=false;  
+                            this.cert=false,
+                  console.log("data hena");
+                  console.log(this.users);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured";
+                              
+                      });
+        },
+        certcatg(){
+                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+                console.log("ehhh?");
+                axios({
+                  method: 'get',
+                  url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
+                  headers: {Authorization: token},
+                  params:{cert:1}
+                  }).then(response => {
+                  console.log("ehhh?");
+                  console.log(response.data);
+                  this.users=response.data.Users_info;  
+                  this.filtered= "list of certifed users ";
+                            this.catg="certifed user";
+                            this.cert=true,
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
                             this.age=false;
                             this.name=false;
                             this.gender=false;
@@ -185,7 +262,7 @@ export default {
                               return "error occoured";
                               
                       });
-        }
+        },
     }
 }
 </script>
