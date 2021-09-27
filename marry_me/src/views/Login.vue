@@ -189,14 +189,19 @@ export default {
     Login() {
       console.log(this.email);
       console.log(this.password);
+      
+      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
       axios
         .post("http://127.0.0.1:8000/api/login", {
+          option,
           email: this.email,
           password: this.password,
           remember: this.remember,
         })
         .then((res) => {
           console.log(res.data);
+          this.$store.state.usertoken = res.data.access_token;
+            localStorage.setItem('usertoken',res.data.access_token);
           this.$router.push({ name: "HomePage" });
         
         })
@@ -207,7 +212,7 @@ export default {
           //console.log(err.message);
         });
 
-      //this.$router.push({ name: "HomePage" });
+      this.$router.push({ name: "HomePage" });
     },
   },
 };

@@ -113,15 +113,21 @@ export default {
        
     forgotPassword() {
       console.log(this.email);
+      
+      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
      
       axios
         .post("http://127.0.0.1:8000/api/forgot-password", {
+          option,
           email: this.email,
           //this.DeleteMsg=response.data.message
         })
         //this.message = 'the mail was sent'
         .then((res) => {
          console.log(res.data.message);
+         
+          this.$store.state.usertoken = res.data.access_token;
+            localStorage.setItem('usertoken',res.data.access_token);
           if(res.data.message =="Reset password link sent successfully"){
             this.alert = true;
           }

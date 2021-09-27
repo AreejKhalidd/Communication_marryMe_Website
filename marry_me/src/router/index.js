@@ -17,6 +17,11 @@ import ResetPassword from '../views/ResetPassword';
 import Register from '../views/Register';
 import ForgotPassword from '../views/ForgotPassword';
 import UserProfile from '../components/Profile';
+import AdminHomePage from '../views/AdminHomePage';
+
+import AdminNavbar from '../components/AdminNavbar';
+
+import AdminRegisteration from '../views/AdminRegisteration';
 
 Vue.use(VueRouter)
 
@@ -117,6 +122,21 @@ const routes = [{
         name: 'UserProfile',
         component: UserProfile,
         props: true
+    },
+    {
+        path: '/adminhome',
+        name: 'AdminHomePage',
+        component: AdminHomePage
+    },
+    {
+        path: '/adminregister',
+        name: 'AdminRegisteration',
+        component: AdminRegisteration
+    },
+    {
+        path: '/adminnavbar',
+        name: 'AdminNavbar',
+        component: AdminNavbar
     },
 
 ]

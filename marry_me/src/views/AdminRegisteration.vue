@@ -39,7 +39,7 @@
                   >
                     إنشاء حساب جديد
                   </h2>
-                  <div class="col" style="">
+                <!--  <div class="col" style="">
                     <a
                       style="width: 25rem; margin-right: -1rem"
                       href="http://127.0.0.1:8000/api/auth/facebook"
@@ -70,36 +70,10 @@
                         mdi-google
                       </v-icon>
                     </a>
-                  </div>
-
-                  <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.show1" type="error"  :disabled="show1" color="tomato">
-                        لقد استخدمت هذا الجهاز من قبل !!
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
-                  <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.show2" type="error" :disabled="show2" color="tomato">
-                        لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
-
-                       <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.showVerify" type="error"  :disabled="showVerify" color="tomato">
-                      من فضلك يرجى التحقق من بريدك الإلكتروني 
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
+                  </div>-->
 
                   <v-text-field
-                    label="الاسم"
+                    label="اسم المستخدم"
                     name="name"
                     style="width: 600px"
                     color="red darken-0"
@@ -111,18 +85,7 @@
                     class="rounded-2"
                     outlined
                   ></v-text-field>
-                  <v-text-field
-                    label="الايميل"
-                    name="email"
-                    v-model="email"
-                    color="red darken-0"
-                    :rules="emailRules"
-                    prepend-inner-icon="mdi-email"
-                    type="email"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
+           
                   <v-text-field
                     label="كلمه المرور"
                     name="password"
@@ -137,63 +100,20 @@
                     outlined
                     required
                   ></v-text-field>
-                  <v-text-field
-                    ref="confirmPassword"
-                    label="تأكيد كلمه المرور"
-                    name="confirmPassword"
-                    v-model="confirmPassword"
+      
+         <v-select
+         
+                    style="width: 600px"
                     color="red darken-0"
-                    :rules="[confirmRules.required]"
-                    prepend-inner-icon="mdi-lock"
-                    :type="showPassword ? 'text' : 'password'"
-                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPassword = !showPassword"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
+          :items="items"
+          label="المشرف"
+          :rules="itemRules"
+          outlined
+          required
+        ></v-select>
 
-                  <v-text-field
-                    ref="phone"
-                    label="رقم الموبايل"
-                    name="phone"
-                    v-model="phone"
-                    color="red darken-0"
-                    :rules="phoneRules"
-                    prepend-inner-icon="mdi-phone"
-                    type="phone"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
-
-                  <v-text-field
-                    ref="gender"
-                    label="النوع"
-                    name="gender"
-                    v-model="gender"
-                    color="red darken-0"
-                    :rules="genderRules"
-                    prepend-inner-icon="mdi-gender-male-female"
-                    type="gender"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
-
-                  <v-text-field
-                    ref="birthday"
-                    label="تاريخ الميلاد"
-                    name="birthday"
-                    v-model="birthday"
-                    color="red darken-0"
-                    :rules="birthdayRules"
-                    :icon="birthIcon"
-                    type="date"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
+          
+               
                   <v-btn
                     @click="validate"
                     :disabled="!valid"
@@ -254,6 +174,7 @@ import { faBirthdayCake } from "@fortawesome/free-solid-svg-icons";
 export default {
   name: "Register",
   data: () => ({
+       items: ['True', 'False'],
     ExistingUseralert: false,
     show1: false,
     show2:false,
@@ -261,30 +182,13 @@ export default {
 
     valid: true,
     nameRules: [(v) => !!v || "الاسم مطلوب"],
-    emailRules: [
-      (v) => !!v || "الايميل مطلوب",
-      (v) => /.+@.+\..+/.test(v) || "الايميل يجب ان يكون صالحا",
-    ],
+     itemRules: [(v) => !!v || " مطلوب"],
     passwordRules: [
       (v) => !!v || "كلمه المرور مطلوبه",
       (v) => (v && v.length > 8) || "كلمه المرور يجب ان تكون على الاقل 8 أحرف",
     ],
     name: "",
-    email: "",
     password: "",
-    confirmPassword: "",
-    phone: "",
-    gender: "",
-    birthday: "",
-    confirmRules: {
-      required: (v) => !!v || "تأكيد كلمه المرور مطلوب",
-      Matchingchar: (confirmPassword, password) =>
-        this.IsMatching(confirmPassword, password) ||
-        "يجب أن يكون تأكيد كلمة المرور هو نفس كلمة المرور",
-    },
-    phoneRules: [(v) => !!v || "رقم الموبايل مطلوب"],
-    genderRules: [(v) => !!v || "النوع مطلوب"],
-    birthdayRules: [(v) => !!v || "عيد الميلاد مطلوب"],
     showPassword: false,
     checkbox: true,
     errorMessages: "",
@@ -300,38 +204,26 @@ export default {
       console.log("signin");
       this.$router.push({ name: "Login" });
     },
-    IsMatching(confirmPassword, password) {
-      if (confirmPassword !== password) return false;
-      return true;
-    },
     validate() {
       this.$refs.form.validate();
     },
     Register() {
-      /*
-        if((Date.now() - this.birth_day) < 18){
-            alert("Age must be greater than 18")
-        }*/
       console.log(this.name);
-      console.log(this.email);
       console.log(this.password);
-      console.log(this.confirmPassword);
+       console.log(this.items);
+      
       
       const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
-      axios.post('http://127.0.0.1:8000/api/register',  {
+      axios.post('http://127.0.0.1:8000/api/register/Admin',  {
          option,
-          name: this.name,
-          email: this.email,
+          username: this.name,
           password: this.password,
-          password_confirmation: this.confirmPassword,
-          phone: this.phone,
-          gender: this.gender,
-          birth_day: this.birthday,
+           super_admin: this.items,
+          
         
         })
         .then((res) => {
           console.log(res.data);
-       alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
             this.$store.state.usertoken = res.data.access_token;
             localStorage.setItem('usertoken',res.data.access_token);
             /* if(res.response.status === 201){
@@ -354,11 +246,7 @@ export default {
           console.log(err.response.data);
           if (err.response.status === 403) {
             this.show1=true;
-           // alert(err.response.data.message);
-           // console.log(
-            //  err.response.data.code,
-             // "Invalid, you used this device before !!"
-           // );
+         
           }
           if(err.response.status === 400){
             this.show2=true;
