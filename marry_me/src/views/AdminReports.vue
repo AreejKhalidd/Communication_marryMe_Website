@@ -17,10 +17,10 @@
 
                 <v-list-item-title class="font_name" style="font-weight: bolder">رقم الرسالة : {{ r.message_id }}</v-list-item-title>
                 <v-list-item-subtitle class="font_age" style="font-weight: bolder">رقم البلاغ : {{ r.id }}</v-list-item-subtitle>
-                <v-list-item-subtitle :id="r.id +2" class="font_age" style="font-weight: bolder;display: none">التعليق : {{ r.details }}</v-list-item-subtitle>
-                <v-list-item-subtitle :id="r.id +3" class="font_age" style="font-weight: bolder;display: none">القرار المأخوذ : في انتظار رد المشرف</v-list-item-subtitle>
-                <v-list-item-subtitle :id="r.id +4" class="font_age" style="font-weight: bolder;display: none">تم الانشاء في : {{r.created_at}}</v-list-item-subtitle>
-                <v-list-item-subtitle :id="r.id +5" class="font_age" style="font-weight: bolder;display: none">تم النحديث في : {{r.updated_at}}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +'comment'" class="font_age" style="font-weight: bolder;display: none">التعليق : {{ r.details }}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +'action'" class="font_age" style="font-weight: bolder;display: none">القرار المأخوذ : في انتظار رد المشرف</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +'data1'" class="font_age" style="font-weight: bolder;display: none">تم الانشاء في : {{r.created_at}}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +'data2'" class="font_age" style="font-weight: bolder;display: none">تم النحديث في : {{r.updated_at}}</v-list-item-subtitle>
 
 
               </v-list-item-content>
@@ -44,7 +44,7 @@
                         style="color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="showIcon"/>
                     <font-awesome-icon
                         @click="reverseChange(r.id)"
-                        :id="r.id+1"
+                        :id="r.id+'show'"
                         title="رؤية اكثر"
                         style="display: none;color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="lessIcon"/>
 
@@ -156,19 +156,19 @@ export default {
     },
     change(id){
       document.getElementById(id).style.display = 'none';
-      document.getElementById(id+1).style.display = 'inline';
-      document.getElementById(id+2).style.display = 'inline';
-      document.getElementById(id+3).style.display = 'inline';
-      document.getElementById(id+4).style.display = 'inline';
-      document.getElementById(id+5).style.display = 'inline';
+      document.getElementById(id+'show').style.display = 'inline';
+      document.getElementById(id+'comment').style.display = 'inline';
+      document.getElementById(id+'action').style.display = 'inline';
+      document.getElementById(id+'data1').style.display = 'inline';
+      document.getElementById(id+'data2').style.display = 'inline';
     },
     reverseChange(id){
       document.getElementById(id).style.display = 'inline';
-      document.getElementById(id+1).style.display = 'none';
-      document.getElementById(id+2).style.display = 'none';
-      document.getElementById(id+3).style.display = 'none';
-      document.getElementById(id+4).style.display = 'none';
-      document.getElementById(id+5).style.display = 'none';
+      document.getElementById(id+'show').style.display = 'none';
+      document.getElementById(id+'comment').style.display = 'none';
+      document.getElementById(id+'action').style.display = 'none';
+      document.getElementById(id+'data1').style.display = 'none';
+      document.getElementById(id+'data2').style.display = 'none';
     }
   },
   computed: {
