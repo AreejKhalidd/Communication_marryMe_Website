@@ -10,10 +10,10 @@
                   <v-list class="list-style" three-line>
                     <template class="back">
                       <v-list-item style="max-width: 1300px">
-                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.image != NULL ">
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="!user.image">
                           <v-img v-bind:src="user.image"></v-img>
                       </v-list-item-avatar>
-                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.image == NULL ">
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.imageNULL ">
                           <v-img v-bind:src="img"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content class="shift">
@@ -41,7 +41,7 @@ import axios from "axios";
     Navbar,
     Sidebar,
    },
-   props: { users:[] ,searchname:null,VIP:null,
+   props: { searchname:null,VIP:null,
             banusers:null,
             vipusers:null,
             freeusers:null,
@@ -52,7 +52,7 @@ import axios from "axios";
           },
    data() {
     return {   
-                
+                users:[] ,
                 msgtoshow:"",
                 img:img,                
         }

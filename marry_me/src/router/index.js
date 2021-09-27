@@ -25,8 +25,8 @@ import AdminRegisteration from '../views/AdminRegisteration';
 import All_Reports from '../views/AdminReports';
 
 
-import UsersList from '../views/UsersList';
-import UserinfoforAdmin from '../views/UserinfoforAdmin';
+import AdminUserList from '../views/AdminUsersList';
+import AdminUserinfo from '../views/AdminUserinfo';
 
 Vue.use(VueRouter)
 
@@ -144,14 +144,14 @@ const routes = [{
         component: AdminNavbar,
     },
     {
-        path: '/userslist',
-        name: 'UsersList',
-        component: UsersList,
+        path: '/adminuserslist',
+        name: 'AdminUserList',
+        component: AdminUserList,
     },
     {
-        path: '/userinfoforAdmin/:id',
-        name: 'UserinfoforAdmin',
-        component: UserinfoforAdmin,
+        path: '/AdminUserinfo/:id',
+        name: 'AdminUserinfo',
+        component: AdminUserinfo,
     },
     {
         path: '/all_reports',

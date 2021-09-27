@@ -115,9 +115,9 @@
  </v-col>
                         <v-col>
                         <div class="b">
-                        <button  v-if="me_vip === 1 " rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  v-if="me_vip === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  :icon="fav" rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>
+                        <button  v-if="me_vip === 1 "  class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  v-if="me_vip === 0" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button   class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>
                         </div>
                        </v-col>
                       </v-row>

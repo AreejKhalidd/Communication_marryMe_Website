@@ -45,7 +45,7 @@
 <script>
 import axios from "axios";
 export default {
-    name: "UserList",
+    name: "AdminUserList",
   data() {
     return {   
                 users:[],
@@ -92,7 +92,7 @@ export default {
           console.log(user);
           console.log(index);
             let i= user.id;
-          this.$router.push({name: 'UserinfoforAdmin',params: { id:i }})
+          this.$router.push({name: 'AdminUserinfo',params: { id:i }})
         },
         allcatg(){          
                 const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");

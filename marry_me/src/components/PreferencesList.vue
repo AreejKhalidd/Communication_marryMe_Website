@@ -20,16 +20,17 @@
           </template>
 
           <v-img
-            v-if="user.user[0].image != NULL "
+            v-if="user.user[0].image"
             height="250"
             v-bind:src="user.user[0].image"
           ></v-img>
-
-          <v-img
-            v-if="user.user[0].image == NULL "
+           <v-img
+            v-if="!user.user[0].image"
             height="250"
             v-bind:src="img"
           ></v-img>
+
+
 
             <div>الاسم : {{ user.user[0].name}} </div>
             <div> العمر : {{ user.user[0].age}} </div>
@@ -64,9 +65,10 @@
     </v-alert>
 </div>
           <v-card-actions class="c">
-                      <v-btn :icon="startChat"  v-if="VIP === 1" rounded="circle" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
-                      <v-btn  :icon="startChat" v-if="VIP === 0" rounded="circle" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="startChat"/></v-btn>
-                      <v-btn  :icon="fav"  rounded="circle" class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(user.user[0].id)" ><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px" :icon="fav"/></v-btn>
+                      <span v-if="VIP === 1" style="{background-color: white;}" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="startChat"/></span>
+                      <span></span>
+                      <span v-if="VIP === 0" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="startChat"/></span>
+                      <span  @click="addtofavs(user.user[0].id)" class="btns-logo" title="اضافة الي المفضلين"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="fav"/></span>
               <div class="cc">      
                       <v-btn color="deep-purple lighten-2"   class="btn" text @click="gotouserinfo(user)" left> المزيد </v-btn>
               </div >   
@@ -82,10 +84,11 @@ import img from "../assets/UserDefaultAvatar.png";
 import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
 export default{
 
+  
+
   data(){
             return{
-                users:  [                   
-                ],
+                users:  [  ],
                 VIP: "",
                 avatarurl: null,
                 img: img,  
@@ -304,23 +307,18 @@ export default{
   border-radius:15px;
 }
 .btns-logo{
-margin-right:1px;
+margin-right:9px;
 background-color: white;
-variant:outline-secondary;
-color:black;
-border-radius: 40%;
-border: 0;
-height: 40px;
-width: 40px;
+color:white;
+height: 20px;
+width: 30px;
 }
 .btns-logo:hover{
-  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
-  -webkit-transform: scale(1.05);
-  transform: scale(1.02);
+  
   background-color:white;
-  color:grey;
+  color:white;
   border-radius: 40%;
-  variant:outline-secondary;
+  variant:white;
   cursor:pointer;
   font-size:12px;
 }
@@ -344,6 +342,6 @@ width: 40px;
 }
 .cc{
   direction: rtl;
-  margin-right:90px;
+  margin-right:40%;
 }
 </style>
