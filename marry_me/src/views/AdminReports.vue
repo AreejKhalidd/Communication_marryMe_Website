@@ -129,7 +129,7 @@ export default {
       this.$router.push('/userProfile/' + this.sender_id)
     },
     takeAction(id,action){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2OTEyMjEsImV4cCI6MTYzMzEwMTYyMSwibmJmIjoxNjMyNjkxMjIxLCJqdGkiOiIxdUdzbmhhRjhaMUJ5TlV6Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.pw0pqQvQ-M-V7xM4bwkSBTOCAxPF7uIXgJhXh_NhiPQ");
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios({
         method: 'put',
         url: "http://127.0.0.1:8000/api/admin/takeActionOnReport",
@@ -142,7 +142,7 @@ export default {
       this.reload();
     },
     reload(){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2OTEyMjEsImV4cCI6MTYzMzEwMTYyMSwibmJmIjoxNjMyNjkxMjIxLCJqdGkiOiIxdUdzbmhhRjhaMUJ5TlV6Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.pw0pqQvQ-M-V7xM4bwkSBTOCAxPF7uIXgJhXh_NhiPQ");
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios.get("http://127.0.0.1:8000/api/admin/getAllReports", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
