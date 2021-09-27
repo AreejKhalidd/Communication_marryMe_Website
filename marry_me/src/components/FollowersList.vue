@@ -10,14 +10,12 @@
           </v-list-item-avatar>
 
           <v-list-item-content style="text-align: right;margin: 0 50px 0 0">
-            <v-list-item-title style="font-weight: bolder;font-size: 25px">الأسم : {{ name }}</v-list-item-title>
-            <v-list-item-subtitle style="font-weight: bolder;font-size: 17px">العمر : {{ age }}</v-list-item-subtitle>
+            <v-list-item-title class="font_name" style="font-weight: bolder;">الأسم : {{ name }}</v-list-item-title>
+            <v-list-item-subtitle class="font_age" style="font-weight: bolder;">العمر : {{ age }}</v-list-item-subtitle>
           </v-list-item-content>
           <template >
             <v-icon
-                large
-                color="primary"
-                style="cursor: pointer;margin-left: 30px"
+                style="cursor: pointer;margin-left: 30px;color: #0062cc"
                 @click="redirect"
                 title="صفحته الشخصية"
             >
@@ -68,5 +66,55 @@ export default {
 <style>
 body {
   background-color: #EEE !important;
+}
+@media screen and (max-width: 1024px) {
+  .font_name{
+    font-size: 24px;
+  }
+  .font_age{
+    font-size: 20px;
+  }
+
+}
+
+@media screen and (max-width: 950px) {
+  .font_name{
+    font-size: 20px;
+  }
+  .font_age{
+    font-size: 16px;
+  }
+
+}
+
+
+@media screen and (max-width: 650px) {
+  .font_name{
+    font-size: 18px;
+  }
+  .font_age{
+    font-size: 13px;
+  }
+
+
+}
+
+@media screen and (max-width: 480px) {
+  .font_name{
+    font-size: 15px;
+  }
+  .font_age{
+    font-size: 11px;
+  }
+
+}
+@media screen and (max-width: 360px) {
+  .font_name{
+    font-size: 11px;
+  }
+  .font_age{
+    font-size: 8px;
+  }
+
 }
 </style>

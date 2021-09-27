@@ -10,8 +10,8 @@
           </v-list-item-avatar>
 
           <v-list-item-content style="text-align: right;margin: 0 50px 0 20px">
-            <v-list-item-title style="font-weight: bolder;font-size: 25px">الأسم : {{ name }}</v-list-item-title>
-            <v-list-item-subtitle style="font-weight: bolder;font-size: 17px">العمر : {{ age }}</v-list-item-subtitle>
+            <v-list-item-title class="font_name" style="font-weight: bolder;">الأسم : {{ name }}</v-list-item-title>
+            <v-list-item-subtitle class="font_age" style="font-weight: bolder;">العمر : {{ age }}</v-list-item-subtitle>
           </v-list-item-content>
 
           <div class="text-center">
@@ -21,19 +21,16 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                    large
+
 
                     v-bind="attrs"
                     v-on="on"
-                    style="color: red" depressed>
+                    style="color: red;font-size: 27px" depressed>
                 >
                   mdi-delete
                 </v-icon>
                 <v-icon
-                    large
-                    color="primary"
-                    class="mr-8"
-                    style="cursor: pointer"
+                    style="cursor: pointer;font-size: 27px;color: #0062cc;margin-right: 10px"
                     @click="redirect"
                     title="صفحته الشخصية"
                 >
@@ -127,5 +124,56 @@ export default {
 <style>
 body{
   background-color: #EEE;
+}
+
+@media screen and (max-width: 1024px) {
+  .font_name{
+    font-size: 24px;
+  }
+  .font_age{
+    font-size: 20px;
+  }
+
+}
+
+@media screen and (max-width: 950px) {
+  .font_name{
+    font-size: 20px;
+  }
+  .font_age{
+    font-size: 16px;
+  }
+
+}
+
+
+@media screen and (max-width: 650px) {
+  .font_name{
+    font-size: 18px;
+  }
+  .font_age{
+    font-size: 13px;
+  }
+
+
+}
+
+@media screen and (max-width: 480px) {
+  .font_name{
+    font-size: 15px;
+  }
+  .font_age{
+    font-size: 11px;
+  }
+
+}
+@media screen and (max-width: 360px) {
+  .font_name{
+    font-size: 11px;
+  }
+  .font_age{
+    font-size: 8px;
+  }
+
 }
 </style>

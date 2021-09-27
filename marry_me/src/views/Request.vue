@@ -1,49 +1,10 @@
 <template>
 
   <div data-app>
-    <div id="app">
-      <v-app id="inspire" style="direction: rtl">
-        <v-card
-            class=" overflow-hidden"
-            height="100%"
-            width="100%"
-        >
-          <v-app-bar
-              dark
-              prominent
-              style="background-color: #FE6265;height: 70px"
-          >
-            <v-app-bar-nav-icon style="margin-top: 5px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    <div id="app" style="direction: rtl">
+      <Navbar/>
+      <Sidebar/>
 
-            <v-toolbar-title style="width: 1200px;flex: auto;margin-bottom: 65px">قائمة طلبات الصداقة</v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-          </v-app-bar>
-
-          <v-navigation-drawer
-              v-model="drawer"
-              absolute
-              bottom
-              right
-              style="min-width: 15%;min-height: 100%;max-width: 40%;width: 200px  "
-              temporary
-
-          >
-            <v-list
-                class="linkStyle"
-                dense
-                nav
-            >
-              <v-list-item-group
-                  v-model="group"
-                  active-class="deep-purple--text text--accent-4"
-              >
-                <AnotherSideBar/>
-
-              </v-list-item-group>
-            </v-list>
-          </v-navigation-drawer>
           <v-main>
             <v-container>
               <v-tabs style="min-width: 200px!important;"  v-if="!error">
@@ -67,7 +28,6 @@
                               :req_id="request.req_id"
                               :status="request.status"
                               :img="request.image" :name="request.name"
-                              :mess="this.message"
                               :count="decCount"/>
               </div>
               <div  v-if="all && req">
@@ -107,10 +67,6 @@
 
             </v-container>
           </v-main>
-
-        </v-card>
-
-      </v-app>
     </div>
 
   </div>
@@ -120,8 +76,9 @@
 
 <script>
 import RequestsList from '@/components/RequestsList.vue'
+import Navbar from '@/components/Navbar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import RecRequest from '@/components/RecRequest.vue'
-import AnotherSideBar from '@/components/AnotherSideBar.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
 import EmptyPage from '@/components/EmptyPage.vue'
 import AcceptedRequests from '@/components/AcceptedRequests.vue'
@@ -132,9 +89,9 @@ import axios from "axios";
 export default {
   name: "Request",
   components: {
-
+    Navbar,
+    Sidebar,
     RequestsList,
-    AnotherSideBar,
     ErrorPage,
     RecRequest,
     EmptyPage,
@@ -159,23 +116,7 @@ export default {
     }
   },
   mounted() {
-    // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjcwMzYwMSwiZXhwIjoxNjMzMTE0MDAxLCJuYmYiOjE2MzI3MDM2MDEsImp0aSI6IjdlZE1FaVBtTTlGVjhtU2kiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.twkp8_gwKH7_qi_6HOz5hQ32DFylrkkID0bJEQYuWQU");
-    axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
-        .then(response => {
-          // If request is good...
-          this.requests = response.data
-          this.error = false;
-          let filteredItem =
-              this.requests.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
-
-          this.counter_dec = filteredItem.length;
-          this.counter = this.requests.requests_sent.length;
-        })
-        .catch(() => {
-          this.error = true;
-        });
-
+    this.callMounted();
   },
   watch: {
     group() {
@@ -194,7 +135,7 @@ export default {
    //   }
     },
     callMounted(){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjcwMzYwMSwiZXhwIjoxNjMzMTE0MDAxLCJuYmYiOjE2MzI3MDM2MDEsImp0aSI6IjdlZE1FaVBtTTlGVjhtU2kiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.twkp8_gwKH7_qi_6HOz5hQ32DFylrkkID0bJEQYuWQU");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjc2MjMzMywiZXhwIjoxNjMzMTcyNzMzLCJuYmYiOjE2MzI3NjIzMzMsImp0aSI6InhCQk43Z1Vtb2I1ZGo5N2ciLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y6UWyQ7h7EJyxUKjTTGopLCVy0wGZ6cxBcDWBNsjIc8");
       axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...

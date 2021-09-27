@@ -29,9 +29,7 @@
               </v-btn>
               <v-icon
 
-                  color="primary"
-                  class="mr-8"
-                  style="cursor: pointer;font-size: 27px"
+                  style="cursor: pointer;font-size: 27px;color: #0062cc;margin-right: 10px"
                   @click="redirect"
                   title="صفحته الشخصية"
               >

@@ -1,57 +1,22 @@
 <template>
-  <div data-app>
-    <div id="app">
-      <v-app id="inspire" style="direction: rtl">
-        <v-card
-            class=" overflow-hidden"
-            height="100%"
-            width="100%"
-        >
-          <v-app-bar
-              style="background-color: #FE6265;height: 70px;"
-              dark
-              prominent
-          >
-            <v-app-bar-nav-icon style="margin-top: 5px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+  <div data-app style="direction: rtl">
+    <Navbar/>
+    <Sidebar/>
+    <v-main>
+      <v-container>
+        <div id="app">
 
-            <v-toolbar-title style="width: 1200px;flex: auto;margin-bottom: 65px">قائمة المعجبين بي</v-toolbar-title>
 
-            <v-spacer></v-spacer>
-
-          </v-app-bar>
-
-          <v-navigation-drawer
-              v-model="drawer"
-              absolute
-              bottom
-              temporary
-              right
-              style="min-width: 15%;min-height: 100%;max-width: 40%;width: 200px ;direction: rtl;"
-
-          >
-            <v-list
-                nav
-                dense
-                class="linkStyle"
-            >
-              <v-list-item-group
-                  v-model="group"
-                  active-class="deep-purple--text text--accent-4"
-              >
-                <AnotherSideBar/>
-
-              </v-list-item-group>
-            </v-list>
-          </v-navigation-drawer>
           <FollowersList style="margin: 20px !important;" v-for="follower in followers" :key="follower.id"
                          :id="follower.id" :name="follower.name"
                          :user1_id="follower.user_1"
                          :age="follower.age" :img="follower.user2_image"/>
           <ErrorPage style="margin: 50px !important;" v-if="error"/>
-        </v-card>
-      </v-app>
-    </div>
 
+        </div>
+
+      </v-container>
+    </v-main>
 
   </div>
 
@@ -60,7 +25,8 @@
 
 <script>
 import FollowersList from '@/components/FollowersList.vue'
-import AnotherSideBar from '@/components/AnotherSideBar.vue'
+import Navbar from '@/components/Navbar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
 
 import axios from "axios";
@@ -69,7 +35,8 @@ export default {
   name: "LikedMe",
   components: {
     FollowersList,
-    AnotherSideBar,
+    Navbar,
+    Sidebar,
     ErrorPage
   },
   data() {
@@ -82,7 +49,7 @@ export default {
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjE1Mzc0MiwiZXhwIjoxNjMyMjAwNTQyLCJuYmYiOjE2MzIxNTM3NDIsImp0aSI6IjZBQjhESWtqYjl0WHc5a1kiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.Z6wR2m7ekwSQvZUkMMnqkiUiujVyE_x_uzNilZvcbK4");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjc2MjMzMywiZXhwIjoxNjMzMTcyNzMzLCJuYmYiOjE2MzI3NjIzMzMsImp0aSI6InhCQk43Z1Vtb2I1ZGo5N2ciLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y6UWyQ7h7EJyxUKjTTGopLCVy0wGZ6cxBcDWBNsjIc8");
     axios.get("http://127.0.0.1:8000/api/showAllLiked", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
