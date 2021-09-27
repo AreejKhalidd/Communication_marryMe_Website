@@ -218,7 +218,7 @@ export default {
         },
         addtofavs(id){
           console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+               const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
                 axios({
                   method: 'post',
                   url: "http://127.0.0.1:8000/api/addFriend",
@@ -240,7 +240,7 @@ export default {
         },
         startchat(id){
           console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+              const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/startchat",
@@ -283,7 +283,7 @@ export default {
         },
       requestchat(id){ 
                console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+               const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
                 axios({
                 method: 'post',
                 url: "http://127.0.0.1:8000/api/request",
@@ -306,11 +306,11 @@ export default {
       }          
     },
     mounted(){
-        const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+        const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
         axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
-            headers: {Authorization: AuthStr}
+            headers: {Authorization: token}
           }).then(response => {
           console.log(response.data)
           this.me_vip=response.data.VIP;
@@ -322,7 +322,7 @@ export default {
         axios({
           method: 'post',
           url: "http://127.0.0.1:8000/api/getUser",
-          headers: {Authorization: AuthStr},
+          headers: {Authorization: token},
           data: {id :this.userId}
         }).then((response) => {
               this.ID = response.data.id;
@@ -342,7 +342,7 @@ export default {
         axios({
           method: 'get',
           url: "http://127.0.0.1:8000/api/show-user",
-          headers: {Authorization: AuthStr},
+          headers: {Authorization: token},
           params:  { user_id : this.userId}
         }).then((response) => {
                             console.log(response.data);

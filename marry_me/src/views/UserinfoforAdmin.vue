@@ -204,113 +204,15 @@ export default {
           this.url = URL.createObjectURL(this.file);
           this.useravatar();
         },
-        addtofavs(id){
-          console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-                axios({
-                  method: 'post',
-                  url: "http://127.0.0.1:8000/api/addFriend",
-                  headers: {Authorization: token},
-                  params : { recevier_id :id }
-                  }).then(response => {
-                  console.log(response.data.message);
-                  ///alert("تم اضافة الي قائمة المفضلين");///
-                  this.msg="تم اضافة المستخدم الي قائمة المفضلين";
-                  this.donefav=true;
-                      })
-                              .catch((error) => {
-                              console.log('There is error:'+error);
-                              this.errorfav=true;
-                              this.msg="لقد قمت باضافة المستخدم من قبل..";
-                            ///  alert("لقد قمت باضافة المستخدم من قبل.."); ///
-                              return "error occoured"
-                      });
-        },
-        startchat(id){
-          console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-                axios({
-                method: 'post',
-                url: "http://127.0.0.1:8000/api/startchat",
-                headers: {Authorization: token},
-                params: {userid2:id}
-                }).then(response => {
-                console.log(response.data);
-                this.doneschat=true;
-                this.msg="يمكنم الان بدء المحادثة";
-               /// alert("You can start chat now");
-                 console.log(response.status); ///
-                    })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.status);
-                            if(error.response.status==400){
-                              /// alert("you have to choose user to start chat with");///
-                              this.errorschat=true;
-                              this.msg="عليك اختيار مستخدم لبدء المحادثة ";
-                            }
-                            else if (error.response.status==403){
-                               ///alert("this user blocked you, cannot send msg");///
-                              this.errorschat=true;
-                              this.msg="هذا المستخدم قام بحذ لك..لا يمن ان تبدء المحادثة معه ";
-                               }                         
-                            else if (error.response.status==404){
-                              /// alert("No user with this info to start chat with");///
-                              this.errorschat=true;
-                              this.msg="لا يوجد معلومات عن هذا المستخدم ";
-                               }
-                            else if (error.response.status==405){
-                               // alert("can not send more than 4 msgs to this account or you may dont have access to this chat");///
-                              this.errorschat=true;
-                              this.msg="لقد قمت بالرسال اكثر من 4 رسائل او لا يمكنك ارسال رسالة لهذا المستخدم";
-                              }                            
-                            else
-                               alert("you cannot start chat..")
-                            return "error occoured"
-                    });
-        },
-      requestchat(id){ 
-               console.log(id);
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-                axios({
-                method: 'post',
-                url: "http://127.0.0.1:8000/api/request",
-                headers: {Authorization: token},
-                data: {recevier :id}
-                }).then(response => {
-                console.log(response.status);
-                ///alert("تم ارسال طلب محادثة للمستخدم");///
-                this.msg="تم ارسال طلب محادثة للمستخدم"
-                this.donerchat=true;
-                    })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            this.errorrchat=true;
-                            this.msg="لقد قمت بالرسال طلب محادثة من قبل";
-                           /// alert("لقد قمت بالرسال طلب محادثة من قبل")///
-                            return "error occoured"
-                    });
-
-      }          
+        
     },
     mounted(){
-        const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-        axios({
-            method: 'get',
-            url: "http://127.0.0.1:8000/api/profile",
-            headers: {Authorization: AuthStr}
-          }).then(response => {
-          console.log(response.data)
-          this.me_vip=response.data.VIP;
-                })
-                        .catch((error) => {
-                        console.log('There is error:'+error);
-                        return "error occoured"
-          });
+        const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
+ 
         axios({
           method: 'post',
           url: "http://127.0.0.1:8000/api/getUser",
-          headers: {Authorization: AuthStr},
+          headers: {Authorization: token},
           data: {id :this.userId}
         }).then((response) => {
               this.ID = response.data.id;
@@ -330,7 +232,7 @@ export default {
         axios({
           method: 'get',
           url: "http://127.0.0.1:8000/api/show-user",
-          headers: {Authorization: AuthStr},
+          headers: {Authorization: token},
           params:  { user_id : this.userId}
         }).then((response) => {
                             console.log(response.data);
