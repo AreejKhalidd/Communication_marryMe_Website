@@ -45,7 +45,7 @@
                     <font-awesome-icon
                         @click="reverseChange(r.id)"
                         :id="r.id+'show'"
-                        title="رؤية اكثر"
+                        title="رؤية اقل"
                         style="display: none;color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="lessIcon"/>
 
                     <v-icon
