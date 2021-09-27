@@ -17,6 +17,7 @@ import ResetPassword from '../views/ResetPassword';
 import Register from '../views/Register';
 import ForgotPassword from '../views/ForgotPassword';
 import UserProfile from '../components/Profile';
+import All_Reports from '../views/AdminReports';
 
 
 import UsersList from '../views/UsersList';
@@ -131,6 +132,12 @@ const routes = [{
         path: '/userinfoforAdmin',
         name: 'UserinfoforAdmin',
         component: UserinfoforAdmin,
+    },
+    {
+        path: '/all_reports',
+        name: 'all_reports',
+        component: All_Reports,
+        props: true
     },
 
 ]

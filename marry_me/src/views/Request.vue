@@ -103,7 +103,7 @@
                             :count="reqCount"/>
               </div>
               <ErrorPage v-if="error" style="margin: 50px !important;"/>
-              <EmptyPage  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style="margin: 50px !important;"/>
+              <EmptyPage :msg="this.msg"  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style="margin: 50px !important;"/>
 
             </v-container>
           </v-main>
@@ -154,12 +154,13 @@ export default {
       error: false,
       flag_all:true,
       counter: 0,
+      msg:" لا يوجد اي طلبات حاليا لعرضها",
       counter_dec: 0
     }
   },
   mounted() {
     // GET request using axios with set headers
-    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
+    const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjcwMzYwMSwiZXhwIjoxNjMzMTE0MDAxLCJuYmYiOjE2MzI3MDM2MDEsImp0aSI6IjdlZE1FaVBtTTlGVjhtU2kiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.twkp8_gwKH7_qi_6HOz5hQ32DFylrkkID0bJEQYuWQU");
     axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
         .then(response => {
           // If request is good...
@@ -193,7 +194,7 @@ export default {
    //   }
     },
     callMounted(){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI0MTczOCwiZXhwIjoxNjMyNDcyMTM4LCJuYmYiOjE2MzIyNDE3MzgsImp0aSI6Ik4wR3I0QWg2WkI1RGtWQkMiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2gQXqBJTS_uYAn3z8XhIlf8qIGTm0Rdm4XeJEH_uDxE");
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjcwMzYwMSwiZXhwIjoxNjMzMTE0MDAxLCJuYmYiOjE2MzI3MDM2MDEsImp0aSI6IjdlZE1FaVBtTTlGVjhtU2kiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.twkp8_gwKH7_qi_6HOz5hQ32DFylrkkID0bJEQYuWQU");
       axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
