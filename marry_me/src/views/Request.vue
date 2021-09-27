@@ -63,7 +63,7 @@
                             :count="reqCount"/>
               </div>
               <ErrorPage v-if="error" style="margin: 50px !important;"/>
-              <EmptyPage :msg="this.msg"  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style="margin: 50px !important;"/>
+              <EmptyPage :msg="this.msg"  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style=";margin: 50px !important;"/>
 
             </v-container>
           </v-main>
@@ -118,11 +118,6 @@ export default {
   mounted() {
     this.callMounted();
   },
-  watch: {
-    group() {
-      this.drawer = false
-    },
-  },
   methods:{
     decCount(){
   //    if(this.counter!==0){
@@ -135,7 +130,7 @@ export default {
    //   }
     },
     callMounted(){
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9yZWdpc3RlciIsImlhdCI6MTYzMjc2MjMzMywiZXhwIjoxNjMzMTcyNzMzLCJuYmYiOjE2MzI3NjIzMzMsImp0aSI6InhCQk43Z1Vtb2I1ZGo5N2ciLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y6UWyQ7h7EJyxUKjTTGopLCVy0wGZ6cxBcDWBNsjIc8");
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...

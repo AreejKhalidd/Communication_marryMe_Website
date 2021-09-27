@@ -3,10 +3,10 @@
     <v-alert
         text
         prominent
+
         type="error"
         icon="mdi-cloud-alert"
-        style="direction: rtl;padding-left: 50px"
-
+        style="direction: rtl;padding-left: 50px;background-color: #F89D9F !important;"
     >
      {{msg}}
     </v-alert>
