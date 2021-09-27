@@ -107,7 +107,11 @@ export default {
       this.count();
     },
     redirect(){
-      this.$router.push('/userProfile/'+this.req_id)
+      this.$router
+          .push({
+            name: 'Userinfo',
+            params: { id:this.req_id }
+          })
     }
   }
 }

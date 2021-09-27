@@ -99,7 +99,11 @@ export default {
       document.getElementById(id).style.display='none';
     },
     redirect(){
-      this.$router.push('/userProfile/'+this.blocked_id)
+      this.$router
+          .push({
+            name: 'Userinfo',
+            params: { id:this.blocked_id }
+          })
     }
   }
 }

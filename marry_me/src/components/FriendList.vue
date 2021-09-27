@@ -98,7 +98,11 @@ export default {
       document.getElementById(id).style.display='none';
     },
     redirect(){
-      this.$router.push('/userProfile/'+this.user2_id)
+      this.$router
+          .push({
+            name: 'Userinfo',
+            params: { id:this.user2_id }
+          })
     }
   }
 }

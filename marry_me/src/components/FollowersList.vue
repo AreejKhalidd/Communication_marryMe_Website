@@ -41,7 +41,11 @@ export default {
   props: ["name", "age", "id", "img","user1_id"],
   methods:{
     redirect(){
-      this.$router.push('/userProfile/'+this.user1_id)
+      this.$router
+          .push({
+            name: 'Userinfo',
+            params: {id: this.user1_id}
+          })
     }
   }
 }
