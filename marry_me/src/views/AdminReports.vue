@@ -14,8 +14,15 @@
               </v-list-item-avatar>
 
               <v-list-item-content style="text-align: right;margin: 0 20px 0 20px">
+
                 <v-list-item-title class="font_name" style="font-weight: bolder">رقم الرسالة : {{ r.message_id }}</v-list-item-title>
                 <v-list-item-subtitle class="font_age" style="font-weight: bolder">رقم البلاغ : {{ r.id }}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +2" class="font_age" style="font-weight: bolder;display: none">التعليق : {{ r.details }}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +3" class="font_age" style="font-weight: bolder;display: none">القرار المأخوذ : في انتظار رد المشرف</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +4" class="font_age" style="font-weight: bolder;display: none">تم الانشاء في : {{r.created_at}}</v-list-item-subtitle>
+                <v-list-item-subtitle :id="r.id +5" class="font_age" style="font-weight: bolder;display: none">تم النحديث في : {{r.updated_at}}</v-list-item-subtitle>
+
+
               </v-list-item-content>
 
               <div  class="text-center">
@@ -30,7 +37,16 @@
                         style="background-color: red;font-weight: bolder;padding: 0 ;height: 25px;color: #EEEEEE;" depressed>
                       منع
                     </v-btn>
-                    <font-awesome-icon title="رؤية اكثر" style="color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="showIcon"/>
+                    <font-awesome-icon
+                        :id="r.id"
+                        @click="change(r.id)"
+                        title="رؤية اكثر"
+                        style="color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="showIcon"/>
+                    <font-awesome-icon
+                        @click="reverseChange(r.id)"
+                        :id="r.id+1"
+                        title="رؤية اكثر"
+                        style="display: none;color: #0062CC;cursor: pointer;font-size: 37px;margin-right: 15px;margin-bottom: -8px" :icon="lessIcon"/>
 
                     <v-icon
                         @click="takeAction(r.id,2)"
@@ -86,7 +102,7 @@
 <script>
 import EmptyPage from '@/components/EmptyPage.vue'
 import axios from "axios";
-import {faCaretDown} from '@fortawesome/free-solid-svg-icons'
+import {faCaretDown,faCaretUp} from '@fortawesome/free-solid-svg-icons'
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 export default {
@@ -137,11 +153,30 @@ export default {
           .catch(() => {
             this.error = true;
           });
+    },
+    change(id){
+      document.getElementById(id).style.display = 'none';
+      document.getElementById(id+1).style.display = 'inline';
+      document.getElementById(id+2).style.display = 'inline';
+      document.getElementById(id+3).style.display = 'inline';
+      document.getElementById(id+4).style.display = 'inline';
+      document.getElementById(id+5).style.display = 'inline';
+    },
+    reverseChange(id){
+      document.getElementById(id).style.display = 'inline';
+      document.getElementById(id+1).style.display = 'none';
+      document.getElementById(id+2).style.display = 'none';
+      document.getElementById(id+3).style.display = 'none';
+      document.getElementById(id+4).style.display = 'none';
+      document.getElementById(id+5).style.display = 'none';
     }
   },
   computed: {
     showIcon() {
       return faCaretDown
+    },
+    lessIcon() {
+      return faCaretUp
     },
   }
 }
