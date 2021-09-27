@@ -1,4 +1,5 @@
 <template>
+  <v-app>
   <v-main id="certifyme">
     <Navbar/>
     <Sidebar/>
@@ -44,6 +45,7 @@
     </v-row>
         
   </v-main>
+  </v-app>
 </template>
 
 <script>
