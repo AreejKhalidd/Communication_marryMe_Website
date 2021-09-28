@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <div class="all">
+      <div class="all" v-if="error==false" >
           <Navbar/>
           <Sidebar/>
         <div class="page"> 
@@ -38,8 +38,8 @@ import axios from "axios";
  export default {
     name: "SearchResult",
     components: {
-    Navbar,
     Sidebar,
+    Navbar,
    },
    props: { searchname:null,VIP:null,
             banusers:null,
@@ -54,7 +54,8 @@ import axios from "axios";
     return {   
                 users:[] ,
                 msgtoshow:"",
-                img:img,                
+                img:img, 
+                error: false,               
         }
     },
   watch: {
@@ -65,12 +66,16 @@ import axios from "axios";
 
     methods:
     {
-        gotouserinfo(user,index){
-          console.log(user);
-          console.log(index);
-            let i= user.id;
-          this.$router.push({name: 'Userinfo',params: { id:i }})
-        },
+  
+      redirect(){
+        this.$router.push({ name: 'Login' })
+      },
+      gotouserinfo(user,index){
+        console.log(user);
+        console.log(index);
+          let i= user.id;
+        this.$router.push({name: 'Userinfo',params: { id:i }})
+      },
       gotosearch(){    
       console.log(this.users);
       console.log("hena fl search");
@@ -240,6 +245,11 @@ import axios from "axios";
       else{
         this.msgtoshow="الناتج عن بحثك"
       }
+        if(!localStorage.getItem('usertoken'))
+        {
+             this.error=true;
+             return;
+        }
       const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
           if(this.VIP==1)
           {             
@@ -260,6 +270,7 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            ///this.error = true;///
                             return "error occoured"
                           });
               }

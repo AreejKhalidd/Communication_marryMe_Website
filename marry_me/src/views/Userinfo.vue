@@ -1,10 +1,13 @@
 <template>
- <div id="app">
-   <v-app id="content">
-        <Navbar/>
-        <Sidebar/>
-      <div >
-                          <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">
+ <div id="app" >
+          <div v-if="error">
+              <ErrorPage style="margin: 50px !important;" v-if="error"/>
+          </div>
+   <v-app id="content" v-if="!error">       
+        <Navbar v-if="!error" />
+        <Sidebar v-if="!error" />
+      <div v-if="!error" >
+                          <h4 class ="mt-3" align="center" style="color: rgba(255,98,101,1);">
                                        بيانات عن المستخدم  </h4>
                           <v-divider  dark></v-divider>
           <div class="page">
@@ -135,15 +138,18 @@ import axios from "axios";
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import img from "../assets/UserDefaultAvatar.png";
+import ErrorPage from '@/components/ErrorPage.vue';
 import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
 export default {
     name: "Userinfo",
     components: {
     Navbar,
-    Sidebar,
+    Sidebar,  
+    ErrorPage,
    },
   data() {
     return {
+      error: false,
       avatarurl: null,
       userId:this.$route.params.id,
       url: img,
@@ -189,8 +195,9 @@ export default {
     },
 
     methods:{
-
-
+       redirect(){
+        this.$router.push({ name: 'Login' })
+      },
         refav(){
             this.donefav=false;
             this.errorfav=false;
@@ -317,6 +324,7 @@ export default {
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
+                        this.error = true;
                         return "error occoured"
           });
         axios({

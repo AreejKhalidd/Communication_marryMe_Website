@@ -56,6 +56,7 @@ export default{
       url: img,
       avatarurl: null,
       name:"",
+      file: '',
     }
   },
   computed: {
@@ -75,15 +76,15 @@ export default{
        return faCheck
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl;
+      if (this.avatarurl) return `http://127.0.0.1:8000${this.avatarurl}`;
       return this.url;
     },
   },
  methods:{
-      previewImage() {
-          this.url = URL.createObjectURL(this.file);
-          this.useravatar();
-        },
+    previewImage() {
+      this.url = URL.createObjectURL(this.file);
+      this.useravatar(); 
+    },
       goToblocks(){
          this.$router.push('/blockedUsers');
         }
@@ -102,6 +103,7 @@ export default{
    },
    redirect(name) {
      this.$router.push({name:name});
+
    }
  },
   mounted(){
