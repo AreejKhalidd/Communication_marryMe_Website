@@ -39,7 +39,7 @@
                   >
                     إنشاء حساب جديد
                   </h2>
-                <!--  <div class="col" style="">
+                  <!--  <div class="col" style="">
                     <a
                       style="width: 25rem; margin-right: -1rem"
                       href="http://127.0.0.1:8000/api/auth/facebook"
@@ -85,7 +85,7 @@
                     class="rounded-2"
                     outlined
                   ></v-text-field>
-           
+
                   <v-text-field
                     label="كلمه المرور"
                     name="password"
@@ -100,20 +100,32 @@
                     outlined
                     required
                   ></v-text-field>
-      
-         <v-select
-         
-                    style="width: 600px"
-                    color="red darken-0"
-          :items="items"
-          label="المشرف"
-          :rules="itemRules"
-          outlined
-          required
-        ></v-select>
 
-          
-               
+                  <b-dropdown
+                    variant="white"
+                    text-align="right"
+                    class="super"
+                    style="
+                      margin-right: 0rem;
+                      margin-bottom: 2rem;
+                      height: 57px;
+                      background-color: white;
+                      color: black;
+                      border: solid 1px rgba(255, 98, 101, 255);
+                      padding-left: 29rem;
+                      text-align: right;
+                      align-text: right;
+                    "
+                    :text="type"
+                  >
+                    <b-dropdown-item-button @click="superAdmin()"
+                      >super admin</b-dropdown-item-button
+                    >
+                    <b-dropdown-item-button @click="normal()"
+                      >normal</b-dropdown-item-button
+                    >
+                  </b-dropdown>
+
                   <v-btn
                     @click="validate"
                     :disabled="!valid"
@@ -170,19 +182,20 @@
 
 <script>
 import axios from "axios";
-import { faBirthdayCake } from "@fortawesome/free-solid-svg-icons";
 export default {
   name: "Register",
   data: () => ({
-       items: ['True', 'False'],
+    type: "type of admin",
+
+       super_admin:null,
     ExistingUseralert: false,
     show1: false,
-    show2:false,
-    showVerify:false,
+    show2: false,
+    showVerify: false,
 
     valid: true,
     nameRules: [(v) => !!v || "الاسم مطلوب"],
-     itemRules: [(v) => !!v || " مطلوب"],
+    itemRules: [(v) => !!v || " مطلوب"],
     passwordRules: [
       (v) => !!v || "كلمه المرور مطلوبه",
       (v) => (v && v.length > 8) || "كلمه المرور يجب ان تكون على الاقل 8 أحرف",
@@ -192,75 +205,80 @@ export default {
     showPassword: false,
     checkbox: true,
     errorMessages: "",
-    // formHasErrors: false,
   }),
-  computed: {
-    birthIcon() {
-      return faBirthdayCake;
-    },
+ 
+  mounted(){
+    console.log(this.name);
+    console.log(this.password);
+    console.log(this.items);
+    console("dataaa");
   },
+
+
   methods: {
-    signIn() {
+
+         signIn() {
       console.log("signin");
       this.$router.push({ name: "Login" });
     },
+  
+  
     validate() {
       this.$refs.form.validate();
     },
-    Register() {
-      console.log(this.name);
-      console.log(this.password);
-       console.log(this.items);
-      
-      
-      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
-      axios.post('http://127.0.0.1:8000/api/register/Admin',  {
-         option,
-          username: this.name,
+
+
+superAdmin()
+{
+this.type="Super Admin";
+this.super_admin=1;
+},
+normal()
+{
+this.type="Normal Admin";
+this.super_admin=0;
+},
+
+
+  
+    Register(){
+                    console.log(this.password);      
+              console.log(this.name);
+              console.log(this.super_admin);
+              
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjY2MTQsImV4cCI6MTYzMjc3MDIxNCwibmJmIjoxNjMyNzY2NjE0LCJqdGkiOiJienpaRUw2WXlrRGwxeFA4Iiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.4ZmYKqfoUizSQKHRqZE5SQFehUaCGquCVIasPUWm0dE");
+          axios({
+            method: 'post',
+            url: "http://127.0.0.1:8000/api/register/Admin",
+            headers: {Authorization: token /*`${'Bearer'} ${localStorage.getItem('usertoken')}`*/  },
+
+            data:{    username: this.name,
           password: this.password,
-           super_admin: this.items,
-          
-        
-        })
-        .then((res) => {
-          console.log(res.data);
-            this.$store.state.usertoken = res.data.access_token;
-            localStorage.setItem('usertoken',res.data.access_token);
-            /* if(res.response.status === 201){
-           this.showVerify = true;
-          }*/
-            
-        //  if (res.status === 403) {
-           //  console.log(res.data);
-           // this.show = true;
-            // alert(res.response.data.message)
-            // console.log(res.response.data.code, 'Invalid, you used this device before !!')
-         // }
-          // alert("You are logged in..");
-          // const token = localStorage.setItem("token", res.data.access_token);
-          // return token;
-          // const user = localStorage.setItem("user", res.data.user);
-          // return token, user;
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-          if (err.response.status === 403) {
-            this.show1=true;
-         
-          }
-          if(err.response.status === 400){
-            this.show2=true;
-          }
-         
-        
- 
-        });
-    },
+           super_admin: this.super_admin, }
+          }).then(response => {
+  
+
+          console.log(response.data)
+             
+                })
+                        .catch((error) => {
+                        console.log('There is error:'+error);
+                        this.error = true;
+                        return "error occoured"
+                });
+  },
+   
   },
 };
 </script>
 
 <style lang="css" scoped>
+.super {
+  width: 600px;
+  text-align: center;
+  margin-right: -10rem;
+  background-color: blue;
+}
 .alert {
   padding: 20px;
   background-color: #f44336;

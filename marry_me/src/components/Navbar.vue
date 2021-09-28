@@ -42,6 +42,12 @@
           </b-navbar-nav>
         </b-navbar>
       </div>
+
+      <span></span>
+      <br/>
+    <v-alert v-if="loggedout" type="success" color="#FF6265" align="center" dismissible @click="relogin()">
+            تم نسجيل الخروج
+    </v-alert>
   </div>
 </template>
 
@@ -63,6 +69,7 @@ export default{
       ageusers:null,
       age:20,
       bancount:1,
+      loggedout:false,
     }
   },
   computed: {
@@ -76,7 +83,10 @@ export default{
 
   methods:{
 
-
+      relogin(){
+        localStorage.removeItem("usertoken");
+        this.$router.push('/login');
+      },
       vipcatg(){
          this.catg="VIPالمستخدمين";
          this.vipusers=true;
@@ -105,11 +115,13 @@ export default{
             headers: {Authorization: token}
           }).then(response => {
           console.log(response.data)
-          alert("You are logged out..");
+          
                
                 console.log("logged out");
-           localStorage.clear();
-          this.$router.push('/login');
+                this.loggedout=true;
+                        localStorage.removeItem("usertoken");
+                this.$router.push('/login');
+
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);

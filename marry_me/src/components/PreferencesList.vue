@@ -2,6 +2,11 @@
       <div>
          <h4 class="hp" align="center" style="color: rgba(255,98,101,1);">   
                                        قائمة التفضيلات الخاصة بك   </h4>
+
+        <div v-if="!users">
+                       <h4 class="hp" align="center" style="color: rgba(255,98,101,1);">   
+                      فم باجابة جميع الاسئلة لظهور قائمة التفضيلات الخاصة بك   </h4>       
+        </div>
         <v-card
           :loading="loading"         
           max-width="300"

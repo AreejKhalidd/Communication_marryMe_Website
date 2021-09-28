@@ -1,10 +1,36 @@
 <template>
- <div id="app">
-   <v-app id="content">
-        <Navbar/>
-        <Sidebar/>
-      <div >
-                          <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">
+ <div id="app" >
+
+                <v-app v-if="notoken==true">
+                      <ErrorPage style="margin: 50px !important;" v-if="notoken"/>
+                </v-app>      
+                <v-app v-if="notverified==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باعادة التسجيل الدخول و التحقق من حسابك
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="redirect()">
+                            نسجيل الدخول
+                          </v-btn>
+                        </div>
+                </v-app>      
+                <v-app v-if="checkquestions==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باجابة جميع اسئلتك قبل التصفح
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="quizpage()">
+                            الذهاب للاسئلة
+                          </v-btn>
+                        </div>
+                </v-app>
+
+
+   <v-app id="content" v-if="noerror">       
+        <Navbar v-if="noerror" />
+        <Sidebar v-if="noerror" />
+      <div v-if="noerror" >
+                          <h4 class ="mt-3" align="center" style="color: rgba(255,98,101,1);">
                                        بيانات عن المستخدم  </h4>
                           <v-divider  dark></v-divider>
           <div class="page">
@@ -135,15 +161,21 @@ import axios from "axios";
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import img from "../assets/UserDefaultAvatar.png";
+import ErrorPage from '@/components/ErrorPage.vue';
 import {faHeart,faComment,faBan} from '@fortawesome/free-solid-svg-icons'
 export default {
     name: "Userinfo",
     components: {
     Navbar,
-    Sidebar,
+    Sidebar,  
+    ErrorPage,
    },
   data() {
     return {
+      noerror: false,
+      checkquestions:false,
+      notverified:false,
+      notoken:false,
       avatarurl: null,
       userId:this.$route.params.id,
       url: img,
@@ -182,15 +214,19 @@ export default {
       return faBan
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl;
+      if (this.avatarurl) return this.avatarurl; /// `http://127.0.0.1:8000${this.avatarurl}`;///
       return this.url;
     },
 
     },
 
     methods:{
-
-
+        redirect(){
+          this.$router.push({ name: 'Login' })
+        },
+        quizpage(){
+          this.$router.push({ name: 'questions' })
+        },
         refav(){
             this.donefav=false;
             this.errorfav=false;
@@ -212,10 +248,10 @@ export default {
             this.errorschat=false;
             this.msg="";
         } ,
-        previewImage() {
-          this.url = URL.createObjectURL(this.file);
-          this.useravatar();
-        },
+    previewImage() {
+      this.url = URL.createObjectURL(this.file);
+      this.useravatar(); 
+    },
         addtofavs(id){
           console.log(id);
                const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
@@ -306,6 +342,12 @@ export default {
       }
     },
     mounted(){
+        
+        if(!localStorage.getItem('usertoken'))
+        {
+          this.notoken=true;
+          return;
+        }
         const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
         axios({
             method: 'get',
@@ -313,10 +355,19 @@ export default {
             headers: {Authorization: token}
           }).then(response => {
           console.log(response.data)
+          this.noerror = true;
           this.me_vip=response.data.VIP;
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
+                        console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                         return "error occoured"
           });
         axios({

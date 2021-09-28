@@ -159,7 +159,7 @@ export default {
       return faTimes
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl;
+      if (this.avatarurl) return this.avatarurl;  /// `http://127.0.0.1:8000${this.avatarurl}`;///
       return this.url;
     },
     

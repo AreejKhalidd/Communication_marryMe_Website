@@ -16,10 +16,8 @@
                     color: tomato;
                     margin-bottom: 38px;
                     text-align: center;
-    margin-right: 14rem;
-    margin-left: -4rem;
-   margin-top: -6rem;
-    margin-bottom: 5rem;
+  
+        margin: -1rem 16rem 9rem -6rem;
                   "
                 >
                   تسجيل دخول
@@ -189,27 +187,35 @@ export default {
     Login() {
       console.log(this.email);
       console.log(this.password);
-      axios
-        .post("http://127.0.0.1:8000/api/login", {
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      axios({
+        method:"post",
+        url:"http://127.0.0.1:8000/api/login", 
+        headers:{Authorization: AuthStr},
+          data:{
           email: this.email,
           password: this.password,
           remember: this.remember,
+          }
         })
         .then((res) => {
           console.log(res.data.AccessToken);
-         // this.$store.state.usertoken = res.data.AccessToken;
+          console.log(res.data.message);
+          console.log("here");
             localStorage.setItem('usertoken',res.data.AccessToken);
-          this.$router.push({ name: "HomePage" });
-
+          // if(res.data.message =="logged in successfully"/*status== 200*/){
+            
+             this.$router.push({ name: "HomePage" });
+           // }
         })
         .catch((err) => {
-              if (err.response.status === 404) {
+              if (err.response.status == 404) {
             this.show1=true;
               }
           console.log(err.message);
         });
 
-      this.$router.push({ name: "HomePage" });
+      //this.$router.push({ name: "HomePage" });
     },
   },
 };
@@ -275,6 +281,8 @@ div.row.no-gutters.justify-center{
 div.v-alert.v-sheet.theme--dark.tomato{
   background-color: tomato;
     width: 27rem;
+    margin-top: -7rem;
+    margin-right: 0rem;
 }
 
 </style>

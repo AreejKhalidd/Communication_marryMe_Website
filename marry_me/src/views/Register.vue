@@ -317,9 +317,12 @@ export default {
       console.log(this.password);
       console.log(this.confirmPassword);
       
-      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
-      axios.post('http://127.0.0.1:8000/api/register',  {
-         option,
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      axios({
+        method:"post",
+        url:'http://127.0.0.1:8000/api/register',  
+         headers:{Authorization: AuthStr},
+         data:{
           name: this.name,
           email: this.email,
           password: this.password,
@@ -327,6 +330,7 @@ export default {
           phone: this.phone,
           gender: this.gender,
           birth_day: this.birthday,
+         }
         
         })
         .then((res) => {

@@ -121,6 +121,8 @@ const routes = [{
         path: '/resetpassword',
         name: 'ResetPassword',
         component: ResetPassword,
+      
+        props: true,
     },
     {
         path: '/userProfile/:id',

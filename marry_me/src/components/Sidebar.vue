@@ -9,8 +9,8 @@
                     :src="useravatar"
                     id="avatar"           
                     rounded 
-                    max-height="80"
-                    max-width="80"            
+                    max-height="40%"
+                    max-width="40%"            
                     class="ml-auto mx-5"
                     >
                 </v-img>
@@ -75,7 +75,7 @@ export default{
        return faCheck
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl;
+      if (this.avatarurl) return `http://127.0.0.1:8000${this.avatarurl}`;
       return this.url;
     },
   },
