@@ -1,8 +1,33 @@
 <template>
   <v-app>
-    <v-main id="content">
-      <Navbar/>
-      <Sidebar/>
+
+    <v-app v-if="notoken==true">
+                      <ErrorPage style="margin: 50px !important;" v-if="notoken"/>
+    </v-app>      
+    <v-app v-if="notverified==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باعادة التسجيل الدخول و التحقق من حسابك
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="redirect()">
+                            نسجيل الدخول
+                          </v-btn>
+                        </div>
+      </v-app>      
+      <v-app v-if="checkquestions==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باجابة جميع اسئلتك قبل التصفح
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="quizpage()">
+                            الذهاب للاسئلة
+                          </v-btn>
+                        </div>
+      </v-app>
+
+    <v-main id="content" v-if="noerror">
+      <Navbar v-if="noerror"/>
+      <Sidebar v-if="noerror"/>
       <v-row>
         <v-col cols="12" id="Black">
           <br />
@@ -200,10 +225,12 @@ import axios from 'axios';
 import SignupAvatar from "../assets/UserDefaultAvatar.png";
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import ErrorPage from '@/components/ErrorPage.vue'
 export default {
    components: {
     Navbar,
     Sidebar,
+    ErrorPage
    },
   data() {
     return {
@@ -236,9 +263,19 @@ export default {
         required: (value) => !!value || "Required.",
         number: (value) => this.IsaNumber(value) || "Not a Valid Number",
       },
+      noerror: false,
+      checkquestions:false,
+      notverified:false,
+      notoken:false,
     };
   },
   methods: {
+    redirect(){
+             this.$router.push({ name: 'Login' })
+   },
+   quizpage(){
+             this.$router.push({ name: 'questions' })
+     },
     previewImage() {
       this.url = URL.createObjectURL(this.file);
       this.useravatar();
@@ -272,8 +309,20 @@ export default {
           this.NumberOfBans = response.data.ban_count;
           this.Certified=response.data.certified;
           this.vip=response.data.VIP;
+          this.noerror=true;
           this.getUserQA();
-        });
+         }).catch((error) => {
+                        console.log('There is error:'+error);
+                        console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                        return "error occoured"
+                });
     },
     getUserQA() {
       if (localStorage.getItem('usertoken') === null) this.$router.push('/');
@@ -404,6 +453,11 @@ export default {
     },
   },
   created() {
+    if(!localStorage.getItem('usertoken'))
+          {
+            this.notoken=true;
+            return;
+          }
     this.getUserInfo();
   },
   computed: {
