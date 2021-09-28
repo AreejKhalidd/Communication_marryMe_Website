@@ -1,4 +1,59 @@
 <template>
+  <!-- <nav>
+       <v-app-bar color="#23262D" dark app class="line" height="90px">
+           <v-chip class="ma-2" color="grey darken-1" pill >Dashboard
+           <v-icon right small color="cyan"> fas fa-chevron-circle-down</v-icon>
+           </v-chip>
+            <v-chip class="ma-2" color="grey darken-1" pill >REPORTS
+           <v-icon right small color="cyan"> fas fa-chevron-circle-down</v-icon>
+           </v-chip>
+           <v-spacer></v-spacer>
+           <v-text-field filled dense rounded label="search" prepend-inner-icon="fas fa-search"
+           class="mt-6 mr-2" sm="2"></v-text-field>
+           <v-btn fab color="cyan" elevation="0" class="mr-2">
+               
+           <v-icon  color="white"> fas fa-user-check</v-icon>
+           </v-btn>
+            <v-btn fab color="orange" elevation="0" >
+               
+           <v-icon  color="white"> fas fa-bars</v-icon>
+           </v-btn>
+       </v-app-bar>
+       <v-navigation-drawer v-model="drawer" dark app mini-varient mini-varient-width="122" color="#23262D">
+           <v-list>
+               <v-list-item-group color="cyan">
+               <v-list-item class="mb-4">
+               <v-list-item-content align="center">
+                   <v-icon align ="center" x-large>fas fa-tv</v-icon>
+               </v-list-item-content>
+               </v-list-item>
+               </v-list-item-group>
+
+                 <v-list-item-group color="cyan" v-model="selectedItem">
+               <v-list-item  v-for="(item,i) in items" :key="i" >
+               <v-list-item-content align="center">
+                   <v-icon align ="center" class="mb-3" v-text="item.icon"></v-icon>
+               <v-list-item-subtitle align ="center" class="caption" v-text="item.text"></v-list-item-subtitle>
+
+               </v-list-item-content>
+               </v-list-item>
+               </v-list-item-group>
+           </v-list>
+       </v-navigation-drawer>
+   </nav>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
   <div id="app">      
     <div >
       <b-sidebar id="sidebar-right" variant="grey"   class="sidee"  right shadow>
@@ -47,19 +102,27 @@
 
 <script>
 import axios from 'axios';
-import img from "../assets/UserDefaultAvatar.png";
-import {faHeart,faBan,faStar,faPlus,faCheck} from '@fortawesome/free-solid-svg-icons';
+//import img from "../assets/UserDefaultAvatar.png";
+//import {faHeart,faBan,faStar,faPlus,faCheck} from '@fortawesome/free-solid-svg-icons';
 export default{
   data() {
     return {
-      VIP: "",
+    drawer:null,
+    selectedItem:0,
+    items: [
+       { text:'DASHBOARD', icon:'fas fa-tachometer-alt'},
+       
+       { text:'REPORTS', icon:'fas fa-file-alt'},
+
+    ]
+      /*VIP: "",
       url: img,
       avatarurl: null,
-      name:"",
+      name:"",*/
     }
   },
   computed: {
-     fav() {
+    /* fav() {
       return faHeart
     },
      favme() {
@@ -77,10 +140,10 @@ export default{
     useravatar() {
       if (this.avatarurl) return this.avatarurl;
       return this.url;
-    },
+    },*/
   },
  methods:{
-      previewImage() {
+     /* previewImage() {
           this.url = URL.createObjectURL(this.file);
           this.useravatar();
         },
@@ -99,7 +162,7 @@ export default{
       }, 
       goTorequests(){
            this.$router.push('/allRequests'); 
-      },
+      },*/
   },
   mounted(){
           const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");

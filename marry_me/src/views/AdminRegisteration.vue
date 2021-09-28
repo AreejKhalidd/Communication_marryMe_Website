@@ -186,7 +186,9 @@ export default {
   name: "Register",
   data: () => ({
     type: "type of admin",
-    super_admin: null,
+
+       super_admin:null,
+    ExistingUseralert: false,
     show1: false,
     show2: false,
     showVerify: false,
@@ -204,56 +206,68 @@ export default {
     checkbox: true,
     errorMessages: "",
   }),
+ 
+  mounted(){
+    console.log(this.name);
+    console.log(this.password);
+    console.log(this.items);
+    console("dataaa");
+  },
+
+
   methods: {
-    superAdmin() {
-      this.type = "Super Admin";
-      this.super_admin = 1;
-    },
-    normal() {
-      this.type = "Normal Admin";
-      this.super_admin = 0;
-    },
 
-    Register() {
-      console.log(this.password);
-      console.log(this.name);
-      console.log(this.super_admin);
-     // console.log(this.items);
-      const token = "Bearer ".concat(
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjY2MTQsImV4cCI6MTYzMjc3MDIxNCwibmJmIjoxNjMyNzY2NjE0LCJqdGkiOiJienpaRUw2WXlrRGwxeFA4Iiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.4ZmYKqfoUizSQKHRqZE5SQFehUaCGquCVIasPUWm0dE"
-      );
-      axios({
-        method: "post",
-        url: "http://127.0.0.1:8000/api/register/Admin",
-        headers: {
-          Authorization:
-            token /*`${'Bearer'} ${localStorage.getItem('usertoken')}`*/,
-        },
-
-        data: {
-          username: this.name,
-          password: this.password,
-          super_admin: this.super_admin,
-        },
-      })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log("There is error:" + error);
-          this.error = true;
-          return "error occoured";
-        });
-    },
-
-    signIn() {
+         signIn() {
       console.log("signin");
       this.$router.push({ name: "Login" });
     },
+  
+  
     validate() {
       this.$refs.form.validate();
     },
+
+
+superAdmin()
+{
+this.type="Super Admin";
+this.super_admin=1;
+},
+normal()
+{
+this.type="Normal Admin";
+this.super_admin=0;
+},
+
+
   
+    Register(){
+                    console.log(this.password);      
+              console.log(this.name);
+              console.log(this.super_admin);
+              
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjY2MTQsImV4cCI6MTYzMjc3MDIxNCwibmJmIjoxNjMyNzY2NjE0LCJqdGkiOiJienpaRUw2WXlrRGwxeFA4Iiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.4ZmYKqfoUizSQKHRqZE5SQFehUaCGquCVIasPUWm0dE");
+          axios({
+            method: 'post',
+            url: "http://127.0.0.1:8000/api/register/Admin",
+            headers: {Authorization: token /*`${'Bearer'} ${localStorage.getItem('usertoken')}`*/  },
+
+            data:{    username: this.name,
+          password: this.password,
+           super_admin: this.super_admin, }
+          }).then(response => {
+  
+
+          console.log(response.data)
+             
+                })
+                        .catch((error) => {
+                        console.log('There is error:'+error);
+                        this.error = true;
+                        return "error occoured"
+                });
+  },
+   
   },
 };
 </script>

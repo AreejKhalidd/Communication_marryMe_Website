@@ -101,6 +101,7 @@ export default {
 
   props:{
     email:null
+    
   },
   data: () => ({
     alert: false,
@@ -176,6 +177,19 @@ console.log(product);*/
           email: this.email,
           }
         })
+
+      
+      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
+      axios
+        .post("http://127.0.0.1:8000/api/reset-password", {
+          option,
+          password: this.password,
+          password_confirmation: this.confirmPassword,
+          email: this.email,
+
+         
+        })
+      
         .then((res) => {
           console.log(res.data);
           

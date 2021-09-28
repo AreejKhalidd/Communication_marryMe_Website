@@ -145,6 +145,7 @@ export default {
         this.$router.push({name: 'ResetPassword',params:{email:this.email}});
 
        
+       // this.$router.push({ name: "HomePage" });
     },
   },
 
