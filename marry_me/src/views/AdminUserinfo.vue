@@ -1,6 +1,8 @@
 <template>
  <div id="app">
    <v-app id="content">  
+          <AdminNavbar/>
+          <AdminSidebar/>
       <div >  
                           <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
                                        بيانات عن المستخدم  </h4>
@@ -84,37 +86,26 @@
 
                       <v-row> 
  <v-col >
-    <v-alert v-if="donerchat" type="success" color="#FF6265" align="center" dismissible @click="rerchat()">  
-     {{msg}}    
+    <v-alert v-if="deleted" type="success" color="#FF6265" align="center" dismissible @click="gotolistofuser()">  
+     تم مسح الحساب     
     </v-alert>
-    <v-alert v-if="donefav" type="success" color="#FF6265" dismissible @click="refav()">  
-     {{msg}}
-    </v-alert> 
 
-    <v-alert v-if="doneschat" type="success" color="#FF6265" dismissible @click="reschat()" >
+    <v-alert v-if="dodelete" type="info" color="#FF6265" dismissible @click="recheck()" >
       <v-row align="center">
         <v-col>
-          هل انت متاكد من بدء المحادثة؟
+          هل انت متاكد من مسح حساب هذا المستخدم؟
         </v-col>
         <v-col class="shrink">
-          <v-btn  color= "#FF6265"  @click="gochat()">بدء المحادثة</v-btn>
+          <v-btn  color= "#FF6265"  @click="deleteuser()">مسح الحساب</v-btn>
         </v-col>
       </v-row>
     </v-alert>  
-    <v-alert v-if="errorrchat" type="warning" color="#FF6265" align="center" dismissible @click="rerchat()">  
-     {{msg}}    
-    </v-alert>
-    <v-alert v-if="errorfav" type="warning" color="#FF6265" dismissible @click="refav()">  
-     {{msg}}
-    </v-alert>
-    <v-alert v-if="errorschat" type="warning" color="#FF6265" dismissible @click="reschat()">  
-     {{msg}}
-    </v-alert>
+ 
  </v-col>   
                         <v-col>                             
                         <div class="b">
                         <span class="mt-3" align="center" style="font-size: 20px;color: rgba(255,98,101,1);" >مسح حساب المستخدم</span>
-                        <button rounded="circle" class="btns-logo" title="مسح حساب المستخدم"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="remove"/></button>                                                                               
+                        <button rounded="circle" class="btns-logo" title="مسح حساب المستخدم"  @click="gotodelete()"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="remove"/></button>                                                                               
                         </div>
                        </v-col> 
                       </v-row>
@@ -130,11 +121,15 @@
 
 <script>
 import axios from "axios";
+import AdminNavbar from '../components/AdminNavbar';
+import AdminSidebar from '../components/AdminSidebar';
 import img from "../assets/UserDefaultAvatar.png";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 export default {
     name: "AdminUserinfo",
     components: {
+    AdminNavbar,
+    AdminSidebar,
    },
   data() {
     return {
@@ -154,15 +149,9 @@ export default {
       vip: "",
       CurrentlyBanned: "",
       currentID: '',
-      me_vip:"",
       info:[],
-      donefav:false,
-      donerchat:false,
-      doneschat:false,
-      errorrchat:false,
-      errorfav:false,
-      errorschat:false,
-      msg:"",
+      dodelete:false,
+      deleted:false,
     }
   }, 
       computed: {
@@ -177,29 +166,37 @@ export default {
     }, 
     
     methods:{
-      
-
-        refav(){
-            this.donefav=false;
-            this.errorfav=false;
-            this.msg="";
-        } , 
-        rerchat(){
-            this.donerchat=false;
-            this.errorrchat=false;
-            this.msg="";
-        } , 
-        gochat(){
-            this.doneschat=false;
-            this.errorschat=false;
-            this.msg=""; 
-           this.$router.push({name: 'Chat'});
+        gotodelete(){
+          this.dodelete=true;
         },
-        reschat(){
-            this.doneschat=false;
-            this.errorschat=false;
-            this.msg=""; 
-        } , 
+        recheck(){
+          this.dodelete=false;
+        },
+        gotolistofuser(){
+            this.$router.push({name: 'AdminUserList'});
+        },
+        deleteuser(ID){
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+                console.log("ehhh?");
+                console.log(ID);
+                axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/admin/banningFakeUser",
+                  headers: {Authorization: token},
+                  params:{user_id:this.ID}
+                  }).then(response => {
+                  console.log(response.data);
+                  console.log("data hena");
+                  this.deleted=true;
+                  console.log("done deleted");
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured";
+                              
+                      });
+
+        },
         previewImage() {
           this.url = URL.createObjectURL(this.file);
           this.useravatar();

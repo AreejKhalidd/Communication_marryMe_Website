@@ -30,7 +30,7 @@
                         <b-dropdown-item-button @click="vipcatg()">VIP المستخدمين</b-dropdown-item-button>
                         <b-dropdown-item-button @click="freecatg()">المستخدمين المجانين</b-dropdown-item-button>
                         <b-dropdown-item-button @click="bancatg()" > المستخدمين المحظورين بعدد</b-dropdown-item-button>
-                        <b-dropdown-item-button @click="certcatg()">المستخدمين المعتمدين</b-dropdown-item-button>
+                        <b-dropdown-item-button @click="certcatg()">المستخدمين المصدق حسابهم</b-dropdown-item-button>
                         <b-dropdown-item-button @click="agecatg()"> عمر المستخدمين </b-dropdown-item-button>
                     </b-dropdown>
                     <span></span> 
@@ -90,7 +90,7 @@ export default{
          this.banusers=true;
       },
       certcatg(){
-         this.catg="المستخدمين المعتمدين";
+         this.catg="المستخدمين المصدق حسابهم";
          this.certusers=true;
       },
       agecatg(){

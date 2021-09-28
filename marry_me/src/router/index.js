@@ -149,7 +149,7 @@ const routes = [{
         component: AdminUserList,
     },
     {
-        path: '/AdminUserinfo/:id',
+        path: '/adminUserinfo/:id',
         name: 'AdminUserinfo',
         component: AdminUserinfo,
     },

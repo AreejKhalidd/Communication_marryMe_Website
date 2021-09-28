@@ -2,21 +2,26 @@
   <div id="app">
     <v-app>
       <div class="all">
+          <AdminNavbar/>
+          <AdminSidebar/>
         <div class="page"> 
-            <h4 class="hp" align="center"> {{ filtered }} </h4>
-                     <div>                         
-                        اظهار للمستخدمين من خلال                
-                        <b-dropdown  :text="catg" class="dp" align="right" variant="white">
+            <h4 class="hp" align="center"> {{ this.title }} </h4>
+                     <div align="right" class="mr-5">                                          
+                        <b-dropdown  :text="catg" class="dp"  variant="white">
                           <b-dropdown-item-button @click="allcatg()">جميع المستخدمين </b-dropdown-item-button>
-                          <b-dropdown-item-button @click="vipcatg()">VIP </b-dropdown-item-button>
-                          <b-dropdown-item-button @click="freecatg()">Free</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="namecatg()">name</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="emailcatg()" >email</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="femalecatg()">Female</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="agecatg()"> date of creation  </b-dropdown-item-button>
-                          <b-dropdown-item-button @click="certcatg()">certified</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="onlinecatg()">online</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="namecatg()">المستخدمين بالاسم</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="vipcatg()"> المستخدمين  VIP</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="freecatg()">المستخدمين المجانيين</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="certcatg()">المستخدمين  المصدق حسابهم</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="onlinecatg()">المستخدمين المتاحين الان</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="femalecatg()">المستخدمين الاناث</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="malecatg()">المستخدمين الذكور</b-dropdown-item-button>
                         </b-dropdown>  
+                         <span>  </span> 
+                        <input v-if="name"  type="text"  v-model="searchname"  placeholder="   .. البحث بالاسم" size="sm" class="in" @enter="gosearchbyname()" />
+                        <span>  </span> 
+                        <v-btn style="{width:30px; height:30px;}" class="btn" @click="startsearch()">عرض </v-btn>
+                    <span></span> 
                      </div>
               <div v-id="all">
               <v-card class="card" v-for="(user, index) in users" :key="index">
@@ -43,25 +48,30 @@
   </div>
 </template>
 <script>
+import AdminNavbar from '../components/AdminNavbar';
+import AdminSidebar from '../components/AdminSidebar';
 import axios from "axios";
 export default {
     name: "AdminUserList",
+    components: {
+    AdminNavbar,
+    AdminSidebar,
+   },
   data() {
     return {   
                 users:[],
                 catg:"جميع المستخدمين", 
-                filtered:"قائمة بجميع المستخدمين ",
+                title:"قائمة بجميع المستخدمين ",
                 all:true,
                 vip:false, 
                 free:false, 
                 name:false, 
-                email:false, 
+                searchname:null,
                 online:false,
                 cert:false,
                 age:false,
-                gender:false,
-                bd:false, 
-                datacreation:false,             
+                female:false,
+                male:false,           
         }
     },
   mounted(){
@@ -78,7 +88,8 @@ export default {
                   this.users=response.data.All_Users_info;  
                   console.log("data hena");
                   console.log(this.users);
-                  this.filtered = "list of all users ";
+                  this.title = "قائمة بجميع المستخدمين ";    
+                  this.catg="جميع المستخدمين";
                       })
                               .catch((error) => {
                               console.log('There is error:'+error);
@@ -94,8 +105,10 @@ export default {
             let i= user.id;
           this.$router.push({name: 'AdminUserinfo',params: { id:i }})
         },
-        allcatg(){          
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+        startsearch(){
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+              if(this.all)
+              {
                 console.log("ehhh?");
                 axios({
                   method: 'get',
@@ -106,19 +119,7 @@ export default {
                   console.log(response.data);
                   /// All_Users_info///
                   this.users=response.data.All_Users_info;  
-                  this.filtered = "قائمة بجميع المستخدمين ";
-                  this.catg="جميع المستخدمين";
-                            this.all=true;
-                            this.vip=false;
-                            this.free=false;
-                            this.age=false;
-                            this.name=false;
-                            this.gender=false;
-                            this.email=false;
-                            this.datacreation=false
-                            this.online=false;
-                            this.bd=false; 
-                            this.cert=false,
+                  this.title = "قائمة بجميع المستخدمين ";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -127,10 +128,9 @@ export default {
                               return "error occoured";
                               
                       });
-        },
-        vipcatg(){       
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
-                console.log("ehhh?");
+              }
+              else if (this.vip)
+              {  
                 axios({
                   method: 'get',
                   url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
@@ -140,19 +140,7 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.filtered= "list of vip users ";
-                            this.catg="vip user";
-                            this.all=false;   
-                            this.vip=true;
-                            this.free=false;
-                            this.age=false;
-                            this.name=false;
-                            this.gender=false;
-                            this.email=false;
-                            this.online=false;
-                            this.datacreation=false;
-                            this.cert=false,
-                            this.bd=false;  
+                  this.title= " قائمة المستخدمين   VIP ";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -161,10 +149,8 @@ export default {
                               return "error occoured";
                               
                       });
-        },
-        freecatg(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
-                console.log("ehhh?");
+              }
+              else if (this.free){
                 axios({
                   method: 'get',
                   url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
@@ -174,19 +160,7 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.filtered= "list of free users ";
-                            this.catg="free user";
-                            this.all=false;   
-                            this.vip=false;
-                            this.free=true;
-                            this.age=false;
-                            this.name=false;
-                            this.gender=false;
-                            this.email=false;
-                            this.online=false;
-                            this.datacreation=false;
-                            this.cert=false,
-                            this.bd=false;  
+                  this.title= "قائمة المستخدمين المجانيين ";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -195,10 +169,8 @@ export default {
                               return "error occoured";
                               
                       });
-        },
-        onlinecatg(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
-                console.log("ehhh?");
+              }
+              else if (this.online){
                 axios({
                   method: 'get',
                   url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
@@ -208,19 +180,7 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.filtered= "list of online users ";
-                            this.catg="online user";
-                            this.all=false;   
-                            this.vip=false;
-                            this.free=false;
-                            this.age=false;
-                            this.name=false;
-                            this.gender=false;
-                            this.email=false;
-                            this.online=true;
-                            this.datacreation=false;
-                            this.bd=false;  
-                            this.cert=false,
+                  this.title= "قائمة المستخدمين المتاحين الان "; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -229,10 +189,8 @@ export default {
                               return "error occoured";
                               
                       });
-        },
-        certcatg(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
-                console.log("ehhh?");
+              }
+              else if (this.cert){
                 axios({
                   method: 'get',
                   url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
@@ -242,18 +200,7 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.filtered= "list of certifed users ";
-                            this.catg="certifed user";
-                            this.cert=true,
-                            this.all=false;   
-                            this.vip=false;
-                            this.free=false;
-                            this.age=false;
-                            this.name=false;
-                            this.gender=false;
-                            this.email=false;
-                            this.datacreation=false;
-                            this.bd=false;  
+                  this.title= "قائمة المستخدمين  المصدق حسابهم ";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -262,6 +209,174 @@ export default {
                               return "error occoured";
                               
                       });
+              }
+              else if (this.female){
+                axios({
+                  method: 'get',
+                  url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
+                  headers: {Authorization: token},
+                  params:{gender:"Female"}
+                  }).then(response => {
+                  console.log("ehhh?");
+                  console.log(response.data);
+                  this.users=response.data.Users_info;  
+                  this.title= "قائمة المستخدمين الاناث    ";
+                  console.log("data hena");
+                  console.log(this.users);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured";
+                              
+                      });
+              }
+              else if (this.male)
+              {
+                axios({
+                  method: 'get',
+                  url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
+                  headers: {Authorization: token},
+                  params:{gender:"Male"}
+                  }).then(response => {
+                  console.log("ehhh?");
+                  console.log(response.data);
+                  this.users=response.data.Users_info;  
+                  this.title= "قائمة المستخدمين الذكور    ";
+                  console.log("data hena");
+                  console.log(this.users);
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              return "error occoured";
+                              
+                      });
+              }
+              else if (this.name){        
+                console.log("searchhh byy");
+                console.log(this.searchname);  
+                  if(!this.searchname)
+                  {
+                        this.title= "قم بادخال الاسم للبحث عنه...";
+                        return;
+                  }
+                  axios({
+                    method: 'get',
+                    url: "http://127.0.0.1:8000/api/admin/getAllUsersByMethod",
+                    headers: {Authorization: token},
+                    params:{name:this.searchname}
+                    }).then(response => {
+                    console.log("ehhh?");
+                    console.log(response.data);
+                    this.users=response.data.Users_info;  
+                    this.title= "قائمة المستخدمين بالاسم الذي ادخلته    ";
+                    console.log("data hena");
+                    console.log(this.users);
+                        })
+                                .catch((error) => {
+                                console.log('There is error:'+error);
+                                return "error occoured";
+                                
+                        });
+              }
+        },
+        allcatg(){          
+                            this.catg="جميع المستخدمين";
+                            this.all=true;
+                            this.vip=false;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.female=false;
+                            this.male=false;
+                            this.email=false;
+                            this.online=false;
+                            this.cert=false;
+        },
+        vipcatg(){
+                            this.catg="المستخدمين VIP"; 
+                            this.all=false;   
+                            this.vip=true;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.female=false;
+                            this.male=false;
+                            this.email=false;
+                            this.online=false;
+                            this.cert=false;
+        },
+        freecatg(){
+                            this.catg="المستخدمين المجانيين";
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=true;
+                            this.age=false;
+                            this.name=false;
+                            this.female=false;
+                            this.male=false;
+                            this.email=false;
+                            this.online=false;
+                            this.cert=false;
+        },
+        onlinecatg(){
+                            this.catg="المستخدمين المتاحين الان";
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
+                            this.female=false;
+                            this.male=false;
+                            this.name=false;
+                            this.gender=false;
+                            this.email=false;
+                            this.online=true;
+                            this.cert=false;
+        },
+        certcatg(){
+                            this.catg="المستخدمين  المصدق حسابهم";
+                            this.cert=true;
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.female=false;
+                            this.male=false;
+                            this.email=false;
+        },
+        femalecatg(){
+                            this.catg="المستخدمين الاناث";
+                            this.cert=false;
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.female=true;
+                            this.male=false;
+                            this.email=false;
+        },
+        malecatg(){ 
+                            this.catg=" المستخدمين الذكور";
+                            this.cert=false;
+                            this.all=false;   
+                            this.vip=false;
+                            this.free=false;
+                            this.age=false;
+                            this.name=false;
+                            this.female=false;
+                            this.male=true;
+                            this.email=false;
+        },
+        namecatg(){
+              this.catg=" المستخدمين بالاسم";
+              this.cert=false;
+              this.all=false;   
+              this.vip=false;
+              this.free=false;
+              this.age=false;
+              this.name=true;
+              this.female=false;
+              this.male=false;
         },
     }
 }
@@ -312,6 +427,34 @@ export default {
     marigin-left:5px;
     background-color: 	#f5f5f5;
     border: solid 1px rgba(255,98,101,1);
+}
+.in{
+    height:30px;
+    width:150px;
+    border-radius:15px;
+    padding-radius:15px;
+    margin-bottom:4px;
+    margin-top:1px;
+    border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
+    background-color:	#f5f5f5;
+}
+.btn{
+    border-radius:15px;
+    padding-radius:15px;
+    margin-bottom:4px;
+    margin-top:1px;
+    marigin-right:5px;
+    marigin-left:5px;
+    background-color: 	#f5f5f5;
+    border: solid 1px rgba(255,98,101,1);
+}
+.btn:hover {
+  cursor:pointer;
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  background-color: 	#f5f5f5;
+  color:grey;
+  border-radius: 12px;
 }
 </style>
