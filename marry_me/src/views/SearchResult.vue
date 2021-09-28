@@ -1,7 +1,30 @@
 <template>
   <div id="app">
     <v-app>
-      <div class="all" v-if="error==false" >
+                <v-app v-if="notoken==true">
+                      <ErrorPage style="margin: 50px !important;" v-if="notoken"/>
+                </v-app>       
+                <v-app v-if="notverified==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باعادة التسجيل الدخول و التحقق من حسابك
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="redirect()">
+                            نسجيل الدخول
+                          </v-btn>
+                        </div>
+                </v-app>      
+                <v-app v-if="checkquestions==true">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            من فضلك قم باجابة جميع اسئلتك قبل التصفح
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="quizpage()">
+                            الذهاب للاسئلة
+                          </v-btn>
+                        </div>
+                </v-app>    
+      <div class="all" v-if="noerror" >
           <Navbar/>
           <Sidebar/>
         <div class="page"> 
@@ -34,12 +57,14 @@
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import img from "../assets/UserDefaultAvatar.png";
+import ErrorPage from '@/components/ErrorPage.vue'
 import axios from "axios";
  export default {
     name: "SearchResult",
     components: {
     Sidebar,
     Navbar,
+    ErrorPage,
    },
    props: { searchname:null,VIP:null,
             banusers:null,
@@ -54,8 +79,11 @@ import axios from "axios";
     return {   
                 users:[] ,
                 msgtoshow:"",
-                img:img, 
-                error: false,               
+                img:img,                
+                noerror: false,
+                checkquestions:false,
+                notverified:false,
+                notoken:false,               
         }
     },
   watch: {
@@ -85,6 +113,12 @@ import axios from "axios";
       else{
         this.msgtoshow="الناتج عن بحثك"
       }
+       
+          if(!localStorage.getItem('usertoken'))
+          {
+            this.notoken=true;
+            return;
+          }
       const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
           if(this.VIP==1)
           {             
@@ -98,6 +132,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -105,7 +140,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
-                            return "error occoured"
+                            console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                        return "error occoured"
                           });
               }
               else{
@@ -119,6 +162,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -126,6 +170,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                            
                             return "error occoured"
                           });
 
@@ -140,6 +193,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -147,6 +201,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -160,6 +223,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -167,6 +231,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }             
@@ -180,6 +253,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -187,6 +261,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -199,6 +282,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -206,6 +290,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -220,7 +313,7 @@ import axios from "axios";
                 }).then(response => {
                 console.log(response.data)
                 this.users=response.data
-
+                this.noerror=true;
                 console.log("kkkkkkkkk")
                 console.log(response.data)
                 console.log(this.users)
@@ -229,6 +322,15 @@ import axios from "axios";
                       })
                               .catch((error) => {
                               console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                               return "error occoured"
                       });
         }
@@ -236,6 +338,12 @@ import axios from "axios";
     }
     },
     mounted(){
+      
+          if(!localStorage.getItem('usertoken'))
+          {
+            this.notoken=true;
+            return;
+          }
       
       console.log(this.users);
       console.log("hena fl search");
@@ -263,6 +371,7 @@ import axios from "axios";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -271,6 +380,15 @@ import axios from "axios";
                             .catch((error) => {
                             console.log('There is error:'+error);
                             ///this.error = true;///
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
               }
@@ -284,7 +402,8 @@ import axios from "axios";
                       data: {name :this.searchname,ban_count:this.bancount}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -292,6 +411,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
 
@@ -305,7 +433,8 @@ import axios from "axios";
                       data: {name :this.searchname,vip:0}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -313,6 +442,14 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -325,7 +462,8 @@ import axios from "axios";
                       data: {name :this.searchname,vip:1}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -333,6 +471,14 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }             
@@ -345,7 +491,8 @@ import axios from "axios";
                       data: {name :this.searchname,certified:1}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -353,6 +500,14 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -364,7 +519,8 @@ import axios from "axios";
                       data: {name :this.searchname,age:this.age}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
                     console.log(this.users)
@@ -372,6 +528,15 @@ import axios from "axios";
                           })
                             .catch((error) => {
                             console.log('There is error:'+error);
+                            console.log(error.response.data.message);
+                            
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                             return "error occoured"
                           });
                 }
@@ -385,8 +550,8 @@ import axios from "axios";
                   data: {name :this.searchname}
                 }).then(response => {
                 console.log(response.data)
-                this.users=response.data
-
+                this.users=response.data;
+                this.noerror=true;
                 console.log("kkkkkkkkk")
                 console.log(response.data)
                 console.log(this.users)
@@ -395,6 +560,15 @@ import axios from "axios";
                       })
                               .catch((error) => {
                               console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
                               return "error occoured"
                       });
         }

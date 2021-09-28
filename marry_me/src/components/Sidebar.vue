@@ -9,8 +9,8 @@
                     :src="useravatar"
                     id="avatar"           
                     rounded 
-                    max-height="80"
-                    max-width="80"            
+                    max-height="40%"
+                    max-width="40%"            
                     class="ml-auto mx-5"
                     >
                 </v-img>
@@ -56,7 +56,6 @@ export default{
       url: img,
       avatarurl: null,
       name:"",
-      file: '',
     }
   },
   computed: {
@@ -81,10 +80,10 @@ export default{
     },
   },
  methods:{
-    previewImage() {
-      this.url = URL.createObjectURL(this.file);
-      this.useravatar(); 
-    },
+      previewImage() {
+          this.url = URL.createObjectURL(this.file);
+          this.useravatar();
+        },
       goToblocks(){
          this.$router.push('/blockedUsers');
         }
@@ -103,7 +102,6 @@ export default{
    },
    redirect(name) {
      this.$router.push({name:name});
-
    }
  },
   mounted(){
