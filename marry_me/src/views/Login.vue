@@ -201,9 +201,10 @@ export default {
         .then((res) => {
           console.log(res.data.AccessToken);
           console.log(res.data.message);
-          this.$store.state.usertoken = res.data.AccessToken;
+          console.log("here");
             localStorage.setItem('usertoken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
+            
              this.$router.push({ name: "HomePage" });
            // }
         })

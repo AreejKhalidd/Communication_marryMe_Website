@@ -70,7 +70,9 @@ export default {
             for (let file of this.files) {
                     fd.append("image[]", file);
             }
-            const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1ODI5NCwiZXhwIjoxNjMyNDg4Njk0LCJuYmYiOjE2MzIyNTgyOTQsImp0aSI6Imc2VnR1TG42UFNVbGlFYVkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.X2FBWU2iydp-agPiFxVKsTF30bCMmSuBP-e_T4sLDWo'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
+            if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+            const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          //  const option = { headers: { Authorization: `${'Bearer'} ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1ODI5NCwiZXhwIjoxNjMyNDg4Njk0LCJuYmYiOjE2MzIyNTgyOTQsImp0aSI6Imc2VnR1TG42UFNVbGlFYVkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.X2FBWU2iydp-agPiFxVKsTF30bCMmSuBP-e_T4sLDWo'}`,'Content-Type': 'multipart/form-data' } };//temp for testing the request
             axios.post('http://127.0.0.1:8000/api/certified', fd, option)
               .then((response) => {
                 console.log(response.data.message);
