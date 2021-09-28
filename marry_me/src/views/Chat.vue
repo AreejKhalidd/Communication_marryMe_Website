@@ -10,15 +10,11 @@
     @room-info="roomInfoHandler"
     :messages="messages"
     @fetch-messages="fetchMessages"
-    :message-actions="[
-      { name: 'replyMessage', title: 'الرد على هذه الرسالة' },
-      { name: 'deleteAMsg', title: 'حذف الرسالة', onlyMe: true },
-      { name: 'ReportAmsg', title: 'أبلغ عن هذه الرسالة' },
-    ]"
+    :message-actions="messageActions"
     @message-action-handler="msgActionHandler"
     @send-message="sendMsg"
     :messages-loaded="AllmsgsAreLoaded"
-    :show-footer="(CanChat && requestApproved && !Vip) || (CanChat && Vip)"
+    :show-footer="(CanChat && requestApproved && !Vip) || (CanChat && Vip && canSendMoreThan4Msgs)"
     :show-add-room="true"
     @add-room="addNewRoom"
     :show-audio="false"
@@ -66,10 +62,14 @@ export default {
       currentUserName: "",
       currentUserAvatar: "",
       currentUserStatus: "",
-
+      messageActions:[
+      { name: 'replyMessage', title: 'الرد على هذه الرسالة' },
+      { name: 'ReportAmsg', title: 'أبلغ عن هذه الرسالة' },
+    ],
       Vip: false,
       requestApproved: false,
       CanChat: true,
+      canSendMoreThan4Msgs:true,
       type: "image/*",
       AllRoomsAreLoaded: false,
       AllmsgsAreLoaded: false,
@@ -93,7 +93,7 @@ export default {
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
         },
       }; //temp for testing the request
       axios
@@ -108,10 +108,24 @@ export default {
               : `http://127.0.0.1:8000${response.data.image}`;
           }
           this.Vip = response.data.VIP == 1 ? true : false;
+          if(this.Vip==true){
+            this.messageActions=[
+      { name: 'replyMessage', title: 'الرد على هذه الرسالة' },
+      { name: 'deleteAMsg', title: 'حذف الرسالة', onlyMe: true },
+      { name: 'ReportAmsg', title: 'أبلغ عن هذه الرسالة' },
+    ];
+          }
+        }).catch((error) => {
+          if(error.response.data.message=="Not all the questions are answered"){
+            this.$router.push('questions');
+          }
+          else{
+          this.$router.push("Login");
+          }
         });
     },
-    roomInfoHandler() {
-      this.$router.push("Userinfo");
+    roomInfoHandler(room) {
+      this.$router.push({name: 'Userinfo',params: { id:room.users[1]._id }});
     },
     addNewRoom(){
       this.$router.push("HomePage");
@@ -121,7 +135,7 @@ export default {
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
         },
       }; //temp for testing the request
       axios
@@ -203,6 +217,7 @@ export default {
                 unreadCount: `${unreadCount}`,
                 index: `${response.data[i].created_at}`,
                 lastMessage: {
+                  _id:response.data[i].msg_id,
                   content: `${lastMsg}`,
                   senderId: `${response.data[i].sender_id}`,
                   username: `${response.data[i].sender_name}`,
@@ -211,6 +226,7 @@ export default {
                   distributed: delivered,
                   seen: seenmsg,
                   new: newmsg,
+                  deleted:response.data[i].isDeleted,
                 },
                 users: tempusers,
                 blockedRoom: response.data[i].block,
@@ -234,7 +250,7 @@ export default {
           //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           axios.post(
@@ -257,7 +273,7 @@ export default {
           //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
             data: {
               blockId: block_id,
@@ -287,29 +303,32 @@ export default {
       console.log(message);
       //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
       //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      /*const option = {
+      const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
         },
       }; //temp for testing the request
       axios.delete(
-        `${"http://127.0.0.1:8000/api/removeBlock/"}${message._id}`,
+        `${"http://127.0.0.1:8000/api/deletemsg/"}${message._id}`,
         option
-      );*/
+      );
       let i = 0;
       this.messages.forEach((msg) => {
         if (msg._id == message._id) {
-          if (
-            (!this.messages[i].seen && this.Vip) ||
-            (!this.messages[i].seen &&
-              !this.Vip &&
-              this.messages[i].senderId == this.currentUserId) ||
-            (this.messages[i].seen &&
-              this.messages[i].senderId == this.currentUserId)
-          ) {
-            this.messages[i].deleted = true;
-            this.messages = [...this.messages];
+          
+          this.messages[i].deleted = true;
+          this.messages = [...this.messages];
+          let j=0;
+          this.rooms.forEach((room) => {
+            if(room.roomId==roomId){
+              if(this.messages[i]._id==room.lastMessage._id){//if msg deleted is the last msg update the last msg
+              this.rooms[j].lastMessage.deleted = true;
+              this.rooms = [...this.rooms];
           }
+            }
+          
+          j++;
+          });
         }
         i++;
       });
@@ -317,6 +336,20 @@ export default {
     reportAMsg(roomId, message) {
       console.log(roomId);
       console.log(message);
+      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          const option = {
+            headers: {
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+            },
+          }; //temp for testing the request
+          axios
+            .post(
+              "http://127.0.0.1:8000/api/report",
+              { message_id: message._id},
+              option
+            );
+
     },
     msgActionHandler(data) {
       switch (data.action.name) {
@@ -331,6 +364,7 @@ export default {
     fetchMessages(data) {
       this.requestApproved = false;
       this.AllmsgsAreLoaded = false;
+      this.canSendMoreThan4Msgs=true;
       this.CanChat = false;
       if (
         data.room.blockedRoom == true &&
@@ -360,7 +394,7 @@ export default {
         //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
         const option = {
           headers: {
-            Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+            Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
           },
         }; //temp for testing the request
         /*axios
@@ -377,6 +411,20 @@ export default {
             option
           )
           .then((response) => {
+            
+        if(response.data.length==4){
+          let i;
+          for (i = 0; i < response.data.length; i++) {
+            if(response.data[i].sender_id!=this.currentUserId){
+              console.log(response.data[i].sender_id,this.currentUserId);
+              break;
+            }
+            console.log(i);
+          }
+          if(i==4){
+            this.canSendMoreThan4Msgs=false;
+          }
+        }
             for (let i = 0; i < response.data.length; i++) {
               time = moment(response.data[i].created_at).utc().format("HH:mm");
               date = moment(response.data[i].created_at)
@@ -443,7 +491,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                     replyMessage: temReplyMsg,
@@ -474,7 +522,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                     files: [
@@ -508,7 +556,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                     files: [
@@ -537,7 +585,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                   });
@@ -567,7 +615,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                     files: [
@@ -600,7 +648,7 @@ export default {
                     distributed: delivered,
                     seen: seenmsg,
                     new: newmsg,
-                    deleted: false,
+                    deleted: response.data[i].isDeleted,
                     disableActions: false,
                     disableReactions: true,
                     files: [
@@ -615,12 +663,14 @@ export default {
             }
           });
         this.messages = tempMsgs;
-        console.log(this.messages);
         this.AllmsgsAreLoaded = true;
+        
+        
       });
     },
     sendMsg(data) {
       let time, date;
+      console.log(data);
       if (!data.replyMessage) {
         //no reply msg
         if (!data.files) {
@@ -628,7 +678,7 @@ export default {
           //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           axios
@@ -675,6 +725,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                      _id:response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -685,7 +736,9 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
+                    
                   };
                   this.rooms = [...this.rooms];
                 }
@@ -698,12 +751,12 @@ export default {
           const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           const fd = new FormData();
-          let lastMsgContent = data.content != null ? data.content : "Photo";
-          if (data.content != null) {
+          let lastMsgContent = (data.content != null && data.content.length>0)? data.content : "Photo";
+          if (data.content != null && data.content.length>0) {
             fd.append(
               "image",
               data.files[0].blob,
@@ -729,7 +782,7 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = data.content != null ? data.content : "";
+                  let msgContent = (data.content != null && data.content.length>0)? data.content : "";
 
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
@@ -768,6 +821,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                       _id:response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -778,6 +832,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -792,7 +847,7 @@ export default {
           //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           axios
@@ -847,6 +902,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                       _id:response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -857,6 +913,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -869,7 +926,7 @@ export default {
           //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           axios
@@ -940,6 +997,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                       _id:response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -950,6 +1008,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -963,7 +1022,7 @@ export default {
           const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           const fd = new FormData();
@@ -974,7 +1033,8 @@ export default {
           );
           fd.append("chat_id", data.roomId);
           fd.append("replymsg", data.replyMessage._id);
-          if (data.content != null) {
+       
+          if (data.content != null && data.content.length>0) {
             fd.append("content", data.content);
           }
           axios
@@ -987,7 +1047,7 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = data.content != null ? data.content : "";
+                  let msgContent = (data.content != null && data.content.length>0) ? data.content : "";
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
                     content: msgContent,
@@ -1018,7 +1078,7 @@ export default {
 
                   this.messages = [...this.messages];
                   let lastMsgContent =
-                    data.content != null ? data.content : "Photo";
+                    (data.content != null && data.content.length>0) ? data.content : "Photo";
                   this.rooms[i] = {
                     roomId: room.roomId,
                     roomName: room.roomName,
@@ -1031,6 +1091,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                       _id:response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -1041,6 +1102,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -1054,7 +1116,7 @@ export default {
           const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjMwOTIwOCwiZXhwIjoxNjMyNTM5NjA4LCJuYmYiOjE2MzIzMDkyMDgsImp0aSI6ImQ0VVAwYlVtaTV5SFdYQnAiLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OfKKlNODbHeMzN69Pj1zXey48q1CEz7zKTxEUnlZ5B8"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
             },
           }; //temp for testing the request
           const fd = new FormData();
@@ -1081,7 +1143,8 @@ export default {
           );
           fd.append("chat_id", data.roomId);
           fd.append("replymsg", data.replyMessage._id);
-          if (data.content != null) {
+    
+          if (data.content != null && data.content.length>0) {
             fd.append("content", data.content);
           }
           axios
@@ -1094,7 +1157,7 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = data.content != null ? data.content : "";
+                  let msgContent = (data.content != null && data.content.length>0) ? data.content : "";
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
                     content: msgContent,
@@ -1122,7 +1185,7 @@ export default {
 
                   this.messages = [...this.messages];
                   let lastMsgContent =
-                    data.content != null ? data.content : "Photo";
+                    (data.content != null && data.content.length>0) ? data.content : "Photo";
                   this.rooms[i] = {
                     roomId: room.roomId,
                     roomName: room.roomName,
@@ -1135,6 +1198,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
+                       _id:response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -1145,6 +1209,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
+                      deleted:false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -1238,5 +1303,18 @@ export default {
     font-size: 13px;
     text-align: left;
     
+}
+.vac-message-wrapper .vac-icon-deleted {
+    
+    margin: 2px 0 -2px 2px;
+    float: right;
+    
+}
+.vac-format-message-wrapper .vac-icon-deleted {
+    margin: 2px 0 -2px 2px;
+    float: right;
+}
+.vac-format-message-wrapper .vac-format-container {
+    display: inline-grid;
 }
 </style>
