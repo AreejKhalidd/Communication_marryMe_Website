@@ -6,7 +6,7 @@
         step="1"
         color = "red"
       >
-        الخطوة الأولة
+        السؤال الأولة
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -16,7 +16,7 @@
         step="2"
         color = "red"
       >
-        الخطوة الثانية
+        السؤال الثانية
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -24,31 +24,19 @@
       <v-stepper-step
         step="3"
         color = "red">
-        الخطوة الثالثة  
+        السؤال الثالثة  
       </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-card
-          class="mb-12"
-          color="white"
-          height="0px"
-        ></v-card>
 
-        
-        <div class="steps">
-            <v-text-field
-                width="300px"
-                label="السؤال الاول"
-            ></v-text-field>
-            <v-text-field 
-               label="السؤال الثاني">
-             </v-text-field>
-             <v-text-field 
-                label="السؤال الثالث">
-            </v-text-field>
-        </div>
+        <p> Question 1 </p>
+        <v-btn> Ans1 </v-btn>
+        <v-btn> Ans2 </v-btn>
+        <v-btn> Ans3 </v-btn>
+        <v-btn> Ans4 </v-btn>
+        <br> <br> 
 
         <v-btn
           color="green"
@@ -68,26 +56,12 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card
-          class="mb-12"
-          color="white"
-          height="0px"
-        >
-        </v-card>
-        
-        <div class="steps">
-            <v-text-field
-                width="300px"
-                label="السؤال الرابع"
-            ></v-text-field>
-            <v-text-field 
-               label="السؤال الخامس">
-             </v-text-field>
-             <v-text-field 
-                label="السؤال السادس">
-            </v-text-field>
-        </div>
-
+        <p> Question 2 </p>
+        <v-btn> Ans1 </v-btn>
+        <v-btn> Ans2 </v-btn>
+        <v-btn> Ans3 </v-btn>
+        <v-btn> Ans4 </v-btn>
+        <br> <br> 
         <v-btn
           color="green"
           @click="e1 = 3"
@@ -106,25 +80,17 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <v-card
-          class="mb-12"
-          color="white"
-          height="0px"
-        ></v-card>
 
-        <div class="steps">
-            <v-text-field
-                width="300px"
-                label="السؤال السابع"
-            ></v-text-field>
-            <v-text-field 
-               label="السؤال الثامن">
-             </v-text-field>
-             <v-text-field 
-                label="السؤال التاسع">
-            </v-text-field>
-        </div>
+       <p> Question 3 </p>
+        <v-btn> Ans1 </v-btn>
+        <v-btn> Ans2 </v-btn>
+        <v-btn> Ans3 </v-btn>
+        <v-btn> Ans4 </v-btn>
+        <br> <br> 
 
+        <v-text-field
+            label="Other Ans"
+        ></v-text-field>
 
         <v-btn
           color="green"
@@ -145,6 +111,8 @@
 </template>
 
 <script>
+// import axios from "axios";
+
   export default {
     data () {
       return {
