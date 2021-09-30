@@ -107,6 +107,6 @@ div.v-alert.v-sheet.theme--dark.tomato {
   width: 25rem;
 }
 div.col-sm-6.col-md-5.col-12{
-    margin-right: -3rem;
+    margin-right: 7rem;
 }
 </style>

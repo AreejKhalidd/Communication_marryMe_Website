@@ -37,6 +37,7 @@
                 @submit.prevent="resetPassword"
               >
                 <v-text-field
+                id="password"
                   label="كلمه المرور"
                   style="height: 97px"
                   name="password"
@@ -52,6 +53,7 @@
                   required
                 ></v-text-field>
                 <v-text-field
+               id="passwordconfirmation"
                   ref="confirmPassword"
                   label="تأكيد كلمه المرور"
                   name="confirmPassword"
@@ -66,17 +68,24 @@
                   outlined
                   required
                 ></v-text-field>
+                    <div style="margin-bottom: 1rem; margin-top: -1rem">
+                    <span
+                    auto-draw-duration="100"
+                      style="color: tomato"
+                      id="message"
+                      ></span
+                    >
+                  </div>
 
                 <v-btn
+                 @click="check"
                   style="
                     margin-top: 3rem;
                     background-color: tomato;
                     color: white;
                     border-radius: 5px;
                   "
-                  
                   type="submit"
-               
                   x-large
                   block
                   >إعادة كلمة المرور
@@ -113,24 +122,29 @@ export default {
     ],
     confirmRules: [
       (v) => !!v || "تأكيد كلمه المرور مطلوب",
-      // (this.password != this.confirmPassword) || 'Password must match'
-      // const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      //return pattern.test(value) || 'Invalid e-mail.'
     ],
     password: "",
     confirmPassword: "",
     showPassword: false,
+    errrConfirm: "",
     //email:this.$route.params.email,
 
   }),
 
   methods: {
+     check() {
+      if (
+        document.getElementById("password").value !=
+        document.getElementById("passwordconfirmation").value
+      ) {
+        document.getElementById("message").innerHTML = "تأكيد كلمة المرور غير متطابق";
+        document.getElementById("passwordconfirmation").focus();
+      }
+     },
 
     resetPassword() {
-      
       console.log(this.password);
       console.log(this.email);
-      
      // const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
      
       //const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
@@ -146,12 +160,9 @@ token:this.$route.params.token,
           
           }
         })
-
-      
         .then((res) => {
           console.log(res.data);
           if(res.data.message=="Your password has been reset!"){
-           // alert("success");
            this.alert=true;
           }
           this.$store.state.usertoken = res.data.access_token;
@@ -159,6 +170,10 @@ token:this.$route.params.token,
         })
         .catch((err) => {
           console.log(err.message);
+            if (err.response.status === 404) {
+            alert("لا يوجد مثل هذا المستخدم");
+           
+          }
         });
     },
   },
