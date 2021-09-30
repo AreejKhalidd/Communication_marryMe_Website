@@ -114,12 +114,12 @@ export default {
     forgotPassword() {
       console.log(this.email);
       
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+     // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
      
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/forgot-password", 
-        headers:{Authorization: AuthStr},
+       // headers:{Authorization: AuthStr},
           data:{
           email: this.email,
           }
@@ -128,7 +128,7 @@ export default {
          console.log(res.data.message);
          
           this.$store.state.usertoken = res.data.access_token;
-            localStorage.setItem('usertoken',res.data.access_token);
+            localStorage.setItem('usertoken',res.data.AccessToken);
           if(res.data.message =="Reset password link sent successfully"){
             this.alert = true;
           }
@@ -142,7 +142,7 @@ export default {
            // this.alert = true;
          // }
         });
-        this.$router.push({name: 'ResetPassword',params:{email:this.email}});
+        //this.$router.push({name: 'ResetPassword',params:{email:this.email}});
 
        
        // this.$router.push({ name: "HomePage" });

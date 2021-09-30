@@ -51,14 +51,14 @@
                   @submit.prevent="Login"
                 >
                   <v-text-field
-                    label="الايميل/اسم المستخدم"
+                    label="اسم المستخدم"
                     style="width:600px"
                   
-                    name="email"
-                    :rules="emailRules"
-                    v-model="email"
-                    prepend-inner-icon="mdi-email"
-                    type="email"
+                    name="username"
+                    :rules="usernameRules"
+                    v-model="username"
+                    prepend-inner-icon="mdi-account"
+                    type="username"
                     
                     outlined
                     color="red darken-0"
@@ -78,13 +78,7 @@
                     color="red darken-0"
                   ></v-text-field>
 
-                  <v-spacer></v-spacer>
-                      <v-checkbox
-                      color="#000000"
-                      label="ذكرنى لاحقا"
-                      name="remember"
-                      v-model="remember"
-                    ></v-checkbox>
+              
 
                   <v-btn
                     :disabled="!valid"
@@ -154,20 +148,20 @@ export default {
     show1:false,
     answer: [],
     valid: true,
-    emailRules: [
-      (v) => !!v || "الايميل مطلوب",
-      (v) => /.+@.+\..+/.test(v) || "الايميل يجب ان يكون صالحا",
+    usernameRules: [
+      (v) => !!v || "اسم المستخدم مطلوب",
+      //(v) => /.+@.+\..+/.test(v) || "الايميل يجب ان يكون صالحا",
     ],
     passwordRules: [
       (v) => !!v || "كلمه المرور مطلوبه",
       (v) => (v && v.length >= 8) || "كلمه المرور يجب ان تكون على الاقل 8 أحرف",
     ],
-    email: "",
+   username: "",
     
     password: "",
-    remember: "",
+  
     showPassword: false,
-    checkbox: true,
+   
     error: null,
     success: false,
   }),
@@ -185,17 +179,17 @@ export default {
     },
  
     Login() {
-      console.log(this.email);
+      console.log(this.username);
       console.log(this.password);
-     // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios({
         method:"post",
-        url:"http://127.0.0.1:8000/api/login", 
-       // headers:{Authorization: AuthStr},
+        url:"http://127.0.0.1:8000/api/login/Admin", 
+          headers:{Authorization: AuthStr},
           data:{
-          email: this.email,
+          username: this.username,
           password: this.password,
-          remember: this.remember,
+         
           }
         })
         .then((res) => {
@@ -204,7 +198,7 @@ export default {
          // this.$store.state.usertoken = res.data.AccessToken;
             localStorage.setItem('usertoken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
-             this.$router.push({ name: "HomePage" });
+             this.$router.push({ name: "AdminHomePage" });
            // }
         })
         .catch((err) => {

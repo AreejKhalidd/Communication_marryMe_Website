@@ -72,9 +72,14 @@
                     </a>
                   </div>
 
-                  <v-row justify="center" no-gutters>
+               <!--   <v-row justify="center" no-gutters>
                     <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.show1" type="error"  :disabled="show1" color="tomato">
+                      <v-alert
+                        v-if="this.show1"
+                        type="error"
+                        :disabled="show1"
+                        color="tomato"
+                      >
                         لقد استخدمت هذا الجهاز من قبل !!
                       </v-alert>
                     </v-col>
@@ -82,21 +87,16 @@
 
                   <v-row justify="center" no-gutters>
                     <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.show2" type="error" :disabled="show2" color="tomato">
-                        لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى
+                      <v-alert
+                        v-if="this.showVerify"
+                        type="error"
+                        :disabled="showVerify"
+                        color="tomato"
+                      >
+                        من فضلك يرجى التحقق من بريدك الإلكتروني
                       </v-alert>
                     </v-col>
-                  </v-row>
-
-
-                       <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert v-if="this.showVerify" type="error"  :disabled="showVerify" color="tomato">
-                      من فضلك يرجى التحقق من بريدك الإلكتروني 
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
+                  </v-row>-->
 
                   <v-text-field
                     label="الاسم"
@@ -104,7 +104,6 @@
                     style="width: 600px"
                     color="red darken-0"
                     v-model="name"
-                    :error-messages="errorMessages"
                     :rules="nameRules"
                     prepend-inner-icon="mdi-account"
                     type="text"
@@ -112,6 +111,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
+                  id="Email"
                     label="الايميل"
                     name="email"
                     v-model="email"
@@ -123,7 +123,23 @@
                     outlined
                     required
                   ></v-text-field>
+                  <div style="margin-bottom: 1rem; margin-top: -1rem">
+
+                   <!-- <span
+                    id="messageEmail"
+                      style="color: tomato"
+                      
+                      > </span>-->
+                    <span
+                      v-if="this.errorEmail.length > 0"
+                      style="color: tomato"
+                     
+                      >{{ this.errorEmail }}</span
+                    >
+                  </div>
                   <v-text-field
+                    id="password"
+                    onChange="check()"
                     label="كلمه المرور"
                     name="password"
                     v-model="password"
@@ -138,6 +154,8 @@
                     required
                   ></v-text-field>
                   <v-text-field
+                    id="passwordconfirmation"
+                    onChange="check()"
                     ref="confirmPassword"
                     label="تأكيد كلمه المرور"
                     name="confirmPassword"
@@ -152,7 +170,13 @@
                     outlined
                     required
                   ></v-text-field>
-
+                  <div style="margin-bottom: 1rem; margin-top: -1rem">
+                    <span
+                      style="color: tomato"
+                      id="message"
+                      ><!--{{ this.errrConfirm }}--></span
+                    >
+                  </div>
                   <v-text-field
                     ref="phone"
                     label="رقم الموبايل"
@@ -182,6 +206,7 @@
                   ></v-text-field>
 
                   <v-text-field
+                    id="birthday"
                     ref="birthday"
                     label="تاريخ الميلاد"
                     name="birthday"
@@ -194,8 +219,22 @@
                     outlined
                     required
                   ></v-text-field>
+                  <div style="margin-bottom: 1rem; margin-top: -1rem">
+                   <!-- <span
+                    id="messageBirthday"
+                      style="color: tomato"
+                      
+                      > </span>-->
+                    <span
+                    id="messageBirthday"
+                      v-if="this.errorBirthday.length > 0"
+                      style="color: tomato"
+                      
+                      >{{ this.errorBirthday }} </span
+                    >
+                  </div>
                   <v-btn
-                    @click="validate"
+                    @click="check"
                     :disabled="!valid"
                     type="submit"
                     style="
@@ -254,10 +293,9 @@ import { faBirthdayCake } from "@fortawesome/free-solid-svg-icons";
 export default {
   name: "Register",
   data: () => ({
-    ExistingUseralert: false,
     show1: false,
-    show2:false,
-    showVerify:false,
+    show2: false,
+    showVerify: false,
 
     valid: true,
     nameRules: [(v) => !!v || "الاسم مطلوب"],
@@ -278,17 +316,16 @@ export default {
     birthday: "",
     confirmRules: {
       required: (v) => !!v || "تأكيد كلمه المرور مطلوب",
-      Matchingchar: (confirmPassword, password) =>
-        this.IsMatching(confirmPassword, password) ||
-        "يجب أن يكون تأكيد كلمة المرور هو نفس كلمة المرور",
     },
     phoneRules: [(v) => !!v || "رقم الموبايل مطلوب"],
     genderRules: [(v) => !!v || "النوع مطلوب"],
     birthdayRules: [(v) => !!v || "عيد الميلاد مطلوب"],
     showPassword: false,
     checkbox: true,
-    errorMessages: "",
-    // formHasErrors: false,
+    errorEmail: "",
+    errrConfirm: "",
+    errorBirthday: "",
+    
   }),
   computed: {
     birthIcon() {
@@ -296,33 +333,62 @@ export default {
     },
   },
   methods: {
+    check() {
+      if (
+        document.getElementById("password").value !=
+        document.getElementById("passwordconfirmation").value
+      ) {
+        document.getElementById("message").innerHTML = "تأكيد كلمة المرور غير متطابق";
+        document.getElementById("passwordconfirmation").focus();
+      }
+
+       /* if (
+            this.errorEmail ==
+            "The email has already been taken."
+          ) {
+           document.getElementById("messageEmail").innerHTML =
+              "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
+               document.getElementById("Email").focus();
+          }
+          if (
+           this.errorBirthday ==
+            "The birth day must be a date before 17 years ago."
+          ) {
+            document.getElementById("messageBirthday").innerHTML = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
+             document.getElementById("birthday").focus();
+          }*/
+
+
+
+
+     /* var cd = new Date(this.birthday).getFullYear();
+      var yy = new Date().getFullYear();
+      console.log(cd);
+      console.log(yy - cd);
+      if (yy - cd < 18) {
+        window.alert("Age must be greater than 18");
+        document.getElementById("birthday").focus();
+        return false;
+      }*/
+    },
     signIn() {
       console.log("signin");
       this.$router.push({ name: "Login" });
-    },
-    IsMatching(confirmPassword, password) {
-      if (confirmPassword !== password) return false;
-      return true;
     },
     validate() {
       this.$refs.form.validate();
     },
     Register() {
-      /*
-        if((Date.now() - this.birth_day) < 18){
-            alert("Age must be greater than 18")
-        }*/
       console.log(this.name);
       console.log(this.email);
       console.log(this.password);
       console.log(this.confirmPassword);
-      
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+     // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios({
-        method:"post",
-        url:'http://127.0.0.1:8000/api/register',  
-         headers:{Authorization: AuthStr},
-         data:{
+        method: "post",
+        url: "http://127.0.0.1:8000/api/register",
+       //  headers:{Authorization: AuthStr},
+        data: {
           name: this.name,
           email: this.email,
           password: this.password,
@@ -330,46 +396,42 @@ export default {
           phone: this.phone,
           gender: this.gender,
           birth_day: this.birthday,
-         }
-        
-        })
+        },
+      })
         .then((res) => {
-          console.log(res.data);
-       alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
-            this.$store.state.usertoken = res.data.access_token;
-            localStorage.setItem('usertoken',res.data.access_token);
-            /* if(res.response.status === 201){
-           this.showVerify = true;
-          }*/
-            
-        //  if (res.status === 403) {
-           //  console.log(res.data);
-           // this.show = true;
-            // alert(res.response.data.message)
-            // console.log(res.response.data.code, 'Invalid, you used this device before !!')
-         // }
-          // alert("You are logged in..");
-          // const token = localStorage.setItem("token", res.data.access_token);
-          // return token;
-          // const user = localStorage.setItem("user", res.data.user);
-          // return token, user;
+          //console.log(res.data);
+          alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
+          //this.$store.state.usertoken = res.data.access_token;
+          localStorage.setItem("usertoken", res.data.AccessToken);
         })
         .catch((err) => {
-          console.log(err.response.data);
+         // console.log(err.response.data.Errorsin.password);
+         // console.log(err.response.data.Errorsin);
           if (err.response.status === 403) {
-            this.show1=true;
-           // alert(err.response.data.message);
-           // console.log(
-            //  err.response.data.code,
-             // "Invalid, you used this device before !!"
-           // );
+            alert("لقد استخدمت هذا الجهاز من قبل !!");
+            // this.show1=true;
           }
-          if(err.response.status === 400){
-            this.show2=true;
+         // this.errorEmail=err.response.data.Errorsin.email;
+         // this.errorBirthday=err.response.data.Errorsin.birth_day;
+          if (
+            err.response.data.Errorsin.email ==
+            "The email has already been taken."
+          ) {
+            this.errorEmail =
+              "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
           }
-         
-        
- 
+          if (
+            err.response.data.Errorsin.birth_day ==
+            "The birth day must be a date before 17 years ago."
+          ) {
+            this.errorBirthday = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
+          }
+         /* if (
+            err.response.data.Errorsin.password ==
+            ["The password confirmation does not match."]
+          ) {
+            this.errorConfirm = "تأكيد كلمة المرور غير متطابق";
+          }*/
         });
     },
   },

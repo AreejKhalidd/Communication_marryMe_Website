@@ -28,6 +28,10 @@ import All_Reports from '../views/AdminReports';
 import AdminUserList from '../views/AdminUsersList';
 import AdminUserinfo from '../views/AdminUserinfo';
 
+import AdminLogin from '../views/AdminLogin';
+
+import verifyEmail from '../views/verifyEmail';
+
 Vue.use(VueRouter)
 
 const routes = [{
@@ -118,7 +122,7 @@ const routes = [{
         component: ForgotPassword,
     },
     {
-        path: '/resetpassword',
+        path: '/resetpassword/:token/:email',
         name: 'ResetPassword',
         component: ResetPassword,
       
@@ -129,6 +133,11 @@ const routes = [{
         name: 'UserProfile',
         component: UserProfile,
         props: true
+    },
+    {
+        path: '/adminlogin',
+        name: 'AdminLogin',
+        component: AdminLogin
     },
     {
         path: '/adminhome',
@@ -159,6 +168,12 @@ const routes = [{
         path: '/all_reports',
         name: 'all_reports',
         component: All_Reports,
+        props: true
+    },
+    {
+        path: '/api/verify-email/:id/:hash',
+        name: 'verifyEmail',
+        component: verifyEmail,
         props: true
     },
 

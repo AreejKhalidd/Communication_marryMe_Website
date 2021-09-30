@@ -82,9 +82,9 @@
                   >إعادة كلمة المرور
                 </v-btn>
 
-              <!--  <v-alert v-model="alert" dismissible type="success"
+                <v-alert  style=" margin-top: 2rem;" v-model="alert" dismissible type="success"
                   >تم إعادة كلمة المرور بنجاح
-                </v-alert>-->
+                </v-alert>
               </v-form>
             </v-card>
           </v-col>
@@ -126,75 +126,36 @@ export default {
 
   methods: {
 
-
- /*JavascriptgetURLParameterValues(parameterName, url) {
-      if (!url) url = window.location.href;
-      parameterName= parameterName.replace(/[\[\]]/g, "\\><");
-      var regularExpression = 
-          new RegExp("[?&]" + parameterName + "(=([^&#]*)|&|#|$)"),
-      results = regularExpression.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-},
-   var url=' http://127.0.0.1:8000/api/reset-password/0b953dc553fa3f6033e057699250d861b05a6c8bc77ac1f56b1bd755d82d273a?email=amiraFa%40gmail.com';
-    console.log( JavascriptgetURLParameterValues(email, url));*/
-
-       
-
-
-
-
-
     resetPassword() {
       
       console.log(this.password);
       console.log(this.email);
-   /*   var url_string = "http://127.0.0.1:8000/api/reset-password"; //window.location.href
-var url = new URL(url_string);
-var c = url.searchParams.get("e");
-console.log(c);
-
-
-const queryString = 'http://127.0.0.1:8000/api/reset-password/0b953dc553fa3f6033e057699250d861b05a6c8bc77ac1f56b1bd755d82d273a?email=amiraFa%40gmail.com';
-console.log(queryString);
-
-
-const urlParams = new URLSearchParams(queryString);
-const product = urlParams.get('email')
-console.log(product);*/
       
      // const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
      
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      //const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/reset-password", 
-        headers:{Authorization: AuthStr},
+       // headers:{Authorization: AuthStr},
           data:{
           password: this.password,
           password_confirmation: this.confirmPassword,
-          email: this.email,
+token:this.$route.params.token,
+          email: this.$route.params.email,
+          
           }
         })
 
       
-      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
-      axios
-        .post("http://127.0.0.1:8000/api/reset-password", {
-          option,
-          password: this.password,
-          password_confirmation: this.confirmPassword,
-          email: this.email,
-
-         
-        })
-      
         .then((res) => {
           console.log(res.data);
-          
+          if(res.data.message=="Your password has been reset!"){
+           // alert("success");
+           this.alert=true;
+          }
           this.$store.state.usertoken = res.data.access_token;
-            localStorage.setItem('usertoken',res.data.access_token);
+            localStorage.setItem('usertoken',res.data.AccessToken);
         })
         .catch((err) => {
           console.log(err.message);
