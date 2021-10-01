@@ -14,7 +14,11 @@
     @message-action-handler="msgActionHandler"
     @send-message="sendMsg"
     :messages-loaded="AllmsgsAreLoaded"
-    :show-footer="(CanChat && requestApproved && !Vip) || (CanChat && Vip && canSendMoreThan4Msgs)"
+    :show-footer="
+      (CanChat && requestApproved && !Vip) ||
+      (CanChat && Vip && canSendMoreThan4Msgs) ||
+      (CanChat && msgRecievedFromVIP && !Vip)
+    "
     :show-add-room="true"
     @add-room="addNewRoom"
     :show-audio="false"
@@ -46,7 +50,6 @@ import axios from "axios";
 import ChatWindow from "vue-advanced-chat";
 import "vue-advanced-chat/dist/vue-advanced-chat.css";
 import moment from "moment";
-//import Echo from 'laravel-echo';
 
 export default {
   components: {
@@ -62,14 +65,15 @@ export default {
       currentUserName: "",
       currentUserAvatar: "",
       currentUserStatus: "",
-      messageActions:[
-      { name: 'replyMessage', title: 'الرد على هذه الرسالة' },
-      { name: 'ReportAmsg', title: 'أبلغ عن هذه الرسالة' },
-    ],
+      messageActions: [
+        { name: "replyMessage", title: "الرد على هذه الرسالة" },
+        { name: "ReportAmsg", title: "أبلغ عن هذه الرسالة" },
+      ],
       Vip: false,
       requestApproved: false,
       CanChat: true,
-      canSendMoreThan4Msgs:true,
+      canSendMoreThan4Msgs: true,
+      msgRecievedFromVIP: false,
       type: "image/*",
       AllRoomsAreLoaded: false,
       AllmsgsAreLoaded: false,
@@ -89,13 +93,17 @@ export default {
   },
   methods: {
     getUserInfo() {
-      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      if (localStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+          Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
         },
-      }; //temp for testing the request
+      }; //waiting for the login to be finished to store the access token
+      /*const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
+        },
+      }; */
       axios
         .get("http://127.0.0.1:8000/api/profile", option)
         .then((response) => {
@@ -108,36 +116,45 @@ export default {
               : `http://127.0.0.1:8000${response.data.image}`;
           }
           this.Vip = response.data.VIP == 1 ? true : false;
-          if(this.Vip==true){
-            this.messageActions=[
-      { name: 'replyMessage', title: 'الرد على هذه الرسالة' },
-      { name: 'deleteAMsg', title: 'حذف الرسالة', onlyMe: true },
-      { name: 'ReportAmsg', title: 'أبلغ عن هذه الرسالة' },
-    ];
+          if (this.Vip == true) {
+            this.messageActions = [
+              { name: "replyMessage", title: "الرد على هذه الرسالة" },
+              { name: "deleteAMsg", title: "حذف الرسالة", onlyMe: true },
+              { name: "ReportAmsg", title: "أبلغ عن هذه الرسالة" },
+            ];
           }
-        }).catch((error) => {
-          if(error.response.data.message=="Not all the questions are answered"){
-            this.$router.push('questions');
-          }
-          else{
-          this.$router.push("Login");
+        })
+        .catch((error) => {
+          if (
+            error.response.data.message == "Not all the questions are answered"
+          ) {
+            this.$router.push("questions");
+          } else {
+            this.$router.push("Login");
           }
         });
     },
     roomInfoHandler(room) {
-      this.$router.push({name: 'Userinfo',params: { id:room.users[1]._id }});
+      this.$router.push({
+        name: "Userinfo",
+        params: { id: room.users[1]._id },
+      });
     },
-    addNewRoom(){
+    addNewRoom() {
       this.$router.push("HomePage");
     },
     Chats() {
-      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      if (localStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+          Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
         },
-      }; //temp for testing the request
+      }; //waiting for the login to be finished to store the access token
+      /*const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
+        },
+      }; */
       axios
         .get("http://127.0.0.1:8000/api/listallchats", option)
         .then((response) => {
@@ -185,7 +202,7 @@ export default {
               seenmsg = true;
               newmsg = false;
             }
-            
+
             DateTime = moment(response.data[i].created_at)
               .utc()
               .format("HH:mm D/M/YYYY");
@@ -217,7 +234,7 @@ export default {
                 unreadCount: `${unreadCount}`,
                 index: `${response.data[i].created_at}`,
                 lastMessage: {
-                  _id:response.data[i].msg_id,
+                  _id: response.data[i].msg_id,
                   content: `${lastMsg}`,
                   senderId: `${response.data[i].sender_id}`,
                   username: `${response.data[i].sender_name}`,
@@ -226,7 +243,7 @@ export default {
                   distributed: delivered,
                   seen: seenmsg,
                   new: newmsg,
-                  deleted:response.data[i].isDeleted,
+                  deleted: response.data[i].isDeleted,
                 },
                 users: tempusers,
                 blockedRoom: response.data[i].block,
@@ -246,13 +263,18 @@ export default {
       this.rooms.forEach((room) => {
         if (room.roomId == roomId) {
           secondUser_id = room.users[1]._id;
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          if (localStorage.getItem("usertoken") === null)
+            this.$router.push("/");
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
             },
-          }; //temp for testing the request
+          }; //waiting for the login to be finished to store the access token
+          /*const option = {
+            headers: {
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
+            },
+          }; */
           axios.post(
             "http://127.0.0.1:8000/api/blockFriend",
             { reciever_id: secondUser_id },
@@ -269,18 +291,28 @@ export default {
         if (room.roomId == roomId) {
           block_id = room.block_id;
           blocked_id = room.users[1]._id;
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          if (localStorage.getItem("usertoken") === null)
+            this.$router.push("/");
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
             },
             data: {
               blockId: block_id,
               blockerId: this.currentUserId,
               blockedId: blocked_id,
             },
-          }; //temp for testing the request
+          }; //waiting for the login to be finished to store the access token
+          /*const option = {
+            headers: {
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
+            },
+            data: {
+              blockId: block_id,
+              blockerId: this.currentUserId,
+              blockedId: blocked_id,
+            },
+          }; //temp for testing the request*/
           axios.delete("http://127.0.0.1:8000/api/removeBlock", option);
           this.CanChat = true;
           this.menuActions = [{ name: "blockaction", title: "حظر" }];
@@ -301,13 +333,13 @@ export default {
     deleteMsg(roomId, message) {
       console.log(roomId);
       console.log(message);
-      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-      const option = {
+      if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      /*const option = {
         headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
         },
-      }; //temp for testing the request
+      }; //temp for testing the request*/
       axios.delete(
         `${"http://127.0.0.1:8000/api/deletemsg/"}${message._id}`,
         option
@@ -315,19 +347,19 @@ export default {
       let i = 0;
       this.messages.forEach((msg) => {
         if (msg._id == message._id) {
-          
           this.messages[i].deleted = true;
           this.messages = [...this.messages];
-          let j=0;
+          let j = 0;
           this.rooms.forEach((room) => {
-            if(room.roomId==roomId){
-              if(this.messages[i]._id==room.lastMessage._id){//if msg deleted is the last msg update the last msg
-              this.rooms[j].lastMessage.deleted = true;
-              this.rooms = [...this.rooms];
-          }
+            if (room.roomId == roomId) {
+              if (this.messages[i]._id == room.lastMessage._id) {
+                //if msg deleted is the last msg update the last msg
+                this.rooms[j].lastMessage.deleted = true;
+                this.rooms = [...this.rooms];
+              }
             }
-          
-          j++;
+
+            j++;
           });
         }
         i++;
@@ -336,20 +368,18 @@ export default {
     reportAMsg(roomId, message) {
       console.log(roomId);
       console.log(message);
-      //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
-            headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
-            },
-          }; //temp for testing the request
-          axios
-            .post(
-              "http://127.0.0.1:8000/api/report",
-              { message_id: message._id},
-              option
-            );
-
+      if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      /*const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
+        },
+      }; //temp for testing the request*/
+      axios.post(
+        "http://127.0.0.1:8000/api/report",
+        { message_id: message._id },
+        option
+      );
     },
     msgActionHandler(data) {
       switch (data.action.name) {
@@ -362,9 +392,10 @@ export default {
       }
     },
     fetchMessages(data) {
+      this.msgRecievedFromVIP = false;
       this.requestApproved = false;
       this.AllmsgsAreLoaded = false;
-      this.canSendMoreThan4Msgs=true;
+      this.canSendMoreThan4Msgs = true;
       this.CanChat = false;
       if (
         data.room.blockedRoom == true &&
@@ -390,13 +421,13 @@ export default {
         let delivered = false;
         let seenmsg = false;
         let newmsg = false;
-        //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-        //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-        const option = {
+        if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+        const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+        /*const option = {
           headers: {
-            Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+            Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
           },
-        }; //temp for testing the request
+        }; //temp for testing the request*/
         /*axios
             .post(
               "http://127.0.0.1:8000/api/readmsg",
@@ -411,20 +442,25 @@ export default {
             option
           )
           .then((response) => {
-            
-        if(response.data.length==4){
-          let i;
-          for (i = 0; i < response.data.length; i++) {
-            if(response.data[i].sender_id!=this.currentUserId){
-              console.log(response.data[i].sender_id,this.currentUserId);
-              break;
+            for (let i = 0; i < response.data.length; i++) {
+              if (response.data[i].sender_id != this.currentUserId) {
+                this.msgRecievedFromVIP = true;
+                break;
+              }
             }
-            console.log(i);
-          }
-          if(i==4){
-            this.canSendMoreThan4Msgs=false;
-          }
-        }
+            if (response.data.length == 4) {
+              let i;
+              for (i = 0; i < response.data.length; i++) {
+                if (response.data[i].sender_id != this.currentUserId) {
+                  console.log(response.data[i].sender_id, this.currentUserId);
+                  break;
+                }
+                console.log(i);
+              }
+              if (i == 4) {
+                this.canSendMoreThan4Msgs = false;
+              }
+            }
             for (let i = 0; i < response.data.length; i++) {
               time = moment(response.data[i].created_at).utc().format("HH:mm");
               date = moment(response.data[i].created_at)
@@ -664,23 +700,21 @@ export default {
           });
         this.messages = tempMsgs;
         this.AllmsgsAreLoaded = true;
-        
-        
       });
     },
     sendMsg(data) {
       let time, date;
-      console.log(data);
+      
       if (!data.replyMessage) {
         //no reply msg
         if (!data.files) {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           axios
             .post(
               "http://127.0.0.1:8000/api/sendmsg",
@@ -695,7 +729,10 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  this.messages[this.messages.length] = {
+                  window.Echo.channel(`chat.${data.roomId}`).listen(
+                  "MessageSent",
+                  () => {
+                    this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
                     content: data.content,
                     senderId: this.currentUserId,
@@ -725,7 +762,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                      _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -736,27 +773,40 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
-                    
                   };
                   this.rooms = [...this.rooms];
+
+                  });
+          
+          
+        
+                  
                 }
                 i++;
-              });
+                
+              }
+              
+              );
+              
             });
+            
         } else {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           const fd = new FormData();
-          let lastMsgContent = (data.content != null && data.content.length>0)? data.content : "Photo";
-          if (data.content != null && data.content.length>0) {
+          let lastMsgContent =
+            data.content != null && data.content.length > 0
+              ? data.content
+              : "Photo";
+          if (data.content != null && data.content.length > 0) {
             fd.append(
               "image",
               data.files[0].blob,
@@ -782,7 +832,10 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = (data.content != null && data.content.length>0)? data.content : "";
+                  let msgContent =
+                    data.content != null && data.content.length > 0
+                      ? data.content
+                      : "";
 
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
@@ -821,7 +874,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                       _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -832,7 +885,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -843,13 +896,13 @@ export default {
         }
       } else {
         if (!data.files && !data.replyMessage.files) {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           axios
             .post(
               "http://127.0.0.1:8000/api/sendmsg",
@@ -902,7 +955,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                       _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -913,7 +966,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -922,13 +975,13 @@ export default {
               });
             });
         } else if (!data.files && data.replyMessage.files) {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           axios
             .post(
               "http://127.0.0.1:8000/api/sendmsg",
@@ -997,7 +1050,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                       _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: data.content,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -1008,7 +1061,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -1017,14 +1070,14 @@ export default {
               });
             });
         } else if (data.files && !data.replyMessage.files) {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           const fd = new FormData();
           fd.append(
             "image",
@@ -1033,8 +1086,8 @@ export default {
           );
           fd.append("chat_id", data.roomId);
           fd.append("replymsg", data.replyMessage._id);
-       
-          if (data.content != null && data.content.length>0) {
+
+          if (data.content != null && data.content.length > 0) {
             fd.append("content", data.content);
           }
           axios
@@ -1047,7 +1100,10 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = (data.content != null && data.content.length>0) ? data.content : "";
+                  let msgContent =
+                    data.content != null && data.content.length > 0
+                      ? data.content
+                      : "";
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
                     content: msgContent,
@@ -1078,7 +1134,9 @@ export default {
 
                   this.messages = [...this.messages];
                   let lastMsgContent =
-                    (data.content != null && data.content.length>0) ? data.content : "Photo";
+                    data.content != null && data.content.length > 0
+                      ? data.content
+                      : "Photo";
                   this.rooms[i] = {
                     roomId: room.roomId,
                     roomName: room.roomName,
@@ -1091,7 +1149,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                       _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -1102,7 +1160,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -1111,14 +1169,14 @@ export default {
               });
             });
         } else {
-          //if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          //const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          const option = {
+          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
+          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          /*const option = {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjg1MDk4NiwiZXhwIjoxNjMzMjYxMzg2LCJuYmYiOjE2MzI4NTA5ODYsImp0aSI6InlYMGUzOTV1S1VQUEN1WG4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.z8p05ZXYV2LwKiPxhecu_fJA9TyRtjOeq7QFUhxOhbA"}`,
+              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
-          }; //temp for testing the request
+          }; //temp for testing the request*/
           const fd = new FormData();
           let tempReplyMsg = {};
           let replyMsgContent =
@@ -1143,8 +1201,8 @@ export default {
           );
           fd.append("chat_id", data.roomId);
           fd.append("replymsg", data.replyMessage._id);
-    
-          if (data.content != null && data.content.length>0) {
+
+          if (data.content != null && data.content.length > 0) {
             fd.append("content", data.content);
           }
           axios
@@ -1157,7 +1215,10 @@ export default {
               let i = 0;
               this.rooms.forEach((room) => {
                 if (room.roomId == data.roomId) {
-                  let msgContent = (data.content != null && data.content.length>0) ? data.content : "";
+                  let msgContent =
+                    data.content != null && data.content.length > 0
+                      ? data.content
+                      : "";
                   this.messages[this.messages.length] = {
                     _id: response.data.msg_id,
                     content: msgContent,
@@ -1185,7 +1246,9 @@ export default {
 
                   this.messages = [...this.messages];
                   let lastMsgContent =
-                    (data.content != null && data.content.length>0) ? data.content : "Photo";
+                    data.content != null && data.content.length > 0
+                      ? data.content
+                      : "Photo";
                   this.rooms[i] = {
                     roomId: room.roomId,
                     roomName: room.roomName,
@@ -1198,7 +1261,7 @@ export default {
                     block_id: room.block_id,
                     requestStatus: room.requestStatus,
                     lastMessage: {
-                       _id:response.data.msg_id,
+                      _id: response.data.msg_id,
                       content: lastMsgContent,
                       senderId: this.currentUserId,
                       username: this.currentUserName,
@@ -1209,7 +1272,7 @@ export default {
                       distributed: false,
                       seen: false,
                       new: true,
-                      deleted:false,
+                      deleted: false,
                     },
                   };
                   this.rooms = [...this.rooms];
@@ -1222,10 +1285,10 @@ export default {
     },
   },
   created() {
-    moment.locale('ar');
+    moment.locale("ar");
     this.getUserInfo();
     this.Chats();
-    //Echo.join('MessageSent').here(user=>{console.log(user);}).joining(user=>{console.log(user);}).leaving(user=>{console.log(user);});
+    
   },
   /*mounted(){
     Echo.channel('chat').listen('.MessageSent',(user)=>{console.log(user);});
@@ -1285,36 +1348,33 @@ export default {
   direction: rtl;
 }
 .vac-box-search .vac-icon-search {
-    left:auto;
-    right: 70px;
+  left: auto;
+  right: 70px;
 }
 .vac-box-search .vac-input {
-    direction:rtl;
-    padding: 10px 40px 10px 10px;
+  direction: rtl;
+  padding: 10px 40px 10px 10px;
 }
 .vac-box-search .vac-add-icon {
-    margin-left: auto;
-    padding-left: 10px;
+  margin-left: auto;
+  padding-left: 10px;
 }
 .vac-room-container .vac-text-date {
-    margin-left: auto;
-    direction:ltr;
-    margin-right:5px;
-    font-size: 13px;
-    text-align: left;
-    
+  margin-left: auto;
+  direction: ltr;
+  margin-right: 5px;
+  font-size: 13px;
+  text-align: left;
 }
 .vac-message-wrapper .vac-icon-deleted {
-    
-    margin: 2px 0 -2px 2px;
-    float: right;
-    
+  margin: 2px 0 -2px 2px;
+  float: right;
 }
 .vac-format-message-wrapper .vac-icon-deleted {
-    margin: 2px 0 -2px 2px;
-    float: right;
+  margin: 2px 0 -2px 2px;
+  float: right;
 }
 .vac-format-message-wrapper .vac-format-container {
-    display: inline-grid;
+  display: inline-grid;
 }
 </style>

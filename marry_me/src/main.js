@@ -13,6 +13,22 @@ library.add(faUserSecret)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
+
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+window.Pusher = require('pusher-js');
+Pusher.logToConsole = true;
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.VUE_APP_WEBSOCKETS_KEY,
+    cluster: process.env.VUE_PUSHER_APP_CLUSTER,
+    wsHost: process.env.VUE_APP_Host,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+    encrypted: true
+});
+
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 Vue.use(IconsPlugin)
 Vue.use(BootstrapVue)
