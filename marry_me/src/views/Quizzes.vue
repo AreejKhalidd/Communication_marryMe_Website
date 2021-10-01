@@ -2,49 +2,30 @@
   <div data-app>
     <div id="app">
       <v-app id="inspire" style="direction: rtl">
-        <v-card
-            height="100%"
-            width="100%"
-        >
-          <v-app-bar
-              style="background-color: #FE6265;height: 70px;"
-              dark
-              prominent
+           <v-card
+              
           >
-            <v-app-bar-nav-icon style="margin-top: 5px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
-            <v-toolbar-title style="width: 1200px;flex: auto;margin-bottom: 65px"> اسئلة التسجيل </v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-          </v-app-bar>
-
-          <v-navigation-drawer
-              v-model="drawer"
-              absolute
-              bottom
-              right
-              temporary
-              style="min-width: 15%;min-height: 100%; "
-
-          >
-            <v-list
-                nav
-                dense
-                class="linkStyle"
-            >
-              <v-list-item-group
-                  v-model="group"
-                  active-class="deep-purple--text text--accent-4"
-              >
-                <AnotherSideBar/>
-
-              </v-list-item-group>
-            </v-list>
-          </v-navigation-drawer>
+          <v-img
+                  style="margin-left: 0px"
+                  src="@/assets/marry_me.jpeg"
+                  alt="MarryMe Logo"
+                  position="left left"
+                  height="90"
+                  width="120"
+                ></v-img>
+          <h1
+                    style="
+                      text-align: center;
+                      margin-bottom: 2rem;
+                      color: tomato;
+                      margin-right: 1rem;
+                    "
+                  >
+                    اسئلة التسجيل
+           </h1>
+          </v-card>
           <Questions />
           <ErrorPage style="margin: 50px !important;" v-if="error"/>
-        </v-card>
       </v-app>
     </div>
 
@@ -56,14 +37,12 @@
 
 <script>
 import ErrorPage from '@/components/ErrorPage.vue'
-import AnotherSideBar from '@/components/AnotherSideBar.vue'
 import Questions from '@/components/Questions.vue'
 
 
 export default {
   name: "Block",
   components: {
-    AnotherSideBar,
     ErrorPage,
     Questions
   },
