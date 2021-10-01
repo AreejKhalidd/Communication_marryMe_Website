@@ -45,9 +45,6 @@
 
       <span></span>
       <br/>
-    <v-alert v-if="loggedout" type="success" color="#FF6265" align="center" dismissible @click="relogin()">
-            تم نسجيل الخروج
-    </v-alert>
   </div>
 </template>
 
@@ -83,10 +80,6 @@ export default{
 
   methods:{
 
-      relogin(){
-        localStorage.removeItem("usertoken");
-        this.$router.push('/login');
-      },
       vipcatg(){
          this.catg="VIPالمستخدمين";
          this.vipusers=true;
@@ -119,7 +112,7 @@ export default{
                
                 console.log("logged out");
                 this.loggedout=true;
-                        localStorage.removeItem("usertoken");
+                localStorage.removeItem("usertoken");
                 this.$router.push('/login');
 
                 })
@@ -194,6 +187,7 @@ export default{
     border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
     background-color:	#f5f5f5;
+    text-align: center;
 }
 .age{
     height:30px;

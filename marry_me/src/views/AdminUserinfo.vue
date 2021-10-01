@@ -1,8 +1,7 @@
 <template>
  <div id="app">
    <v-app id="content">  
-          <AdminNavbar/>
-          <AdminSidebar/>
+         
       <div >  
                           <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
                                        بيانات عن المستخدم  </h4>
@@ -46,7 +45,7 @@
                         </v-list >
                         <v-list >
                           <v-list-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle>
+                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle> 
                         </v-list >
                         <v-list >
                           <v-list-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : </v-list-title>
@@ -57,8 +56,9 @@
                           <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="Certified === 1" > المستخدم  </v-list-title>
+                          <v-list-title style="font-size: 20px;align:right;"  > المستخدم  </v-list-title>
                           <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
+                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-subtitle>
                           <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
                         </v-list>                                      
                        </v-col> 
@@ -80,7 +80,7 @@
                                   </v-list-title>
                                 </v-list>
                               </div>
-                        </div>                               
+                        </div>                             
                         </v-col>
                       </v-row>
 
@@ -121,15 +121,11 @@
 
 <script>
 import axios from "axios";
-import AdminNavbar from '../components/AdminNavbar';
-import AdminSidebar from '../components/AdminSidebar';
 import img from "../assets/UserDefaultAvatar.png";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 export default {
     name: "AdminUserinfo",
     components: {
-    AdminNavbar,
-    AdminSidebar,
    },
   data() {
     return {
@@ -176,7 +172,7 @@ export default {
             this.$router.push({name: 'AdminUserList'});
         },
         deleteuser(ID){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
                 console.log("ehhh?");
                 console.log(ID);
                 axios({
@@ -199,19 +195,20 @@ export default {
         },
         previewImage() {
           this.url = URL.createObjectURL(this.file);
-          this.useravatar();
+          this.useravatar();  
         },
         
     },
     mounted(){
         ///const token = 'Bearer '.concat(localStorage.getItem('usertoken'));///
- const token ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+ const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
         axios({
-          method: 'post',
-          url: "http://127.0.0.1:8000/api/getUser",
-          headers: {Authorization: token},
-          data: {id :this.userId}
+          method: 'get',
+          url: "http://127.0.0.1:8000/api/getUserbyID", 
+          headers: {Authorization: tokenn},
+          params: {id :this.userId}
         }).then((response) => {
+          console.log("user dataaa");
               this.ID = response.data.id;
               this.Name = response.data.name;
               this.Email = response.data.email;
@@ -223,13 +220,16 @@ export default {
               this.NumberOfBans = response.data.ban_count;
               this.Certified = response.data.certified;
               this.vip = response.data.VIP;
+              console.log(response.data);
+              console.log(response.data.email);
             }).catch((error) => {
-          console.log(error.response.statusText)
+          console.log(error.response.statusText);
+          console.log("error in user data");
         });
         axios({
           method: 'get',
-          url: "http://127.0.0.1:8000/api/show-user",
-          headers: {Authorization: token},
+          url: "http://127.0.0.1:8000/api/getUserQues",
+          headers: {Authorization: tokenn},
           params:  { user_id : this.userId}
         }).then((response) => {
                             console.log(response.data);
@@ -241,7 +241,7 @@ export default {
              //// this.questions = response.data.questions;
              this.answers= response.data.answers;///
             }).catch((error) => {
-          console.log(error.response.statusText)
+          console.log(error.response.statusText) 
         });
   },
 }

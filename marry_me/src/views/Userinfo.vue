@@ -83,9 +83,10 @@
                           <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="Certified === 1" > المستخدم  </v-list-title>
+                          <v-list-title style="font-size: 20px;align:right;"  > المستخدم  </v-list-title>
                           <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
-                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon>
+                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-subtitle>
+                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
                         </v-list>
                        </v-col>
                        <v-col align="center">

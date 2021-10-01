@@ -2,8 +2,6 @@
   <div id="app">
     <v-app>
       <div class="all">
-          <AdminNavbar/>
-          <AdminSidebar/>
         <div class="page"> 
             <h4 class="hp" align="center"> {{ this.title }} </h4>
                      <div align="right" class="mr-5">                                          
@@ -12,10 +10,10 @@
                           <b-dropdown-item-button @click="namecatg()">المستخدمين بالاسم</b-dropdown-item-button>
                           <b-dropdown-item-button @click="vipcatg()"> المستخدمين  VIP</b-dropdown-item-button>
                           <b-dropdown-item-button @click="freecatg()">المستخدمين المجانيين</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="certcatg()">المستخدمين  المصدق حسابهم</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="onlinecatg()">المستخدمين المتاحين الان</b-dropdown-item-button>
                           <b-dropdown-item-button @click="femalecatg()">المستخدمين الاناث</b-dropdown-item-button>
                           <b-dropdown-item-button @click="malecatg()">المستخدمين الذكور</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="certcatg()">المستخدمين  المصدق حسابهم</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="onlinecatg()">المستخدمين المتاحين الان</b-dropdown-item-button>
                         </b-dropdown>  
                          <span>  </span> 
                         <input v-if="name"  type="text"  v-model="searchname"  placeholder="   .. البحث بالاسم" size="sm" class="in" @enter="gosearchbyname()" />
@@ -48,14 +46,10 @@
   </div>
 </template>
 <script>
-import AdminNavbar from '../components/AdminNavbar';
-import AdminSidebar from '../components/AdminSidebar';
 import axios from "axios";
 export default {
     name: "AdminUserList",
     components: {
-    AdminNavbar,
-    AdminSidebar,
    },
   data() {
     return {   
@@ -75,7 +69,7 @@ export default {
         }
     },
   mounted(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
                 console.log("ehhh?");
                 axios({
                   method: 'get',
@@ -91,8 +85,8 @@ export default {
                   this.title = "قائمة بجميع المستخدمين ";    
                   this.catg="جميع المستخدمين";
                       })
-                              .catch((error) => {
-                              console.log('There is error:'+error);
+                              .catch(() => {
+                              console.log('There is error:');
                               return "error occoured";
                               
                       });
@@ -106,7 +100,7 @@ export default {
           this.$router.push({name: 'AdminUserinfo',params: { id:i }})
         },
         startsearch(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
               if(this.all)
               {
                 console.log("ehhh?");
@@ -438,6 +432,8 @@ export default {
     border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
     background-color:	#f5f5f5;
+    text-align:center;
+    align-text:left;
 }
 .btn{
     border-radius:15px;
