@@ -48,45 +48,56 @@
                           >
                         </v-img>
                       </v-col>
-                       <v-col class="list">
+                       <v-col class="list">   
                            <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;"> معلومات شخصية عن المستخدم </h6>
+                        <div>
                         <v-list >
-                          <v-list-title style="font-size: 20px; align:right;">  الاسم :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Name}} </v-list-subtitle>
+                            <v-list-item-title  style="font-size: 20px;">  الاسم :
+                            <v-list-item-subtitle  style="font-size: 15px;display:inline;"> {{ Name}} </v-list-item-subtitle >
+                            </v-list-item-title>
+                        </v-list >
+                        </div>
+                        <v-list >
+                            <v-list-item-title  style="font-size: 20px;">رقم التليفون :
+                            <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ PhoneNumber }} </v-list-item-subtitle>
+                            </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">رقم التليفون :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ PhoneNumber }} </v-list-subtitle>
+                            <v-list-item-title   style="font-size: 20px;">تاريخ الميلاد  :
+                            <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ BirthDay }}  </v-list-item-subtitle>
+                            </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">تاريخ الميلاد  :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ BirthDay }}  </v-list-subtitle>
+                            <v-list-item-title style="font-size: 20px;">البريد:
+                            <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Email }}  </v-list-item-subtitle>
+                            </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">البريد:</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Email }}  </v-list-subtitle>
+                            <v-list-item-title style="font-size: 20px;"> النوع  :   
+                            <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Gender }}  </v-list-item-subtitle>
+                            </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> النوع  :   </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Gender }}  </v-list-subtitle>
+                           <v-list-item-title style="font-size: 20px;"> عدد مرات الابلاغ  : 
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfReports }}  </v-list-item-subtitle>
+                           </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle>
+                           <v-list-item-title style="font-size: 20px;"> عدد مرات الحظر     : 
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfBans }} </v-list-item-subtitle>
+                           </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfBans }} </v-list-subtitle>
+                           <v-list-item-title style="font-size: 20px;" v-if="vip === 1"> المستخدم
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="vip === 1">  VIP  </v-list-item-subtitle>
+                           </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم</v-list-title>
-                          <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
-                        </v-list >
-                        <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"  > المستخدم  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
-                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-subtitle>
-                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
+                           <v-list-item-title style="font-size: 20px;"  > المستخدم  
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="Certified === 1" >   مصرح حسابه  </v-list-item-subtitle>
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-item-subtitle>
+                           <v-icon v-if="Certified" style="font-size: 20px;display:inline;" color="#FF6265">mdi-check-circle </v-icon> 
+                           </v-list-item-title>
                         </v-list>
                        </v-col>
                        <v-col align="center">
@@ -96,15 +107,15 @@
                             <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;">  اسئلة عن المستخدم </h6>
                         <div class="list" v-for="(data, index) in info" :key="index">
                               <div v-if="data[1][0].hidden==0">
-                                <v-list>
-                                  <v-list-title style="font-size: 20px"> السؤال :
-                                    <v-list-subtitle style="font-size: 15px;display:inline;"> :{{data[0][0].question}} </v-list-subtitle>
-                                    </v-list-title>
+                                <v-list >
+                                  <v-list-item-title style="font-size: 20px"> السؤال :
+                                    <v-list-item-subtitle style="font-size: 15px;display:inline;"> :{{data[0][0].question}} </v-list-item-subtitle>
+                                    </v-list-item-title>
                                 </v-list>
                                 <v-list>
-                                    <v-list-title style="font-size: 20px"> اجابة المستخدم :
-                                  <v-list-subtitle style="font-size: 15px;display:inline;">:{{ data[2][0].answer}}</v-list-subtitle>
-                                  </v-list-title>
+                                    <v-list-item-title style="font-size: 20px"> اجابة المستخدم :
+                                  <v-list-item-subtitle style="font-size: 15px;display:inline;">:{{ data[2][0].answer}}</v-list-item-subtitle>
+                                  </v-list-item-title>
                                 </v-list>
                               </div>
                         </div>
@@ -477,6 +488,14 @@ width: 60px;
 .list{
 
   direction: rtl;
+  
+   align:right;
+   text-align:right;
+   align-text:right;
+
+}
+.titles{
+   direction: rtl;
    align:right;
    text-align:right;
    align-text:right;
