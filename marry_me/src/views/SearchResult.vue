@@ -80,6 +80,7 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
     'v-list-item-title': VListItemTitle,
    },
    props: { searchname:null, me_vip:null,
+
             all:null,
             vip:null,
             free:null,

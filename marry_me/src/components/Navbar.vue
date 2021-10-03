@@ -22,7 +22,7 @@
                     
              <div v-if="VIP === 1" >
                  <b-button class="b" style="width:120px;" @click="openfilter()">
-                       البحث عن طريق
+                       تصفية البحث
                  </b-button>
              </div>
 
@@ -35,7 +35,7 @@
                   <b-button size="sm" class="btnss" variant="outline-secondary" type="submit" @click="logout()">تسجيل خروج</b-button>  
           </b-navbar-nav>
         </b-navbar>
-      </div>
+      </div> 
 
       <span></span>
       <br/>
