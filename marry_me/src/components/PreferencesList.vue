@@ -10,12 +10,10 @@
         <v-card
           :loading="loading"         
           max-width="300"
+          max-height="400"
           v-for="(user, index) in users" :key="index"
           class="card"
         >
-          
-
-
           <template slot="progress">
             <v-progress-linear
               color="deep-purple"
@@ -24,21 +22,29 @@
             ></v-progress-linear>
           </template>
 
-          <v-img
-            v-if="user.user[0].image"
+          
+           <v-img            
             height="250"
+            width="300"
+            v-if="!user.user[0].image"
+            v-bind:src="url"
+          ></v-img>
+          <v-img            
+            height="250"
+            width="300"
+            v-else-if="user.user[0].image.includes('http')"
             v-bind:src="user.user[0].image"
           ></v-img>
-           <v-img
-            v-if="!user.user[0].image"
+           <v-img            
             height="250"
-            v-bind:src="img"
+            width="300"
+            v-else-if="!user.user[0].image.includes('http')"
+            v-bind:src="`http://127.0.0.1:8000${user.user[0].image}`"
           ></v-img>
-
-
+                        
 
             <div>الاسم : {{ user.user[0].name}} </div>
-            <div> العمر : {{ user.user[0].age}} </div>
+            <div> العمر : {{ parseInt(user.user[0].age)}} </div>
 
           <v-divider class="mx-4"></v-divider>
 <div v-if="sid == user.user[0].id">
@@ -96,7 +102,8 @@ export default{
                 users:  [  ],
                 VIP: "",
                 avatarurl: null,
-                img: img,  
+                url: img, 
+                file: '', 
                 loading: false,
                 selection: 1,
                 donefav:false,
@@ -120,6 +127,13 @@ export default{
       return faBan
     },
     
+    useravatar(img) {
+      
+      if (! img.includes("http")){
+             return `http://127.0.0.1:8000${img}`;
+      } 
+      return img;
+    },
   },
 
   mounted(){
@@ -154,6 +168,8 @@ export default{
   
     methods:
     {   
+      
+    
         refav(){
             this.donefav=false;
             this.errorfav=false;

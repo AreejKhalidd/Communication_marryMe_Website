@@ -2,8 +2,8 @@
      <v-app>
         <v-main>
             <div class="hp">
-              <Navbar v-if="noerror" />
-              <Sidebar v-if="noerror" />
+              <Navbar  />
+              <Sidebar/>
 
                 <v-app v-if="notoken==true">
                       <ErrorPage style="margin: 50px !important;" v-if="notoken"/>

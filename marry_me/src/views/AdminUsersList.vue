@@ -2,8 +2,6 @@
   <div id="app">
     <v-app>
       <div class="all">
-          <AdminNavbar/>
-          <AdminSidebar/>
         <div class="page"> 
             <h4 class="hp" align="center"> {{ this.title }} </h4>
                      <div align="right" class="mr-5">                                          
@@ -12,10 +10,10 @@
                           <b-dropdown-item-button @click="namecatg()">المستخدمين بالاسم</b-dropdown-item-button>
                           <b-dropdown-item-button @click="vipcatg()"> المستخدمين  VIP</b-dropdown-item-button>
                           <b-dropdown-item-button @click="freecatg()">المستخدمين المجانيين</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="certcatg()">المستخدمين  المصدق حسابهم</b-dropdown-item-button>
-                          <b-dropdown-item-button @click="onlinecatg()">المستخدمين المتاحين الان</b-dropdown-item-button>
                           <b-dropdown-item-button @click="femalecatg()">المستخدمين الاناث</b-dropdown-item-button>
                           <b-dropdown-item-button @click="malecatg()">المستخدمين الذكور</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="certcatg()">المستخدمين  المصدق حسابهم</b-dropdown-item-button>
+                          <b-dropdown-item-button @click="onlinecatg()">المستخدمين المتاحين الان</b-dropdown-item-button>
                         </b-dropdown>  
                          <span>  </span> 
                         <input v-if="name"  type="text"  v-model="searchname"  placeholder="   .. البحث بالاسم" size="sm" class="in" @enter="gosearchbyname()" />
@@ -23,7 +21,7 @@
                         <v-btn style="{width:30px; height:30px;}" class="btn" @click="startsearch()">عرض </v-btn>
                     <span></span> 
                      </div>
-              <div v-id="all">
+              <div id="all">
               <v-card class="card" v-for="(user, index) in users" :key="index">
                   <v-list class="list-style" three-line>
                     <template class="back">
@@ -48,14 +46,10 @@
   </div>
 </template>
 <script>
-import AdminNavbar from '../components/AdminNavbar';
-import AdminSidebar from '../components/AdminSidebar';
 import axios from "axios";
 export default {
     name: "AdminUserList",
     components: {
-    AdminNavbar,
-    AdminSidebar,
    },
   data() {
     return {   
@@ -75,7 +69,7 @@ export default {
         }
     },
   mounted(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
                 console.log("ehhh?");
                 axios({
                   method: 'get',
@@ -88,11 +82,13 @@ export default {
                   this.users=response.data.All_Users_info;  
                   console.log("data hena");
                   console.log(this.users);
-                  this.title = "قائمة بجميع المستخدمين ";    
+                  this.title = "قائمة بجميع المستخدمين ";   
+                    if(response.data.All_Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   this.catg="جميع المستخدمين";
                       })
-                              .catch((error) => {
-                              console.log('There is error:'+error);
+                              .catch(() => {
+                              console.log('There is error:');
                               return "error occoured";
                               
                       });
@@ -106,7 +102,7 @@ export default {
           this.$router.push({name: 'AdminUserinfo',params: { id:i }})
         },
         startsearch(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
               if(this.all)
               {
                 console.log("ehhh?");
@@ -119,7 +115,9 @@ export default {
                   console.log(response.data);
                   /// All_Users_info///
                   this.users=response.data.All_Users_info;  
-                  this.title = "قائمة بجميع المستخدمين ";
+                  this.title = "قائمة بجميع المستخدمين ";   
+                    if(response.data.All_Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -140,7 +138,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= " قائمة المستخدمين   VIP ";
+                  this.title= " قائمة المستخدمين   VIP ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -160,7 +160,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين المجانيين ";
+                  this.title= "قائمة المستخدمين المجانيين ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -180,7 +182,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين المتاحين الان "; 
+                  this.title= "قائمة المستخدمين المتاحين الان ";   
+                    if(response.data.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -200,7 +204,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين  المصدق حسابهم ";
+                  this.title= "قائمة المستخدمين  المصدق حسابهم ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -220,7 +226,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين الاناث    ";
+                  this.title= "قائمة المستخدمين الاناث    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -241,7 +249,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين الذكور    ";
+                  this.title= "قائمة المستخدمين الذكور    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -268,7 +278,9 @@ export default {
                     console.log("ehhh?");
                     console.log(response.data);
                     this.users=response.data.Users_info;  
-                    this.title= "قائمة المستخدمين بالاسم الذي ادخلته    ";
+                    this.title= "قائمة المستخدمين بالاسم الذي ادخلته    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                     console.log("data hena");
                     console.log(this.users);
                         })
@@ -438,6 +450,8 @@ export default {
     border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
     background-color:	#f5f5f5;
+    text-align:center;
+    align-text:left;
 }
 .btn{
     border-radius:15px;

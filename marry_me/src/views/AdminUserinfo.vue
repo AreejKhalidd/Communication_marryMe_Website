@@ -1,8 +1,7 @@
 <template>
  <div id="app">
    <v-app id="content">  
-          <AdminNavbar/>
-          <AdminSidebar/>
+         
       <div >  
                           <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
                                        بيانات عن المستخدم  </h4>
@@ -25,41 +24,51 @@
                        <v-col class="list">
                            <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;"> معلومات شخصية عن المستخدم </h6> 
                         <v-list >
-                          <v-list-title style="font-size: 20px; align:right;">  الاسم :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Name}} </v-list-subtitle>                      
+                          <v-list-item-title style="font-size: 20px; align:right;">  الاسم :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Name}} </v-list-item-subtitle> 
+                          </v-list-item-title>                     
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">رقم التليفون :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ PhoneNumber }} </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;">رقم التليفون :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ PhoneNumber }} </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">تاريخ الميلاد  :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ BirthDay }}  </v-list-subtitle>                  
+                          <v-list-item-title style="font-size: 20px;align:right;">تاريخ الميلاد  :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ BirthDay }}  </v-list-item-subtitle>   
+                          </v-list-item-title>               
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">البريد:</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Email }}  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;">البريد:
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Email }}  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> النوع  :   </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Gender }}  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;"> النوع  :   
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Gender }}  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfReports }}  </v-list-item-subtitle>
+                          </v-list-item-title> 
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfBans }} </v-list-subtitle> 
+                          <v-list-item-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : 
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfBans }} </v-list-item-subtitle> 
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم</v-list-title>
-                          <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="vip === 1">  VIP  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="Certified === 1" > المستخدم  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
-                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
+                          <v-list-item-title style="font-size: 20px;align:right;"  > المستخدم  
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-item-subtitle>
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-item-subtitle>
+                          <v-icon v-if="Certified" style="font-size: 20px;display:inline;" color="#FF6265">mdi-check-circle </v-icon> 
+                          </v-list-item-title>
                         </v-list>                                      
                        </v-col> 
                        <v-col align="center">
@@ -70,17 +79,17 @@
                         <div class="list" v-for="(data, index) in info" :key="index">
                               <div v-if="data[1][0].hidden==0">
                                 <v-list>
-                                  <v-list-title style="font-size: 20px"> السؤال : 
-                                    <v-list-subtitle style="font-size: 15px;display:inline;"> :{{data[0][0].question}} </v-list-subtitle>
-                                    </v-list-title>
+                                  <v-list-item-title style="font-size: 20px"> السؤال : 
+                                    <v-list-item-subtitle style="font-size: 15px;display:inline;;display:inline;"> :{{data[0][0].question}} </v-list-item-subtitle>
+                                  </v-list-item-title> 
                                 </v-list>
                                 <v-list>
-                                    <v-list-title style="font-size: 20px"> اجابة المستخدم : 
-                                  <v-list-subtitle style="font-size: 15px;display:inline;">:{{ data[2][0].answer}}</v-list-subtitle>
-                                  </v-list-title>
+                                  <v-list-item-title style="font-size: 20px"> اجابة المستخدم : 
+                                      <v-list-item-subtitle style="font-size: 15px;display:inline;;display:inline;">:{{ data[2][0].answer}}</v-list-item-subtitle>
+                                  </v-list-item-title>
                                 </v-list>
                               </div>
-                        </div>                               
+                        </div>                             
                         </v-col>
                       </v-row>
 
@@ -121,15 +130,11 @@
 
 <script>
 import axios from "axios";
-import AdminNavbar from '../components/AdminNavbar';
-import AdminSidebar from '../components/AdminSidebar';
 import img from "../assets/UserDefaultAvatar.png";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 export default {
     name: "AdminUserinfo",
     components: {
-    AdminNavbar,
-    AdminSidebar,
    },
   data() {
     return {
@@ -176,7 +181,7 @@ export default {
             this.$router.push({name: 'AdminUserList'});
         },
         deleteuser(ID){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI2ODYyNzMsImV4cCI6MTYzMzA5NjY3MywibmJmIjoxNjMyNjg2MjczLCJqdGkiOiJzYkZiY21iQWdndHc3Z0FoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.u4xxYspuXhYGwRoFe4uFob5V72eTPggVL42A3gnR5LQ");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
                 console.log("ehhh?");
                 console.log(ID);
                 axios({
@@ -199,19 +204,20 @@ export default {
         },
         previewImage() {
           this.url = URL.createObjectURL(this.file);
-          this.useravatar();
+          this.useravatar();  
         },
         
     },
     mounted(){
         ///const token = 'Bearer '.concat(localStorage.getItem('usertoken'));///
- const token ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+ const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
         axios({
-          method: 'post',
-          url: "http://127.0.0.1:8000/api/getUser",
-          headers: {Authorization: token},
-          data: {id :this.userId}
+          method: 'get',
+          url: "http://127.0.0.1:8000/api/getUserbyID", 
+          headers: {Authorization: tokenn},
+          params: {id :this.userId}
         }).then((response) => {
+          console.log("user dataaa");
               this.ID = response.data.id;
               this.Name = response.data.name;
               this.Email = response.data.email;
@@ -223,13 +229,16 @@ export default {
               this.NumberOfBans = response.data.ban_count;
               this.Certified = response.data.certified;
               this.vip = response.data.VIP;
+              console.log(response.data);
+              console.log(response.data.email);
             }).catch((error) => {
-          console.log(error.response.statusText)
+          console.log(error.response.statusText);
+          console.log("error in user data");
         });
         axios({
           method: 'get',
-          url: "http://127.0.0.1:8000/api/show-user",
-          headers: {Authorization: token},
+          url: "http://127.0.0.1:8000/api/getUserQues",
+          headers: {Authorization: tokenn},
           params:  { user_id : this.userId}
         }).then((response) => {
                             console.log(response.data);
@@ -241,7 +250,7 @@ export default {
              //// this.questions = response.data.questions;
              this.answers= response.data.answers;///
             }).catch((error) => {
-          console.log(error.response.statusText)
+          console.log(error.response.statusText) 
         });
   },
 }

@@ -1,6 +1,6 @@
 <template>
-  <div id="app">      
-    <div >
+  <div id="app"  v-if="!error">      
+    <div>
       <b-sidebar id="sidebar-right" variant="grey"   class="sidee"  right shadow>
         <div class="px-6 py-2">
           <nav class="mb-5">
@@ -56,6 +56,7 @@ export default{
       url: img,
       avatarurl: null,
       name:"",
+      error:false,
     }
   },
   computed: {
@@ -105,6 +106,11 @@ export default{
    }
  },
   mounted(){
+      
+          if(!localStorage.getItem('usertoken'))
+          {
+            this.error=true;
+          }
       const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
          /// const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");///
           axios({
@@ -112,7 +118,8 @@ export default{
             url: "http://127.0.0.1:8000/api/profile",
             headers: {Authorization: token}
           }).then(response => {
-          console.log(response.data)
+          console.log(response.data);
+          this.error=false;
           this.VIP=response.data.VIP;
           this.avatarurl = response.data.image;
             console.log(response.data.name);
@@ -120,6 +127,8 @@ export default{
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
+                        if(error.response.status===403)
+                          this.error=true;
                         return "error occoured"
                 });
   },
