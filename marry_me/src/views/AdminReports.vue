@@ -142,7 +142,8 @@ export default {
       this.reload();
     },
     reload(){
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI4MzIzNTMsImV4cCI6MTYzMzI0Mjc1MywibmJmIjoxNjMyODMyMzUzLCJqdGkiOiJDaHNuWEdTOW5EMGpsdHBoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.9QPPCS4tqODVVTmiNQ8_dbtti9fyP_F1TDidla3iKbU");
       axios.get("http://127.0.0.1:8000/api/admin/getAllReports", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...

@@ -24,42 +24,51 @@
                        <v-col class="list">
                            <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;"> معلومات شخصية عن المستخدم </h6> 
                         <v-list >
-                          <v-list-title style="font-size: 20px; align:right;">  الاسم :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Name}} </v-list-subtitle>                      
+                          <v-list-item-title style="font-size: 20px; align:right;">  الاسم :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Name}} </v-list-item-subtitle> 
+                          </v-list-item-title>                     
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">رقم التليفون :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ PhoneNumber }} </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;">رقم التليفون :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ PhoneNumber }} </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">تاريخ الميلاد  :</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ BirthDay }}  </v-list-subtitle>                  
+                          <v-list-item-title style="font-size: 20px;align:right;">تاريخ الميلاد  :
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ BirthDay }}  </v-list-item-subtitle>   
+                          </v-list-item-title>               
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;">البريد:</v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Email }}  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;">البريد:
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Email }}  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> النوع  :   </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ Gender }}  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;"> النوع  :   
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ Gender }}  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfReports }}  </v-list-subtitle> 
+                          <v-list-item-title style="font-size: 20px;align:right;"> عدد مرات الابلاغ  :  
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfReports }}  </v-list-item-subtitle>
+                          </v-list-item-title> 
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : </v-list-title>
-                          <v-list-subtitle style="font-size: 15px"> {{ NumberOfBans }} </v-list-subtitle> 
+                          <v-list-item-title style="font-size: 20px;align:right;"> عدد مرات الحظر     : 
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;"> {{ NumberOfBans }} </v-list-item-subtitle> 
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم</v-list-title>
-                          <v-list-subtitle style="font-size: 15px" v-if="vip === 1">  VIP  </v-list-subtitle>
+                          <v-list-item-title style="font-size: 20px;align:right;" v-if="vip === 1"> المستخدم
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="vip === 1">  VIP  </v-list-item-subtitle>
+                          </v-list-item-title>
                         </v-list >
                         <v-list >
-                          <v-list-title style="font-size: 20px;align:right;"  > المستخدم  </v-list-title>
-                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-subtitle>
-                          <v-list-subtitle style="font-size: 15px;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-subtitle>
-                          <v-icon v-if="Certified" color="#FF6265">mdi-check-circle </v-icon> 
+                          <v-list-item-title style="font-size: 20px;align:right;"  > المستخدم  
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;;align:right;" v-if="Certified === 1" >   مصرح حسابه  </v-list-item-subtitle>
+                          <v-list-item-subtitle style="font-size: 15px;display:inline;;align:right;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-item-subtitle>
+                          <v-icon v-if="Certified" style="font-size: 20px;display:inline;" color="#FF6265">mdi-check-circle </v-icon> 
+                          </v-list-item-title>
                         </v-list>                                      
                        </v-col> 
                        <v-col align="center">
@@ -70,14 +79,14 @@
                         <div class="list" v-for="(data, index) in info" :key="index">
                               <div v-if="data[1][0].hidden==0">
                                 <v-list>
-                                  <v-list-title style="font-size: 20px"> السؤال : 
-                                    <v-list-subtitle style="font-size: 15px;display:inline;"> :{{data[0][0].question}} </v-list-subtitle>
-                                    </v-list-title>
+                                  <v-list-item-title style="font-size: 20px"> السؤال : 
+                                    <v-list-item-subtitle style="font-size: 15px;display:inline;;display:inline;"> :{{data[0][0].question}} </v-list-item-subtitle>
+                                  </v-list-item-title> 
                                 </v-list>
                                 <v-list>
-                                    <v-list-title style="font-size: 20px"> اجابة المستخدم : 
-                                  <v-list-subtitle style="font-size: 15px;display:inline;">:{{ data[2][0].answer}}</v-list-subtitle>
-                                  </v-list-title>
+                                  <v-list-item-title style="font-size: 20px"> اجابة المستخدم : 
+                                      <v-list-item-subtitle style="font-size: 15px;display:inline;;display:inline;">:{{ data[2][0].answer}}</v-list-item-subtitle>
+                                  </v-list-item-title>
                                 </v-list>
                               </div>
                         </div>                             
@@ -172,7 +181,7 @@ export default {
             this.$router.push({name: 'AdminUserList'});
         },
         deleteuser(ID){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
                 console.log("ehhh?");
                 console.log(ID);
                 axios({
@@ -201,7 +210,7 @@ export default {
     },
     mounted(){
         ///const token = 'Bearer '.concat(localStorage.getItem('usertoken'));///
- const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMxMTU3ODYsImV4cCI6MTYzMzUyNjE4NiwibmJmIjoxNjMzMTE1Nzg2LCJqdGkiOiJvM3lEUDZwN0YzQWZ0aXNYIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.3u30wI_bP-dYwd6vOmT8RgusQxEBFOvXyQfkUz94e1w");
+ const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
         axios({
           method: 'get',
           url: "http://127.0.0.1:8000/api/getUserbyID", 
