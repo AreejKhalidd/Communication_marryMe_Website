@@ -82,7 +82,9 @@ export default {
                   this.users=response.data.All_Users_info;  
                   console.log("data hena");
                   console.log(this.users);
-                  this.title = "قائمة بجميع المستخدمين ";    
+                  this.title = "قائمة بجميع المستخدمين ";   
+                    if(response.data.All_Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   this.catg="جميع المستخدمين";
                       })
                               .catch(() => {
@@ -113,7 +115,9 @@ export default {
                   console.log(response.data);
                   /// All_Users_info///
                   this.users=response.data.All_Users_info;  
-                  this.title = "قائمة بجميع المستخدمين ";
+                  this.title = "قائمة بجميع المستخدمين ";   
+                    if(response.data.All_Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -134,7 +138,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= " قائمة المستخدمين   VIP ";
+                  this.title= " قائمة المستخدمين   VIP ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -154,7 +160,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين المجانيين ";
+                  this.title= "قائمة المستخدمين المجانيين ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -174,7 +182,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين المتاحين الان "; 
+                  this.title= "قائمة المستخدمين المتاحين الان ";   
+                    if(response.data.length===0)
+                       this.title="لا يوجد مستخدمين"; 
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -194,7 +204,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين  المصدق حسابهم ";
+                  this.title= "قائمة المستخدمين  المصدق حسابهم ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -214,7 +226,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين الاناث    ";
+                  this.title= "قائمة المستخدمين الاناث    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -235,7 +249,9 @@ export default {
                   console.log("ehhh?");
                   console.log(response.data);
                   this.users=response.data.Users_info;  
-                  this.title= "قائمة المستخدمين الذكور    ";
+                  this.title= "قائمة المستخدمين الذكور    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                   console.log("data hena");
                   console.log(this.users);
                       })
@@ -262,7 +278,9 @@ export default {
                     console.log("ehhh?");
                     console.log(response.data);
                     this.users=response.data.Users_info;  
-                    this.title= "قائمة المستخدمين بالاسم الذي ادخلته    ";
+                    this.title= "قائمة المستخدمين بالاسم الذي ادخلته    ";    
+                    if(response.data.Users_info.length===0)
+                       this.title="لا يوجد مستخدمين";
                     console.log("data hena");
                     console.log(this.users);
                         })

@@ -226,8 +226,11 @@ export default {
       return faBan
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl; /// `http://127.0.0.1:8000${this.avatarurl}`;///
-      return this.url;
+      
+      if(!this.avatarurl) return this.url;
+      if (!this.avatarurl.includes("http")) return `http://127.0.0.1:8000${this.avatarurl}`;
+      
+      return this.avatarurl;
     },
 
     },

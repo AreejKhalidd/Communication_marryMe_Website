@@ -34,15 +34,24 @@
                   <v-list class="list-style" three-line>
                     <template class="back">
                       <v-list-item style="max-width: 1300px">
-                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="user.image">
-                          <v-img v-bind:src="user.image"></v-img>
-                      </v-list-item-avatar>
-                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" v-if="!user.image ">
-                          <v-img v-bind:src="img"></v-img>
+                        <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%" >
+                                  <v-img            
+                                  v-if="!user.image"
+                                  v-bind:src="img"
+                                ></v-img> 
+                                <v-img            
+                                  v-else-if="user.image.includes('http')"
+                                  v-bind:src="user.image.image"
+                                ></v-img>
+                                  <v-img            
+                                  v-else-if="!user.image.includes('http')"
+                                  v-bind:src="`http://127.0.0.1:8000${user.image}`"
+                                ></v-img> 
+    
                       </v-list-item-avatar>
                       <v-list-item-content class="shift">
                           <v-list-item-title class="textt">الأسم : {{ user.name }}</v-list-item-title>
-                          <v-list-item-title  class="textt">العمر : {{ user.age }}</v-list-item-title >
+                          <v-list-item-title  class="textt">العمر : {{ parseInt(user.age) }}</v-list-item-title >
                       </v-list-item-content>
                       <v-btn class="btn" @click="gotouserinfo(user,index)"> المزيد </v-btn>
                     </v-list-item>
@@ -51,7 +60,7 @@
           </v-card>
         </div>
       </div>
-    </v-app>
+    </v-app> 
   </div>
 </template>    
 <script>
@@ -128,14 +137,16 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
           {             
               if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
               {
-                    axios({
+                    axios({ 
                       method: 'post',
                       url: "http://127.0.0.1:8000/api/filter",
                       headers: {Authorization: token},
                       data: {name :this.searchname}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -165,7 +176,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname,ban_count:this.bancount}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -196,7 +209,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname,vip:0}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -226,7 +241,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname,vip:1}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -256,7 +273,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname,certified:1}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -285,7 +304,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname,age:this.age}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -316,7 +337,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                   data: {name :this.searchname}
                 }).then(response => {
                 console.log(response.data)
-                this.users=response.data
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                 this.noerror=true;
                 console.log("kkkkkkkkk")
                 console.log(response.data)
@@ -374,7 +397,9 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                       data: {name :this.searchname}
                     }).then(response => {
                     console.log(response.data)
-                    this.users=response.data
+                    this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -407,6 +432,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -438,6 +465,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -467,6 +496,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -496,6 +527,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -524,6 +557,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                     }).then(response => {
                     console.log(response.data)
                     this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                     this.noerror=true;
                     console.log("kkkkkkkkk")
                     console.log(response.data)
@@ -555,6 +590,8 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                 }).then(response => {
                 console.log(response.data)
                 this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
                 this.noerror=true;
                 console.log("kkkkkkkkk")
                 console.log(response.data)

@@ -12,27 +12,14 @@
               <b-navbar-nav class="ms-auto">  
                 <b-nav-item href="/homepage">الصفحة الرئيسية</b-nav-item>
                 <b-nav-item href="/my_profile">الصفحة الشخصية</b-nav-item>   
-                <b-nav-item href="/chat">المحادثات</b-nav-item>               
+                <b-nav-item href="/chat">المحادثات</b-nav-item>                
                 </b-navbar-nav>
           </b-collapse>
           <b-collapse id="nav-collapse" is-nav class="inform" >
               <b-navbar-nav align="center"> 
-                    <input align="center" type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
+                    <input align="right" type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
                     <span></span>  
-                    <input type="number" 
-                      class="age"
-                      v-model.number="age"  min=20 max=80  v-if="ageusers==true"/>
-                    <input type="number" 
-                      class="age"
-                      v-model.number="bancount"  min=1 max=49  v-if="banusers==true"/>
-                    <span v-if="ageusers==true"></span>             
-                    <b-dropdown  :text="catg" class="dp" variant="white" v-if="VIP === 1">
-                        <b-dropdown-item-button @click="vipcatg()">VIP المستخدمين</b-dropdown-item-button>
-                        <b-dropdown-item-button @click="freecatg()">المستخدمين المجانين</b-dropdown-item-button>
-                        <b-dropdown-item-button @click="bancatg()" > المستخدمين المحظورين بعدد</b-dropdown-item-button>
-                        <b-dropdown-item-button @click="certcatg()">المستخدمين المصدق حسابهم</b-dropdown-item-button>
-                        <b-dropdown-item-button @click="agecatg()"> عمر المستخدمين </b-dropdown-item-button>
-                    </b-dropdown>
+                    
                     <span></span> 
                     <b-button  size="sm"  class="b" variant="outline-light"   @click="gotosearch()">البحث   </b-button>
               </b-navbar-nav > 
@@ -189,14 +176,28 @@ export default{
 .in{
     height:30px;
     width:150px;
-    border-radius:15px;
-    padding-radius:15px;
-    margin-bottom:4px;
-    margin-top:1px;
+    
     border: solid 1px rgba(255,98,101,1);
     border-radius:30px;
     background-color:	#f5f5f5;
-    text-align: center;
+    text-align:right; 
+    
+  direction: rtl;
+  padding: 10px 40px 10px 10px;
+}
+.in:focus{
+   border: solid 1px rgba(255,98,101,1);
+   outline: none !important;
+}
+input{
+  &:focus { 
+    outline: none !important;
+    }
+}
+textarea{
+  &:focus { 
+    outline: none !important;
+    }
 }
 .age{
     height:30px;
@@ -249,10 +250,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .inform{
   text-align: center;
-  align: center;
-  display: flex;
-  display: grid;
-  justify:center;
+
   margin-left: 25%;
  
 }
@@ -278,39 +276,7 @@ input[type=number]::-webkit-outer-spin-button {
 span:not(:last-child) {
     margin-right: 5px;
 }
-.search-wrapper {
-    position: relative;
-    label {
-      position: absolute;
-      font-size: 12px;
-      color: rgba(0,0,0,.50);
-      top: 8px;
-      left: 12px;
-      z-index: -1;
-      transition: .15s all ease-in-out;
-    }
-    input {
-      padding: 4px 12px;
-      color: rgba(0,0,0,.70);
-      border: 1px solid rgba(0,0,0,.12);
-      transition: .15s all ease-in-out;
-      background: white;
-      &:focus {
-        outline: none;
-        transform: scale(1.05);
-        & + label  {
-          font-size: 10px;
-          transform: translateY(-24px) translateX(-12px);
-        }
-      }
-      &::-webkit-input-placeholder {
-          font-size: 12px;
-          color: rgba(0,0,0,.50);
-          font-weight: 100;
-      }
-    }
 
-  }
 
     .nb{
       background-color: #f5f5f5; 
