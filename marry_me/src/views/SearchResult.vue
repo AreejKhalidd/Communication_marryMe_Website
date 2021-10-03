@@ -41,7 +41,7 @@
                                 ></v-img> 
                                 <v-img            
                                   v-else-if="user.image.includes('http')"
-                                  v-bind:src="user.image.image"
+                                  v-bind:src="user.image"
                                 ></v-img>
                                   <v-img            
                                   v-else-if="!user.image.includes('http')"
@@ -79,13 +79,14 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
     'v-list-item': VListItem,
     'v-list-item-title': VListItemTitle,
    },
-   props: { searchname:null,VIP:null,
-            banusers:null,
-            vipusers:null,
-            freeusers:null,
-            certusers:null,
-            ageusers:null,
+   props: { searchname:null, me_vip:null,
+            all:null,
+            vip:null,
+            free:null,
             age:null,
+            agenum:null,
+            cert:null,
+            ban:null,
             bancount:null,
           },
    data() {
@@ -133,61 +134,31 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
             return;
           }
       const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
-          if(this.VIP==1)
+          if(this.me_vip==1)
           {             
-              if(this.banusers == null && this.vipusers==null && this.freeusers==null && this.certusers ==null && this.ageusers==null)
-              {
-                    axios({ 
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
-                    if(response.data.length===0)
-                       this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
-                        if(error.response.data.message === "Not all the questions are answered")
-                        {
-                          this.checkquestions=true;
-                        }if(error.response.data.message === "Email is not verified")
-                        {
-                          this.notverified=true;
-                        }
-                        return "error occoured"
-                          });
-              }
-              else{
-                if(this.banusers != null)
+                if(this.all==true)
                 {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname,ban_count:this.bancount}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
                     if(response.data.length===0)
                        this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
                         if(error.response.data.message === "Not all the questions are answered")
                         {
                           this.checkquestions=true;
@@ -195,33 +166,32 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                         {
                           this.notverified=true;
                         }
-                            
-                            return "error occoured"
-                          });
-
+                              return "error occoured"
+                      });
                 }
-                else if (this.freeusers==true)
+                else if (this.vip==true && this.age==false && this.certified==false&& this.ban==false)
                 {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname,vip:0}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,vip:1}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
                     if(response.data.length===0)
                        this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
-                            
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
                         if(error.response.data.message === "Not all the questions are answered")
                         {
                           this.checkquestions=true;
@@ -229,31 +199,33 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                         {
                           this.notverified=true;
                         }
-                            return "error occoured"
-                          });
+                              return "error occoured"
+                      });
                 }
-                else if (this.vipusers==true)
+                        
+                else if (this.cert==true&&this.vip==false && this.age==false &&  this.ban==false)
                 {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname,vip:1}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,certified:1}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
                     if(response.data.length===0)
                        this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
-                            
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
                         if(error.response.data.message === "Not all the questions are answered")
                         {
                           this.checkquestions=true;
@@ -261,31 +233,33 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                         {
                           this.notverified=true;
                         }
-                            return "error occoured"
-                          });
-                }             
-                else if (this.certusers==true) 
+                              return "error occoured"
+                      });
+                }
+                        
+                else if (this.age==true&&this.vip==false && this.cert==false &&  this.ban==false)
                 {
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname,certified:1}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,age:this.agenum}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
                     if(response.data.length===0)
                        this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
-                            
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
                         if(error.response.data.message === "Not all the questions are answered")
                         {
                           this.checkquestions=true;
@@ -293,30 +267,32 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                         {
                           this.notverified=true;
                         }
-                            return "error occoured"
-                          });
+                              return "error occoured"
+                      });
                 }
-                else if(this.ageusers!=null){
-                    axios({
-                      method: 'post',
-                      url: "http://127.0.0.1:8000/api/filter",
-                      headers: {Authorization: token},
-                      data: {name :this.searchname,age:this.age}
-                    }).then(response => {
-                    console.log(response.data)
-                    this.users=response.data;
+                else if (this.age==false&&this.vip==false && this.cert==false &&  this.ban==true)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,ban_count:this.bancount}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
                     if(response.data.length===0)
                        this.msgtoshow="لا يوجد مستخدمين";
-                    this.noerror=true;
-                    console.log("kkkkkkkkk")
-                    console.log(response.data)
-                    console.log(this.users)
-                    console.log("searchh 3laa");console.log(this.searchname);
-                          })
-                            .catch((error) => {
-                            console.log('There is error:'+error);
-                            console.log(error.response.data.message);
-                            
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
                         if(error.response.data.message === "Not all the questions are answered")
                         {
                           this.checkquestions=true;
@@ -324,11 +300,244 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
                         {
                           this.notverified=true;
                         }
-                            return "error occoured"
-                          });
+                              return "error occoured"
+                      });
                 }
-              }
-        }
+                else if (this.age==true&&this.vip==false && this.cert==true &&  this.ban==true)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,age:this.agenum,certified:1,ban_count:this.bancount}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                else if (this.age==true&&this.vip==true && this.cert==true &&  this.ban==true)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,vip:1,age:this.agenum,certified:1,ban_count:this.bancount}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                
+                else if (this.age==false&&this.vip==true && this.cert==true &&  this.ban==false)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,vip:1,certified:1}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                
+                else if (this.age==true&&this.vip==false && this.cert==true &&  this.ban==false)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,age:this.agenum,certified:1}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                
+                else if (this.age==false&&this.vip==false && this.cert==true &&  this.ban==true)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,ban_count:this.bancount,certified:1}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                else if (this.age==true&&this.vip==false && this.cert==false &&  this.ban==false)
+                {
+                     axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname,age:this.agenum}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                else{
+                  axios({
+                  method: 'post',
+                  url: "http://127.0.0.1:8000/api/filter",
+                  headers: {Authorization: token},
+                  data: {name :this.searchname}
+                }).then(response => {
+                console.log(response.data)
+                this.users=response.data;
+                    if(response.data.length===0)
+                       this.msgtoshow="لا يوجد مستخدمين";
+                this.noerror=true;
+                console.log("kkkkkkkkk")
+                console.log(response.data)
+                console.log(this.users)
+                console.log("searchh 3laa");console.log(this.searchname); 
+             
+                      })
+                              .catch((error) => {
+                              console.log('There is error:'+error);
+                              console.log(error.response.data.message);
+                              
+                        if(error.response.data.message === "Not all the questions are answered")
+                        {
+                          this.checkquestions=true;
+                        }if(error.response.data.message === "Email is not verified")
+                        {
+                          this.notverified=true;
+                        }
+                              return "error occoured"
+                      });
+                }
+                
+          }
         else{
                 axios({
                   method: 'post',

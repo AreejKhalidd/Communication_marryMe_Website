@@ -28,11 +28,14 @@
                           </v-btn>
                         </div>
                 </v-app>
+            <div v-if="noerror">
               <div v-if="VIP === 0">
               <SlidingCards v-if="noerror"/>
               </div>
+            
               <PreferencesList v-if="noerror"/>
             </div>
+          </div>
         </v-main>
       </v-app>
 </template>
@@ -60,6 +63,11 @@ import ErrorPage from '@/components/ErrorPage.vue'
           checkquestions:false,
           notverified:false,
           notoken:false,
+          vip:false,
+          free:false,
+          age:false,
+          certified:false,
+          bancounts:false,
         }
   },
      methods:{
@@ -106,5 +114,6 @@ import ErrorPage from '@/components/ErrorPage.vue'
 <style scoped>
 .hp{
 background-color: white;
+
 }
 </style>
