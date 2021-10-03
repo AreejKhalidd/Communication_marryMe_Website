@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <v-app>
+          <Navbar/>
+          <Sidebar/>
                 <v-app v-if="notoken==true">
                       <ErrorPage style="margin: 50px !important;" v-if="notoken"/>
                 </v-app>       
@@ -25,8 +27,7 @@
                         </div>
                 </v-app>    
       <div class="all" v-if="noerror" >
-          <Navbar/>
-          <Sidebar/>
+
         <div class="page"> 
             <h4 class="hp" align="center">   {{this.msgtoshow}}  </h4>
               <v-card class="card" v-for="(user, index) in users" :key="index">

@@ -26,9 +26,9 @@
                 </v-app>
 
 
-   <v-app id="content" v-if="noerror">       
-        <Navbar v-if="noerror" />
-        <Sidebar v-if="noerror" />
+   <v-app id="content" >       
+        <Navbar  />
+        <Sidebar  />
       <div v-if="noerror" >
                           <h4 class ="mt-3" align="center" style="color: rgba(255,98,101,1);">
                                        بيانات عن المستخدم  </h4>

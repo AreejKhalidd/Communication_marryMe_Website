@@ -1,6 +1,6 @@
 <template>
-  <div id="app">      
-    <div v-if="!error">
+  <div id="app"  v-if="!error">      
+    <div>
       <b-sidebar id="sidebar-right" variant="grey"   class="sidee"  right shadow>
         <div class="px-6 py-2">
           <nav class="mb-5">

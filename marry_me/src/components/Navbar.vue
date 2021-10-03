@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-       <div class="nb" v-if="!error">
+  <div id="app" v-if="!error">
+       <div class="nb" >
           <b-navbar class="navbar">
             <span></span>
           <b-navbar-brand >
