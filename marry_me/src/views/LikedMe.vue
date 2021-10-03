@@ -3,7 +3,7 @@
     <Navbar/>
     <Sidebar/>
     <v-main>
-      <v-container>
+      <v-container v-if="!error2&&!error">
         <div id="app">
 
 
@@ -11,11 +11,19 @@
                          :id="follower.id" :name="follower.name"
                          :user1_id="follower.user_1"
                          :age="follower.age" :img="follower.user2_image"/>
-          <ErrorPage style="margin: 50px !important;" v-if="error"/>
 
         </div>
 
       </v-container>
+      <v-app v-if="error||error2">
+        <EmptyPage v-if="error2"
+                   :msg="this.msg"
+                   :flag="flag"
+                   :buttMess="buttMess"
+                   :red="red"
+                   style=";margin: 50px !important;"/>
+        <ErrorPage style="margin: 50px !important;" v-if="error"/>
+      </v-app>
     </v-main>
 
   </div>
@@ -27,6 +35,7 @@
 import FollowersList from '@/components/FollowersList.vue'
 import Navbar from '@/components/Navbar.vue'
 import Sidebar from '@/components/Sidebar.vue'
+import EmptyPage from '@/components/EmptyPage.vue'
 import ErrorPage from '@/components/ErrorPage.vue'
 
 import axios from "axios";
@@ -37,14 +46,18 @@ export default {
     FollowersList,
     Navbar,
     Sidebar,
-    ErrorPage
+    ErrorPage,
+    EmptyPage
   },
   data() {
     return {
       followers: [],
-      drawer: false,
-      group: null,
       error: false,
+      error2: false,
+      msg: null,
+      red:null,
+      buttMess:null,
+      flag:false
     }
   },
   mounted() {
@@ -54,30 +67,38 @@ export default {
         .then(response => {
           // If request is good...
           this.error = false;
-          this.followers = response.data
+          if(response.data.length===0){
+            this.error2 = true;
+            this.msg = "لا يوجد اي اشخاص قاموا بالإعجاب بك"
+          }else {
+            this.error2 = false;
+            this.followers = response.data;
+          }
+
         })
-        .catch(() => {
-          this.error = true;
+        .catch((error) => {
+          if (error.response.status === 403) {
+            if (error.response.data.message === "Email is not verified") {
+              this.msg = "يجب ان تقوم بتفعيل اميلك اولا من خلال التحقق من بريدك الإلكتروني"
+              this.error2 = true;
+
+            }else if(error.response.data.message === "Not all the questions are answered"){
+              this.error2 = true;
+              this.msg = "يرجي الإجابة علي كل الأسئلة اولا"
+              this.flag= true;
+              this.buttMess="صفحة الاسألة";
+              this.red = "questions"
+            } else {
+              this.error = true;
+            }
+          }
         });
-  },
-  watch: {
-    group() {
-      this.drawer = false
-    },
   },
 
 }
 </script>
 
 <style scoped>
-.linkStyle {
-  background: rgba(0, 0, 0, 0.75) !important;
-  padding: 10px 0 20px 0;
-  border: 1px solid #111;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.75);
-}
 
 
 </style>

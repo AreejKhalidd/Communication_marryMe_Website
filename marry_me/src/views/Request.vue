@@ -6,7 +6,7 @@
       <Sidebar/>
 
           <v-main>
-            <v-container>
+            <v-container v-if="!error2&&!error" >
               <v-tabs style="min-width: 200px!important;"  v-if="!error">
                 <v-tab @click="all=true;sent=true;req=true;accept=false;reject=false;callMounted();flag_all=true">كل الطلبات</v-tab>
                 <v-tab  @click="all=true;sent=true;req=false;accept=false;reject=false;callMounted();flag_all=true;">المرسلة</v-tab>
@@ -53,7 +53,6 @@
                             :count="reqCount"/>
               </div>
               <div  v-if="reject">
-
                 <RejectedRequests v-for="request in requests.requests_received" :id="request.id"
                             :sender_id="request.sender_id"
                             :status="request.status"
@@ -62,10 +61,16 @@
                             :img="request.image" :name="request.name"
                             :count="reqCount"/>
               </div>
-              <ErrorPage v-if="error" style="margin: 50px !important;"/>
-              <EmptyPage :msg="this.msg"  v-if="this.counter_dec===0 &&this.counter===0 &&!error&&flag_all" style=";margin: 50px !important;"/>
-
             </v-container>
+
+              <EmptyPage v-if="error2 || error3"
+                         :msg="this.msg"
+                         :flag="flag"
+                         :buttMess="buttMess"
+                         :red="red"
+                         style=";margin: 50px 200px 50px 200px !important;"/>
+              <ErrorPage style="margin: 50px !important;" v-if="error"/>
+
           </v-main>
     </div>
 
@@ -100,19 +105,22 @@ export default {
   },
   data() {
     return {
+      error3:false,
       all:true,
       sent:true,
       req:true,
       accept:false,
       reject:false,
       requests: [],
-      drawer: false,
-      group: null,
       error: false,
       flag_all:true,
       counter: 0,
-      msg:" لا يوجد اي طلبات حاليا لعرضها",
-      counter_dec: 0
+      counter_dec: 0,
+      error2: false,
+      msg: null,
+      red:null,
+      buttMess:null,
+      flag:false
     }
   },
   mounted() {
@@ -134,19 +142,57 @@ export default {
       axios.get("http://127.0.0.1:8000/api/getAllRequests", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
-            this.requests = response.data
+            let l =
+                response.data.requests_received.filter(item => (item.status !== 1 && item.status !== 2)).length;
+            let r =
+                response.data.requests_received.filter(item => (item.status === 2)).length;
+            let a =
+                response.data.requests_received.filter(item => (item.status === 1 )).length;
             this.error = false;
+            if(response.data.requests_sent.length===0 && this.all && this.sent){
+              this.error3 = true;
+              this.msg = " لا يوجد اي طلبات ارسلتها"
+            }else if(l===0 && this.all && this.req){
+              this.error3 = true;
+              this.msg = " لا يوجد اي طلبات ارسلت إليك"
+            }else if(a===0 && this.accept){
+              this.error3 = true;
+              this.msg = " لا يوجد اي طلبات قبلتها"
+            }else if(r===0 && this.reject){
+              this.error3 = true;
+              this.msg = " لا يوجد اي طلبات رفضتها"
+            }
+            else {
+              this.error3 = false;
+              this.error2 = false;
+              this.requests = response.data
+            }
+
             let filteredItem =
-                this.requests.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
+               response.data.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
 
             this.counter_dec = filteredItem.length;
-            this.counter = this.requests.requests_sent.length;
+            this.counter = response.data.requests_sent.length;
           })
-          .catch(() => {
-            this.error = true;
+          .catch((error) => {
+            if (error.response.status === 403) {
+              if (error.response.data.message === "Email is not verified") {
+                this.msg = "يجب ان تقوم بتفعيل اميلك اولا من خلال التحقق من بريدك الإلكتروني"
+                this.error2 = true;
+
+              }else if(error.response.data.message === "Not all the questions are answered"){
+                this.error2 = true;
+                this.msg = "يرجي الإجابة علي كل الأسئلة اولا"
+                this.flag= true;
+                this.buttMess="صفحة الاسألة";
+                this.red = "questions"
+              } else {
+                this.error = true;
+              }
+            }
           });
 
-    }
+    },
   }
 
 
@@ -171,5 +217,7 @@ export default {
   color: #FE6265 !important;
 
 }
+.v-progress-circular {
+  margin: 1rem;}
 
 </style>
