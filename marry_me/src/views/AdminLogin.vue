@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="4" lg="4">
             <v-card elevation="0">
               
-               <v-img       src="@/assets/marry_me.jpeg" alt="Marry Me Logo" width="90" height="90"></v-img> 
+               <v-img       src="@/assets/marry_me.jpeg" alt="Marry Me Logo" width="90" height="90"></v-img>
               
               <v-card-text class="text-center">
                 <p
@@ -94,44 +94,11 @@
                     >دخول</v-btn
                   >
                 <!--  <v-card-actions class="text--secondary"> -->
-                      <div
-                    class="text-decoration-none"
-                    style="
-                      direction: rtl;
-                       margin-top: 50px;
-                      margin-bottom: 20px;
-                      margin-left: 30rem;
-                      color: tomato;
-                    "
-                  >
-                    <a   @click="forgotPassword()"> هل نسيت كلمه المرور؟</a>
-                      </div>
+
                 
                  <!-- <v-card-actions style="margin-top:-27px;" class="text--secondary"> -->
-                   <div style="margin-top: -42px;
-    margin-right: 28rem;">
-                    <v-spacer></v-spacer>
-
-                    لا يوجد حساب ؟ 
-                    <a
-                      @click="signUp()"
-                      class="pl-2"
-                      style="color: tomato; text-decoration: none"
-                      >أنشئ حساب</a
-                    >
-                 <!-- </v-card-actions> -->
-                   </div>
                 </v-form>
               </v-card-text>
-              <v-card-actions class="ml-6 mr-6 text-center">
-                <p>
-                  By continuing, you agree to MarryMe's
-                  <a href="#" class="pl-2" style="color: #000000">Policy</a> and
-                  <a href="#" class="pl-2" style="color: #000000"
-                    >Terms of Use</a
-                  >
-                </p>
-              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
@@ -170,22 +137,13 @@ export default {
       this.$refs.form.validate();
     },
 
-    forgotPassword() {
-      console.log("forgot password");
-      this.$router.push({ name: "ForgotPassword" });
-    },
-    signUp() {
-      this.$router.push({ name: "Register" });
-    },
  
     Login() {
       console.log(this.username);
       console.log(this.password);
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/login/Admin", 
-          headers:{Authorization: AuthStr},
           data:{
           username: this.username,
           password: this.password,
@@ -196,7 +154,7 @@ export default {
           console.log(res.data.AccessToken);
           console.log(res.data.message);
          // this.$store.state.usertoken = res.data.AccessToken;
-            localStorage.setItem('usertoken',res.data.AccessToken);
+            localStorage.setItem('adminToken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
              this.$router.push({ name: "AdminHomePage" });
            // }

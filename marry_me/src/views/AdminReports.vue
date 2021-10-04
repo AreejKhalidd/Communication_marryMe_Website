@@ -1,7 +1,6 @@
 <template>
 <v-app style="direction: rtl">
-  <Navbar/>
-  <Sidebar/>
+  <AdminNavbar/>
   <v-main>
     <v-container>
       <v-card v-for="r in report.reports" :key="r.id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
@@ -103,13 +102,12 @@
 import EmptyPage from '@/components/EmptyPage.vue'
 import axios from "axios";
 import {faCaretDown,faCaretUp} from '@fortawesome/free-solid-svg-icons'
-import Navbar from '@/components/Navbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
+import AdminNavbar from '@/components/AdminNavbar.vue'
+
 export default {
   name: "AdminReports",
   components:{
-    Navbar,
-    Sidebar,
+    AdminNavbar,
     EmptyPage
   },
   data() {
@@ -129,7 +127,7 @@ export default {
       this.$router.push('/userProfile/' + this.sender_id)
     },
     takeAction(id,action){
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
       axios({
         method: 'put',
         url: "http://127.0.0.1:8000/api/admin/takeActionOnReport",
@@ -142,8 +140,8 @@ export default {
       this.reload();
     },
     reload(){
-      // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
-      const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI4MzIzNTMsImV4cCI6MTYzMzI0Mjc1MywibmJmIjoxNjMyODMyMzUzLCJqdGkiOiJDaHNuWEdTOW5EMGpsdHBoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.9QPPCS4tqODVVTmiNQ8_dbtti9fyP_F1TDidla3iKbU");
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
+     // const AuthStr = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI4MzIzNTMsImV4cCI6MTYzMzI0Mjc1MywibmJmIjoxNjMyODMyMzUzLCJqdGkiOiJDaHNuWEdTOW5EMGpsdHBoIiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.9QPPCS4tqODVVTmiNQ8_dbtti9fyP_F1TDidla3iKbU");
       axios.get("http://127.0.0.1:8000/api/admin/getAllReports", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
