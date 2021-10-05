@@ -32,7 +32,7 @@ import AdminUserinfo from '../views/AdminUserinfo';
 import AdminLogin from '../views/AdminLogin';
 
 import verifyEmail from '../views/verifyEmail';
-
+import certifyUsers from '../views/AdminCertify'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -169,6 +169,12 @@ const routes = [{
         path: '/all_reports',
         name: 'all_reports',
         component: All_Reports,
+        props: true
+    },
+    {
+        path: '/certifyUsers',
+        name: 'certifyUsers',
+        component: certifyUsers,
         props: true
     },
     {
