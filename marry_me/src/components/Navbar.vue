@@ -20,6 +20,13 @@
                     <input align="right" type="text"  v-model="search"  placeholder="   ...البحث  " size="sm" class="in" />
                     <span></span>  
                     
+             <div v-if="VIP === 1" >
+                 <b-button class="b" style="width:120px;" @click="openfilter()">
+                       تصفية البحث
+                 </b-button>
+             </div>
+
+
                     <span></span> 
                     <b-button  size="sm"  class="b" variant="outline-light"   @click="gotosearch()">البحث   </b-button>
               </b-navbar-nav > 
@@ -28,7 +35,30 @@
                   <b-button size="sm" class="btnss" variant="outline-secondary" type="submit" @click="logout()">تسجيل خروج</b-button>  
           </b-navbar-nav>
         </b-navbar>
-      </div>
+      </div> 
+
+      <span></span>
+      <br/>
+                 
+                    <v-row>
+                    <div v-if="filter" style="direction: rtl; align:right;text-align: right;margin-right:25%; display:inline-block;">  
+                       <v-checkbox style="display:inline-block;" v-model="all" :label="` الكل `" ></v-checkbox>
+                        <v-checkbox style="display:inline-block;" v-model="vip" :label="` VIP `" ></v-checkbox>
+                        <v-checkbox style="display:inline-block;" v-model="cert" :label="` المصرح حسابهم `"></v-checkbox>
+                        <v-checkbox style="display:inline-block;" v-model="ban" :label="` المحظورين بعدد `" ></v-checkbox>  
+                        <input style="display:inline-block;padding-top:5px;margin-right:3px;" type="number" class="age" v-model.number="bancount"  min=1 max=50/>
+                        <v-checkbox style="display:inline-block; " v-model="age" :label="` بالعمر `"> </v-checkbox>
+                       <input style="display:inline-block;padding-top:5px; margin-right:3px;" type="number" class="age" v-model.number="agenum"  min=20 max=80/>                     
+
+                       <span></span>
+                        <b-button class="b" style="width:120px;" @click="openfilter()">
+                              تم الاختيار
+                        </b-button>
+                      </div>
+                      </v-row>
+      
+  
+
 
       <span></span>
       <br/>
@@ -45,16 +75,17 @@ export default{
       dosearch:false,
       search:"",
       users:[],
-      catg:"بحث من خلال..",
-      banusers:null,
-      vipusers:null,
-      freeusers:null,
-      certusers:null,
-      ageusers:null,
-      age:20,
-      bancount:1,
       loggedout:false,
       error:false,
+      filter:false,
+      all:false,
+      vip:false,
+      free:false,
+      age:false,
+      agenum:20,
+      cert:false,
+      ban:false,
+      bancount:1,
     }
   },
   computed: {
@@ -67,26 +98,8 @@ export default{
   },
 
   methods:{
-
-      vipcatg(){
-         this.catg="VIPالمستخدمين";
-         this.vipusers=true;
-      },
-      freecatg(){
-             this.catg="المستخدمين المجانين";
-             this.freeusers=true;
-      },
-      bancatg(){
-         this.catg="المستخدمين المحظورين";
-         this.banusers=true;
-      },
-      certcatg(){
-         this.catg="المستخدمين المصدق حسابهم";
-         this.certusers=true;
-      },
-      agecatg(){
-         this.catg="عمر المستخدمين";
-         this.ageusers=true;
+      openfilter(){
+        this.filter=!this.filter;
       },
       logout(){
         const token = 'Bearer '.concat(localStorage.getItem('usertoken'));
@@ -117,7 +130,7 @@ export default{
               this.dosearch=true;
               console.log(this.dosearch)
               console.log(this.search);
-              this.$router.push({name: 'SearchResult',params:{VIP:this.VIP,searchname:this.search,banusers:this.banusers,freeusers:this.freeusers,vipusers:this.vipusers,certusers:this.certusers,age:this.age,bancount:this.bancount }});
+              this.$router.push({name: 'SearchResult',params:{me_vip:this.VIP,searchname:this.search,age:this.age,vip:this.vip,free:this.free,all:this.all,agenum:this.agenum,bancount:this.bancount,ban:this.ban,cert:this.cert }});
       }
    },
 
@@ -200,11 +213,8 @@ textarea{
     }
 }
 .age{
-    height:30px;
+    height:25px;
     width:60px;
-    padding-radius:15px;
-    margin-bottom:4px;
-    margin-top:1px;
     border: solid 1px rgba(255,98,101,1);
     border-radius:10px;
     background-color:	white;
@@ -277,6 +287,9 @@ span:not(:last-child) {
     margin-right: 5px;
 }
 
+spann{
+  margin-top:2px;
+}
 
     .nb{
       background-color: #f5f5f5; 
