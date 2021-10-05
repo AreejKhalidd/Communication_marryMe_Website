@@ -14,6 +14,7 @@
     @message-action-handler="msgActionHandler"
     @send-message="sendMsg"
     :messages-loaded="AllmsgsAreLoaded"
+    @typing-message="typingMsgHandler"
     :show-footer="
       (CanChat && requestApproved && !Vip) ||
       (CanChat && Vip && canSendMoreThan4Msgs) ||
@@ -58,7 +59,7 @@ export default {
   data() {
     return {
       rooms: [],
-
+      currentRoomId: "",
       messages: [],
       users: [],
       currentUserId: "",
@@ -93,10 +94,10 @@ export default {
   },
   methods: {
     getUserInfo() {
-      if (localStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
         },
       }; //waiting for the login to be finished to store the access token
       /*const option = {
@@ -144,10 +145,10 @@ export default {
       this.$router.push("HomePage");
     },
     Chats() {
-      if (localStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
-          Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
         },
       }; //waiting for the login to be finished to store the access token
       /*const option = {
@@ -256,6 +257,11 @@ export default {
           }
           this.rooms = temprooms;
           this.AllRoomsAreLoaded = true;
+        })
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          }
         });
     },
     blockUser(roomId) {
@@ -263,11 +269,13 @@ export default {
       this.rooms.forEach((room) => {
         if (room.roomId == roomId) {
           secondUser_id = room.users[1]._id;
-          if (localStorage.getItem("usertoken") === null)
+          if (sessionStorage.getItem("usertoken") === null)
             this.$router.push("/");
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
             },
           }; //waiting for the login to be finished to store the access token
           /*const option = {
@@ -275,11 +283,22 @@ export default {
               Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
             },
           }; */
-          axios.post(
-            "http://127.0.0.1:8000/api/blockFriend",
-            { reciever_id: secondUser_id },
-            option
-          );
+          axios
+            .post(
+              "http://127.0.0.1:8000/api/blockFriend",
+              { reciever_id: secondUser_id },
+              option
+            )
+            .then((response) => {
+              if (response.data.message) {
+                alert(response.data.message);
+              }
+            })
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
+              }
+            });
           this.menuActions = [{ name: "removeBlock", title: "رفع الحظر" }];
           this.CanChat = false;
         }
@@ -291,11 +310,13 @@ export default {
         if (room.roomId == roomId) {
           block_id = room.block_id;
           blocked_id = room.users[1]._id;
-          if (localStorage.getItem("usertoken") === null)
+          if (sessionStorage.getItem("usertoken") === null)
             this.$router.push("/");
           const option = {
             headers: {
-              Authorization: `${"Bearer"} ${localStorage.getItem("usertoken")}`,
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
             },
             data: {
               blockId: block_id,
@@ -313,7 +334,18 @@ export default {
               blockedId: blocked_id,
             },
           }; //temp for testing the request*/
-          axios.delete("http://127.0.0.1:8000/api/removeBlock", option);
+          axios
+            .delete("http://127.0.0.1:8000/api/removeBlock", option)
+            .then((response) => {
+              if (response.data.message) {
+                alert(response.data.message);
+              }
+            })
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
+              }
+            });
           this.CanChat = true;
           this.menuActions = [{ name: "blockaction", title: "حظر" }];
         }
@@ -333,17 +365,27 @@ export default {
     deleteMsg(roomId, message) {
       console.log(roomId);
       console.log(message);
-      if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
+        },
+      }; //waiting for the login to be finished to store the access token
       /*const option = {
         headers: {
           Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
         },
       }; //temp for testing the request*/
-      axios.delete(
-        `${"http://127.0.0.1:8000/api/deletemsg/"}${message._id}`,
-        option
-      );
+      axios
+        .delete(
+          `${"http://127.0.0.1:8000/api/deletemsg/"}${message._id}`,
+          option
+        )
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          }
+        });
       let i = 0;
       this.messages.forEach((msg) => {
         if (msg._id == message._id) {
@@ -368,18 +410,33 @@ export default {
     reportAMsg(roomId, message) {
       console.log(roomId);
       console.log(message);
-      if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
+        },
+      }; //waiting for the login to be finished to store the access token
       /*const option = {
         headers: {
           Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
         },
       }; //temp for testing the request*/
-      axios.post(
-        "http://127.0.0.1:8000/api/report",
-        { message_id: message._id },
-        option
-      );
+      axios
+        .post(
+          "http://127.0.0.1:8000/api/report",
+          { message_id: message._id },
+          option
+        )
+        .then((response) => {
+          if (response.data.message) {
+            alert(response.data.message);
+          }
+        })
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          }
+        });
     },
     msgActionHandler(data) {
       switch (data.action.name) {
@@ -391,7 +448,30 @@ export default {
           break;
       }
     },
+    typingMsgHandler(data){
+      window.Echo.channel(`chat.${data.roomId}`).whisper("typing", {
+          name: this.currentUserName,
+        });
+        window.Echo.channel(`chat.${data.roomId}`).listenForWhisper("typing", (e) => {
+          console.log(e.name);
+        });
+
+    },
+    connect(roomID) {
+      if (roomID) {
+        window.Echo.channel(`chat.${roomID}`).listen(".MessageSent", (data) => {
+          this.updateMsgs(data);
+        });
+        
+      }
+    },
+    disconnect(roomID) {
+      window.Echo.leave(`chat.${roomID}`);
+    },
     fetchMessages(data) {
+      this.currentRoomId = data.room.roomId;
+      console.log(`chat.${data.room.roomId}`);
+
       this.msgRecievedFromVIP = false;
       this.requestApproved = false;
       this.AllmsgsAreLoaded = false;
@@ -421,8 +501,13 @@ export default {
         let delivered = false;
         let seenmsg = false;
         let newmsg = false;
-        if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-        const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+        if (sessionStorage.getItem("usertoken") === null)
+          this.$router.push("/");
+        const option = {
+          headers: {
+            Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
+          },
+        }; //waiting for the login to be finished to store the access token
         /*const option = {
           headers: {
             Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
@@ -697,19 +782,29 @@ export default {
                 }
               }
             }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              alert(error.response.data.message);
+            }
           });
         this.messages = tempMsgs;
         this.AllmsgsAreLoaded = true;
       });
     },
     sendMsg(data) {
-      let time, date;
-      
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+
       if (!data.replyMessage) {
         //no reply msg
         if (!data.files) {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          const option = {
+            headers: {
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
+            },
+          }; //waiting for the login to be finished to store the access token
           /*const option = {
             headers: {
               Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
@@ -721,80 +816,20 @@ export default {
               { chat_id: data.roomId, content: data.content },
               option
             )
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  window.Echo.channel(`chat.${data.roomId}`).listen(
-                  "MessageSent",
-                  () => {
-                    this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: data.content,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                  };
-                  this.messages = [...this.messages];
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: data.content,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-
-                  });
-          
-          
-        
-                  
-                }
-                i++;
-                
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
               }
-              
-              );
-              
             });
-            
         } else {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          const option = {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
+            },
+          }; //waiting for the login to be finished to store the access token
           /*const option = {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -802,10 +837,7 @@ export default {
             },
           }; //temp for testing the request*/
           const fd = new FormData();
-          let lastMsgContent =
-            data.content != null && data.content.length > 0
-              ? data.content
-              : "Photo";
+
           if (data.content != null && data.content.length > 0) {
             fd.append(
               "image",
@@ -824,80 +856,21 @@ export default {
           }
           axios
             .post("http://127.0.0.1:8000/api/sendpic", fd, option)
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  let msgContent =
-                    data.content != null && data.content.length > 0
-                      ? data.content
-                      : "";
-
-                  this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: msgContent,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                    files: [
-                      {
-                        type: `${data.files[0].extension}`,
-                        url: `http://127.0.0.1:8000${response.data.imgUrl}`,
-                      },
-                    ],
-                  };
-
-                  this.messages = [...this.messages];
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: lastMsgContent,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-                }
-                i++;
-              });
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
+              }
             });
         }
       } else {
-        if (!data.files && !data.replyMessage.files) {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+        if (!data.files) {
+          const option = {
+            headers: {
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
+            },
+          }; //waiting for the login to be finished to store the access token
           /*const option = {
             headers: {
               Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
@@ -913,264 +886,20 @@ export default {
               },
               option
             )
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: data.content,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                    replyMessage: {
-                      content: data.replyMessage.content,
-                      senderId: data.replyMessage.senderId,
-                    },
-                  };
-                  this.messages = [...this.messages];
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: data.content,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-                }
-                i++;
-              });
-            });
-        } else if (!data.files && data.replyMessage.files) {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
-          axios
-            .post(
-              "http://127.0.0.1:8000/api/sendmsg",
-              {
-                chat_id: data.roomId,
-                content: data.content,
-                replymsg: data.replyMessage._id,
-              },
-              option
-            )
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  let tempReplyMsg = {};
-                  let replyMsgContent =
-                    data.replyMessage.content.length > 0
-                      ? data.replyMessage.content
-                      : "";
-
-                  tempReplyMsg = {
-                    content: replyMsgContent,
-                    senderId: data.replyMessage.senderId,
-                    files: [
-                      {
-                        type: `${data.replyMessage.files[0].type}`,
-                        url: `${data.replyMessage.files[0].url}`,
-                      },
-                    ],
-                  };
-
-                  this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: data.content,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                    replyMessage: tempReplyMsg,
-                  };
-                  this.messages = [...this.messages];
-                  //data.replyMessage.files = [];
-                  //data.replyMessage.files.length = 0;
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: data.content,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-                }
-                i++;
-              });
-            });
-        } else if (data.files && !data.replyMessage.files) {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
-          const fd = new FormData();
-          fd.append(
-            "image",
-            data.files[0].blob,
-            data.files[0].name + "." + data.files[0].extension
-          );
-          fd.append("chat_id", data.roomId);
-          fd.append("replymsg", data.replyMessage._id);
-
-          if (data.content != null && data.content.length > 0) {
-            fd.append("content", data.content);
-          }
-          axios
-            .post("http://127.0.0.1:8000/api/sendpic", fd, option)
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  let msgContent =
-                    data.content != null && data.content.length > 0
-                      ? data.content
-                      : "";
-                  this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: msgContent,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                    files: [
-                      {
-                        type: `${data.files[0].extension}`,
-                        url: `http://127.0.0.1:8000${response.data.imgUrl}`,
-                      },
-                    ],
-                    replyMessage: {
-                      content: data.replyMessage.content,
-                      senderId: data.replyMessage.senderId,
-                    },
-                  };
-
-                  this.messages = [...this.messages];
-                  let lastMsgContent =
-                    data.content != null && data.content.length > 0
-                      ? data.content
-                      : "Photo";
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: lastMsgContent,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-                }
-                i++;
-              });
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
+              }
             });
         } else {
-          if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-          const option = { headers: { "Content-Type": "multipart/form-data", Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };//waiting for the login to be finished to store the access token
+          const option = {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
+            },
+          }; //waiting for the login to be finished to store the access token
           /*const option = {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -1178,21 +907,6 @@ export default {
             },
           }; //temp for testing the request*/
           const fd = new FormData();
-          let tempReplyMsg = {};
-          let replyMsgContent =
-            data.replyMessage.content.length > 0
-              ? data.replyMessage.content
-              : "";
-          tempReplyMsg = {
-            content: replyMsgContent,
-            senderId: data.replyMessage.senderId,
-            files: [
-              {
-                type: `${data.replyMessage.files[0].type}`,
-                url: `${data.replyMessage.files[0].url}`,
-              },
-            ],
-          };
 
           fd.append(
             "image",
@@ -1207,92 +921,333 @@ export default {
           }
           axios
             .post("http://127.0.0.1:8000/api/sendpic", fd, option)
-            .then((response) => {
-              time = moment(response.data.created_at).utc().format("HH:mm");
-              date = moment(response.data.created_at)
-                .utc()
-                .format("DD MMMM YYYY");
-              let i = 0;
-              this.rooms.forEach((room) => {
-                if (room.roomId == data.roomId) {
-                  let msgContent =
-                    data.content != null && data.content.length > 0
-                      ? data.content
-                      : "";
-                  this.messages[this.messages.length] = {
-                    _id: response.data.msg_id,
-                    content: msgContent,
-                    senderId: this.currentUserId,
-                    username: this.currentUserName,
-                    avatar: this.currentUserAvatar,
-                    date: date,
-                    timestamp: time,
-                    system: false,
-                    saved: true,
-                    distributed: false,
-                    seen: false,
-                    new: true,
-                    deleted: false,
-                    disableActions: false,
-                    disableReactions: true,
-                    files: [
-                      {
-                        type: `${data.files[0].extension}`,
-                        url: `http://127.0.0.1:8000${response.data.imgUrl}`,
-                      },
-                    ],
-                    replyMessage: tempReplyMsg,
-                  };
-
-                  this.messages = [...this.messages];
-                  let lastMsgContent =
-                    data.content != null && data.content.length > 0
-                      ? data.content
-                      : "Photo";
-                  this.rooms[i] = {
-                    roomId: room.roomId,
-                    roomName: room.roomName,
-                    avatar: room.avatar,
-                    unreadCount: "",
-                    index: `${response.data.created_at}`,
-                    users: room.users,
-                    blockedRoom: room.blockedRoom,
-                    blocker_id: room.blocker_id,
-                    block_id: room.block_id,
-                    requestStatus: room.requestStatus,
-                    lastMessage: {
-                      _id: response.data.msg_id,
-                      content: lastMsgContent,
-                      senderId: this.currentUserId,
-                      username: this.currentUserName,
-                      timestamp: moment(response.data.created_at)
-                        .utc()
-                        .format("HH:mm D/M/YYYY"),
-                      saved: true,
-                      distributed: false,
-                      seen: false,
-                      new: true,
-                      deleted: false,
-                    },
-                  };
-                  this.rooms = [...this.rooms];
-                }
-                i++;
-              });
+            .catch((error) => {
+              if (error.response.data.message) {
+                alert(error.response.data.message);
+              }
             });
         }
       }
+    },
+    updateMsgs(data) {
+      console.log(data);
+      let time, date;
+      time = moment(data.message.created_at).utc().format("HH:mm");
+      date = moment(data.message.created_at).utc().format("DD MMMM YYYY");
+      let userImage = data.user.image.includes("http")
+        ? data.user.image
+        : `http://127.0.0.1:8000${data.user.image}`;
+      if (!data.message.replyMsg) {
+        console.log("No reply");
+        //no reply msg
+        if (data.message.isImg != 1) {
+          console.log("not an image msg");
+          let i = 0;
+          this.rooms.forEach((room) => {
+            if (room.roomId == data.chatId) {
+              this.messages[this.messages.length] = {
+                _id: data.message.id,
+                content: data.message.content,
+                senderId: data.message.sender_id,
+                username: data.user.name,
+                avatar: userImage,
+                date: date,
+                timestamp: time,
+                system: false,
+                saved: true,
+                distributed: false,
+                seen: false,
+                new: true,
+                deleted: false,
+                disableActions: false,
+                disableReactions: true,
+              };
+              this.messages = [...this.messages];
+              this.rooms[i] = {
+                roomId: room.roomId,
+                roomName: room.roomName,
+                avatar: room.avatar,
+                unreadCount: "",
+                index: `${data.message.created_at}`,
+                users: room.users,
+                blockedRoom: room.blockedRoom,
+                blocker_id: room.blocker_id,
+                block_id: room.block_id,
+                requestStatus: room.requestStatus,
+                lastMessage: {
+                  _id: data.message.id,
+                  content: data.message.content,
+                  senderId: data.message.sender_id,
+                  username: data.user.name,
+                  timestamp: moment(data.message.created_at)
+                    .utc()
+                    .format("HH:mm D/M/YYYY"),
+                  saved: true,
+                  distributed: false,
+                  seen: false,
+                  new: true,
+                  deleted: false,
+                },
+              };
+              this.rooms = [...this.rooms];
+            }
+            i++;
+          });
+        } else {
+          let i = 0;
+          let msgImg = "";
+          let imgtype = "";
+
+          msgImg = data.message.img_url.includes("http")
+            ? data.message.img_url
+            : `http://127.0.0.1:8000${data.message.img_url}`;
+          imgtype = msgImg.split(".").pop();
+          this.rooms.forEach((room) => {
+            if (room.roomId == data.chatId) {
+              let msgContent =
+                data.message.content != null && data.message.content.length > 0
+                  ? data.message.content
+                  : "";
+              let lastMsgContent =
+                data.message.content != null && data.message.content.length > 0
+                  ? data.message.content
+                  : "Photo";
+
+              this.messages[this.messages.length] = {
+                _id: data.message.id,
+                content: msgContent,
+                senderId: data.message.sender_id,
+                username: data.user.name,
+                avatar: userImage,
+                date: date,
+                timestamp: time,
+                system: false,
+                saved: true,
+                distributed: false,
+                seen: false,
+                new: true,
+                deleted: false,
+                disableActions: false,
+                disableReactions: true,
+                files: [
+                  {
+                    type: imgtype,
+                    url: msgImg,
+                  },
+                ],
+              };
+
+              this.messages = [...this.messages];
+              this.rooms[i] = {
+                roomId: room.roomId,
+                roomName: room.roomName,
+                avatar: room.avatar,
+                unreadCount: "",
+                index: `${data.message.created_at}`,
+                users: room.users,
+                blockedRoom: room.blockedRoom,
+                blocker_id: room.blocker_id,
+                block_id: room.block_id,
+                requestStatus: room.requestStatus,
+                lastMessage: {
+                  _id: data.message.id,
+                  content: lastMsgContent,
+                  senderId: data.message.sender_id,
+                  username: data.user.name,
+                  timestamp: moment(data.message.created_at)
+                    .utc()
+                    .format("HH:mm D/M/YYYY"),
+                  saved: true,
+                  distributed: false,
+                  seen: false,
+                  new: true,
+                  deleted: false,
+                },
+              };
+              this.rooms = [...this.rooms];
+            }
+            i++;
+          });
+        }
+      } else {
+        let replyMsgs = {};
+        if (data.replyMsg[0].isImg != 1) {
+          replyMsgs = {
+            content: data.replyMsg[0].content,
+            senderId: data.replyMsg[0].sender_id,
+          };
+        } else {
+          let replyContent =
+            data.replyMsg[0].content != null &&
+            data.replyMsg[0].content.length > 0
+              ? data.replyMsg[0].content
+              : "";
+          let msgImg = "";
+          let imgtype = "";
+
+          msgImg = data.replyMsg[0].img_url.includes("http")
+            ? data.replyMsg[0].img_url
+            : `http://127.0.0.1:8000${data.replyMsg[0].img_url}`;
+          imgtype = msgImg.split(".").pop();
+          replyMsgs = {
+            content: replyContent,
+            senderId: data.replyMsg[0].sender_id,
+            files: [
+              {
+                type: `${imgtype}`,
+                url: `${msgImg}`,
+              },
+            ],
+          };
+        }
+        if (data.message.isImg != 1) {
+          let i = 0;
+          this.rooms.forEach((room) => {
+            if (room.roomId == data.chatId) {
+              this.messages[this.messages.length] = {
+                _id: data.message.id,
+                content: data.message.content,
+                senderId: data.message.sender_id,
+                username: data.user.name,
+                avatar: userImage,
+                date: date,
+                timestamp: time,
+                system: false,
+                saved: true,
+                distributed: false,
+                seen: false,
+                new: true,
+                deleted: false,
+                disableActions: false,
+                disableReactions: true,
+                replyMessage: replyMsgs,
+              };
+              this.messages = [...this.messages];
+              this.rooms[i] = {
+                roomId: room.roomId,
+                roomName: room.roomName,
+                avatar: room.avatar,
+                unreadCount: "",
+                index: `${data.message.created_at}`,
+                users: room.users,
+                blockedRoom: room.blockedRoom,
+                blocker_id: room.blocker_id,
+                block_id: room.block_id,
+                requestStatus: room.requestStatus,
+                lastMessage: {
+                  _id: data.message.id,
+                  content: data.message.content,
+                  senderId: data.message.sender_id,
+                  username: data.user.name,
+                  timestamp: moment(data.message.created_at)
+                    .utc()
+                    .format("HH:mm D/M/YYYY"),
+                  saved: true,
+                  distributed: false,
+                  seen: false,
+                  new: true,
+                  deleted: false,
+                },
+              };
+              this.rooms = [...this.rooms];
+            }
+            i++;
+          });
+        } else {
+          let i = 0;
+          this.rooms.forEach((room) => {
+            if (room.roomId == data.chatId) {
+              let msgContent =
+                data.message.content != null && data.message.content.length > 0
+                  ? data.message.content
+                  : "";
+              let lastMsgContent =
+                data.message.content != null && data.message.content.length > 0
+                  ? data.message.content
+                  : "Photo";
+              let msgImg = "";
+              let imgtype = "";
+
+              msgImg = data.message.img_url.includes("http")
+                ? data.message.img_url
+                : `http://127.0.0.1:8000${data.message.img_url}`;
+              imgtype = msgImg.split(".").pop();
+              this.messages[this.messages.length] = {
+                _id: data.message.id,
+                content: msgContent,
+                senderId: data.message.sender_id,
+                username: data.user.name,
+                avatar: userImage,
+                date: date,
+                timestamp: time,
+                system: false,
+                saved: true,
+                distributed: false,
+                seen: false,
+                new: true,
+                deleted: false,
+                disableActions: false,
+                disableReactions: true,
+                files: [
+                  {
+                    type: `${imgtype}`,
+                    url: `${msgImg}`,
+                  },
+                ],
+                replyMessage: replyMsgs,
+              };
+
+              this.messages = [...this.messages];
+              this.rooms[i] = {
+                roomId: room.roomId,
+                roomName: room.roomName,
+                avatar: room.avatar,
+                unreadCount: "",
+                index: `${data.message.created_at}`,
+                users: room.users,
+                blockedRoom: room.blockedRoom,
+                blocker_id: room.blocker_id,
+                block_id: room.block_id,
+                requestStatus: room.requestStatus,
+                lastMessage: {
+                  _id: data.message.id,
+                  content: lastMsgContent,
+                  senderId: data.message.sender_id,
+                  username: data.user.name,
+                  timestamp: moment(data.message.created_at)
+                    .utc()
+                    .format("HH:mm D/M/YYYY"),
+                  saved: true,
+                  distributed: false,
+                  seen: false,
+                  new: true,
+                  deleted: false,
+                },
+              };
+              this.rooms = [...this.rooms];
+            }
+            i++;
+          });
+        }
+      }
+    },
+  },
+  watch: {
+    currentRoomId(val, oldVal) {
+      if (oldVal) {
+        console.log("disconnecting from chat.", oldVal);
+        this.disconnect(oldVal);
+      }
+      console.log("connecting to  chat.", val);
+      this.connect(val);
     },
   },
   created() {
     moment.locale("ar");
     this.getUserInfo();
     this.Chats();
-    
   },
-  /*mounted(){
-    Echo.channel('chat').listen('.MessageSent',(user)=>{console.log(user);});
-  }*/
+  mounted() {},
 };
 </script>
 <style lang="scss">
