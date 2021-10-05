@@ -6,65 +6,50 @@
           <v-col cols="12" sm="8" md="4" lg="4">
             <v-card elevation="0">
               <div class="text-center">
-                <v-icon style="font-size:8rem;" large color="red darken-0"> mdi-email </v-icon>
+                <v-icon style="font-size: 8rem" large color="red darken-0">
+                  mdi-email
+                </v-icon>
                 <p>
-               من فضلك أدخل عنوان بريدك الإلكتروني  وسوف نرسل لك تعليمات حول كيفية إعادة كلمة المرور
+                  من فضلك أدخل عنوان بريدك الإلكتروني وسوف نرسل لك تعليمات حول
+                  كيفية إعادة كلمة المرور
                 </p>
               </div>
 
+              <v-row justify="center" no-gutters>
+                <v-col cols="12" sm="6" md="5">
+                  <v-alert v-if="this.alert" style="" color="green" dark>
+                    تم إرسال رابط إعادة تعيين كلمة المرور بنجاح
+                  </v-alert>
+                </v-col>
+              </v-row>
 
-               
-
-               <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert
-                         v-if="this.alert"
-                        style=""
-                        
-                       color="green"
-                        
-            
-              dark
-                      >
-                        تم إرسال رابط إعادة تعيين كلمة المرور بنجاح
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
-
-
-
-                       <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert
-                         v-if="this.alert1"
-                        style=""
-                        
-                       color="tomato"
-                        
-            
-              dark
-                      >
-                      لا يوجد مثل هذا البريد الالكترونى
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
+              <v-row justify="center" no-gutters>
+                <v-col cols="12" sm="6" md="5">
+                  <v-alert v-if="this.alert1" style="" color="tomato" dark>
+                    لا يوجد مثل هذا البريد الالكترونى
+                  </v-alert>
+                </v-col>
+              </v-row>
 
               <!--  <a href="#">
                 <v-img src="@/assets/logo.png" alt="vuetify components logo" contain height="200" />
               </a> -->
-              <v-form style="margin-top: 3rem;margin-right: -8rem;;width:600px;text-align:center" method="post" @submit.prevent="forgotPassword">
-               <!-- <div  v-if="message" class="alert alert-success" role="alert">
-                     {{error}}
-                </div>
-                <error v-if="error" :error="error"/> -->
+              <v-form
+                style="
+                  margin-top: 3rem;
+                  margin-right: -8rem;
+                  width: 600px;
+                  text-align: center;
+                "
+                method="post"
+                @submit.prevent="forgotPassword"
+              >
                 <v-text-field
                   label="أدخل عنوان بريدك الالكترونى"
                   name="email"
                   prepend-inner-icon="mdi-email"
                   :rules="emailRules"
-                    v-model="email"
+                  v-model="email"
                   color="red darken-0"
                   type="email"
                   class="rounded-2"
@@ -77,7 +62,7 @@
                     color: white;
                     border-radius: 5px;
                   "
-                    type= "submit"
+                  type="submit"
                   x-large
                   block
                   >إرسال</v-btn
@@ -94,66 +79,55 @@
 <script>
 import axios from "axios";
 export default {
-    name: "forgotPassword",
+  name: "forgotPassword",
   data: () => ({
-    alert:false,
-    alert1:false,
-    email:"",
-    message:"",
-    error:"",
-     emailRules: [
+    alert: false,
+    alert1: false,
+    email: "",
+    message: "",
+    error: "",
+    emailRules: [
       (v) => !!v || "الايميل مطلوب",
       (v) => /.+@.+\..+/.test(v) || "الايميل يجب ان يكون صالحا",
     ],
-
   }),
 
-  methods:
-  {
-       
+  methods: {
     forgotPassword() {
       console.log(this.email);
-      
-     // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
-     
       axios({
-        method:"post",
-        url:"http://127.0.0.1:8000/api/forgot-password", 
-       // headers:{Authorization: AuthStr},
-          data:{
+        method: "post",
+        url: "http://127.0.0.1:8000/api/forgot-password",
+        data: {
           email: this.email,
-          }
-        })
+        },
+      })
         .then((res) => {
-         console.log(res.data.message);
-         
-          this.$store.state.usertoken = res.data.access_token;
-            localStorage.setItem('usertoken',res.data.AccessToken);
-          if(res.data.message =="Reset password link sent successfully"){
+          console.log(res.data.message);
+          //this.$store.state.usertoken = res.data.access_token;
+          localStorage.setItem("usertoken", res.data.AccessToken);
+          if (res.data.message == "Reset password link sent successfully") {
             this.alert = true;
           }
         })
         .catch((err) => {
           console.log(err);
-          if(err.response.status === 404){
+          if (err.response.status === 404) {
             this.alert1 = true;
           }
-           //  if(err.message =="Reset password link sent successfully"){
-           // this.alert = true;
-         // }
+          //  if(err.message =="Reset password link sent successfully"){
+          // this.alert = true;
+          // }
         });
-        //this.$router.push({name: 'ResetPassword',params:{email:this.email}});
+      //this.$router.push({name: 'ResetPassword',params:{email:this.email}});
 
-       
-       // this.$router.push({ name: "HomePage" });
+      // this.$router.push({ name: "HomePage" });
     },
   },
-
 };
 </script>
 
 <style lang="css" scoped>
-
 div.row.no-gutters.justify-center {
   width: 63rem;
   margin-right: -21rem;

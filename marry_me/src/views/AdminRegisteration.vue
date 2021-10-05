@@ -128,7 +128,7 @@
 
                   <v-btn
                     @click="validate"
-                    :disabled="!valid"
+                    
                     type="submit"
                     style="
                       background-color: tomato;
@@ -185,7 +185,7 @@ import axios from "axios";
 export default {
   name: "Register",
   data: () => ({
-    type: "type of admin",
+    type: "نوع المشرف",
 
        super_admin:null,
     ExistingUseralert: false,
@@ -247,6 +247,7 @@ this.super_admin=0;
               console.log(this.super_admin);
               
           const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjY2MTQsImV4cCI6MTYzMjc3MDIxNCwibmJmIjoxNjMyNzY2NjE0LCJqdGkiOiJienpaRUw2WXlrRGwxeFA4Iiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.4ZmYKqfoUizSQKHRqZE5SQFehUaCGquCVIasPUWm0dE");
+          if(this.$refs.form.validate()){
           axios({
             method: 'post',
             url: "http://127.0.0.1:8000/api/register/Admin",
@@ -266,6 +267,7 @@ this.super_admin=0;
                         this.error = true;
                         return "error occoured"
                 });
+          }
   },
    
   },

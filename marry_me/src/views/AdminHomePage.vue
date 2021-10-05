@@ -74,59 +74,60 @@
       </v-card>
 
 </div>
-    
-   <!-- <v-list-item>
-          <v-list-item-avatar class="mt-n7">
-              <v-sheet color="green" width="80" height="80" elevation="10">
-                  <v-icon dark large >store</v-icon>
-              </v-sheet>
-          </v-list-item-avatar>
-    <v-list-item-content>
-        <div >reports</div>
-    </v-list-item-content>
-    </v-list-item>-->
-        
-    
- <!-- <v-card
-    height="100%"
-    width="100%"
-    class="mx-auto"
+
+<div>
+
+             <v-card
+    style="margin-right:2rem;background-color:LightBlue;"
+    color="green"
+    dark
+    max-width="600"
   >
-    <v-navigation-drawer permanent>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            Application
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            subtext
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list
-        dense
-        nav
-      >
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
+    <v-card-text
+    style="
+    margin-top: -22rem;
+    margin-left: 21rem;
+    margin-right: 0rem;
+    background-color: LightBlue;
+">
+      <v-sheet color="LightBlue">
+        <v-sparkline
+          :value="value"
+          color="rgba(255, 255, 255, .7)"
+          height="100"
+          padding="24"
+          stroke-linecap="round"
+          smooth
         >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
+          <template v-slot:label="item">
+            ${{ item.value }}
+          </template>
+        </v-sparkline>
+      </v-sheet>
+    </v-card-text>
 
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-  </v-card>-->
-       
+    <v-card-text
+      style="
+ 
+    background-color: LightBlue;
+">
+      <div class="text-h4 font-weight-thin">
+        Sales Last 24h
+      </div>
+    </v-card-text>
+
+    <v-divider></v-divider>
+
+    <v-card-actions class="justify-center">
+      <v-btn
+        block
+        text
+      >
+        Go to Report
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</div>
      </v-row>
     </v-main>
   </v-app>
@@ -143,6 +144,16 @@ export default {
    },
   data() {
         return {
+
+               value: [
+        423,
+        446,
+        675,
+        510,
+        590,
+        610,
+        760,
+      ],
         items: [
           { title: 'Dashboard', icon: 'mdi-view-dashboard' },
           { title: 'Photos', icon: 'mdi-image' },
@@ -198,6 +209,9 @@ export default {
 div.carddd.v-card.v-sheet.theme--light{
     margin-left: -39rem;
     margin-right: 12rem;
+}
+div.mx-auto.text-center.v-card.v-sheet.theme--dark.green{
+    margin-top: -19rem;
 }
 
 </style>

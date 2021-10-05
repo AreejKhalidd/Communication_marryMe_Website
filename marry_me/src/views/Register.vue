@@ -24,6 +24,7 @@
                     margin-right: -10rem;
                     margin-top: -9rem;
                   "
+                  name="myform"
                   v-model="valid"
                   lazy-validation
                   @submit.prevent="Register"
@@ -40,23 +41,30 @@
                     إنشاء حساب جديد
                   </h2>
                   <div class="col" style="">
-                    <a
-                      style="width: 25rem; margin-right: -1rem"
-                      href="http://127.0.0.1:8000/api/auth/facebook"
-                      class="fb btn"
+                    <v-btn
+                      type="submit"
+                      @click="signUpFacebook"
+                      style="
+                        color: white;
+                        background-color: darkblue;
+                        width: 18rem;
+                        height: 3rem;
+                        margin-left: -1rem;
+                      "
                     >
                       <i class="fa fa-facebook fa-fw"></i> تسجيل دخول عبر
                       فيسبوك<v-icon style="color: white">mdi-facebook </v-icon>
-                    </a>
-
-                    <a
+                    </v-btn>
+                    <v-btn
+                      type="submit"
                       style="
-                        width: 25rem;
-                        margin-right: 1rem;
-                        margin-left: -1rem;
+                        color: white;
+                        background-color: tomato;
+                        width: 18rem;
+                        height: 3rem;
+                        margin-right: 2rem;
                       "
-                      href="http://127.0.0.1:8000/api/auth/google"
-                      class="google btn"
+                      @click="signUpGoogle"
                     >
                       <i class="fa fa-google fa-fw"></i>تسجيل دخول عبر جوجل
                       <v-icon
@@ -69,36 +77,10 @@
                       >
                         mdi-google
                       </v-icon>
-                    </a>
+                    </v-btn>
                   </div>
-
-               <!--   <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert
-                        v-if="this.show1"
-                        type="error"
-                        :disabled="show1"
-                        color="tomato"
-                      >
-                        لقد استخدمت هذا الجهاز من قبل !!
-                      </v-alert>
-                    </v-col>
-                  </v-row>
-
-                  <v-row justify="center" no-gutters>
-                    <v-col cols="12" sm="6" md="5">
-                      <v-alert
-                        v-if="this.showVerify"
-                        type="error"
-                        :disabled="showVerify"
-                        color="tomato"
-                      >
-                        من فضلك يرجى التحقق من بريدك الإلكتروني
-                      </v-alert>
-                    </v-col>
-                  </v-row>-->
-
                   <v-text-field
+                  id="name"
                     label="الاسم"
                     name="name"
                     style="width: 600px"
@@ -111,7 +93,7 @@
                     outlined
                   ></v-text-field>
                   <v-text-field
-                  id="Email"
+                    id="Email"
                     label="الايميل"
                     name="email"
                     v-model="email"
@@ -124,16 +106,9 @@
                     required
                   ></v-text-field>
                   <div style="margin-bottom: 1rem; margin-top: -1rem">
-
-                   <!-- <span
-                    id="messageEmail"
-                      style="color: tomato"
-                      
-                      > </span>-->
                     <span
                       v-if="this.errorEmail.length > 0"
                       style="color: tomato"
-                     
                       >{{ this.errorEmail }}</span
                     >
                   </div>
@@ -171,71 +146,87 @@
                     required
                   ></v-text-field>
                   <div style="margin-bottom: 1rem; margin-top: -1rem">
-                    <span
-                      style="color: tomato"
-                      id="message"
+                    <span style="color: tomato" id="message"
                       ><!--{{ this.errrConfirm }}--></span
                     >
                   </div>
-                  <v-text-field
-                    ref="phone"
-                    label="رقم الموبايل"
-                    name="phone"
-                    v-model="phone"
-                    color="red darken-0"
-                    :rules="phoneRules"
-                    prepend-inner-icon="mdi-phone"
-                    type="phone"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
 
-                  <v-text-field
-                    ref="gender"
-                    label="النوع"
-                    name="gender"
-                    v-model="gender"
-                    color="red darken-0"
-                    :rules="genderRules"
-                    prepend-inner-icon="mdi-gender-male-female"
-                    type="gender"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
-
-                  <v-text-field
-                    id="birthday"
-                    ref="birthday"
-                    label="تاريخ الميلاد"
-                    name="birthday"
-                    v-model="birthday"
-                    color="red darken-0"
-                    :rules="birthdayRules"
-                    :icon="birthIcon"
-                    type="date"
-                    class="rounded-2"
-                    outlined
-                    required
-                  ></v-text-field>
-                  <div style="margin-bottom: 1rem; margin-top: -1rem">
-                   <!-- <span
-                    id="messageBirthday"
-                      style="color: tomato"
-                      
-                      > </span>-->
-                    <span
-                    id="messageBirthday"
-                      v-if="this.errorBirthday.length > 0"
-                      style="color: tomato"
-                      
-                      >{{ this.errorBirthday }} </span
-                    >
-                  </div>
+                  <v-form
+                    ref="myform"
+                    style="
+                      width: 600px;
+                      text-align: center;
+                      margin-right: 0rem;
+                      margin-top: 2rem;
+                    "
+                    name="myform"
+                    v-model="valid"
+                    lazy-validation
+                    @submit.prevent="signUpFacebook"
+                  >
+                    <v-text-field
+                      ref="PhoneNumber"
+                      id="phone"
+                      label="رقم الموبايل"
+                      name="phone"
+                      v-model="phone"
+                      color="red darken-0"
+                      :rules="phoneRules"
+                      prepend-inner-icon="mdi-phone"
+                      type="phone"
+                      class="rounded-2"
+                      outlined
+                      required
+                    ></v-text-field>
+                    <div style="margin-bottom: 1rem; margin-top: -1rem">
+                      <span style="color: tomato" id="message"
+                        ><!--{{ this.errrConfirm }}--></span
+                      >
+                    </div>
+                    <v-text-field
+                      id="gender"
+                      ref="gender"
+                      label="النوع"
+                      name="gender"
+                      v-model="gender"
+                      color="red darken-0"
+                      :rules="genderRules"
+                      prepend-inner-icon="mdi-gender-male-female"
+                      type="gender"
+                      class="rounded-2"
+                      outlined
+                      required
+                    ></v-text-field>
+                    <div style="margin-bottom: 1rem; margin-top: -1rem">
+                      <span style="color: tomato" id="message"
+                        ><!--{{ this.errrConfirm }}--></span
+                      >
+                    </div>
+                    <v-text-field
+                      id="birthday"
+                      ref="birthday"
+                      label="تاريخ الميلاد"
+                      name="birthday"
+                      v-model="birthday"
+                      color="red darken-0"
+                      :rules="birthdayRules"
+                      :icon="birthIcon"
+                      type="date"
+                      class="rounded-2"
+                      outlined
+                      required
+                    ></v-text-field>
+                    <div style="margin-bottom: 1rem; margin-top: -1rem">
+                      <span
+                        id="messageBirthday"
+                        v-if="this.errorBirthday.length > 0"
+                        style="color: tomato"
+                        >{{ this.errorBirthday }}
+                      </span>
+                    </div>
+                  </v-form>
                   <v-btn
                     @click="check"
-                    :disabled="!valid"
                     type="submit"
                     style="
                       background-color: tomato;
@@ -248,7 +239,6 @@
                     dark
                     >إنشاء حساب</v-btn
                   >
-
                   <div
                     style="text-align: center; margin-right: -7px"
                     class="text-center"
@@ -270,7 +260,7 @@
                   </div>
                 </v-form>
               </v-card-text>
-              <v-card-actions class="ml-6 mr-6 text-center">
+              <!--  <v-card-actions class="ml-6 mr-6 text-center">
                 <p>
                   By continuing, you agree to MarryMe's
                   <a href="#" class="pl-2" style="color: #000000">Policy</a> and
@@ -278,7 +268,7 @@
                     >Terms of Use</a
                   >
                 </p>
-              </v-card-actions>
+              </v-card-actions>-->
             </v-card>
           </v-col>
         </v-row>
@@ -289,14 +279,12 @@
 
 <script>
 import axios from "axios";
-import { faBirthdayCake } from "@fortawesome/free-solid-svg-icons";
 export default {
   name: "Register",
   data: () => ({
     show1: false,
     show2: false,
     showVerify: false,
-
     valid: true,
     nameRules: [(v) => !!v || "الاسم مطلوب"],
     emailRules: [
@@ -325,43 +313,106 @@ export default {
     errorEmail: "",
     errrConfirm: "",
     errorBirthday: "",
-    
   }),
-  computed: {
-    birthIcon() {
-      return faBirthdayCake;
-    },
-  },
   methods: {
+    signUpFacebook() {
+      // console.log(this.$refs.form[0]);
+      console.log(document.forms["myform"]["name"].value);
+      if (
+         this.$refs.myform.validate()
+      ) {
+        axios({
+          method: "get",
+          url: "http://127.0.0.1:8000/api/auth/facebook",
+          data: {
+            phone: this.phone,
+            gender: this.gender,
+            birth_day: this.birthday,
+          },
+        })
+          .then((res) => {
+            localStorage.setItem("usertoken", res.data.AccessToken);
+          })
+          .catch((err) => {
+            // console.log(err.response.data.Errorsin.password);
+            // console.log(err.response.data.Errorsin);
+            if (err.response.status === 403) {
+              alert("لقد استخدمت هذا الجهاز من قبل !!");
+              // this.show1=true;
+            }
+            // this.errorEmail=err.response.data.Errorsin.email;
+            // this.errorBirthday=err.response.data.Errorsin.birth_day;
+            if (
+              err.response.data.Errorsin.email ==
+              "The email has already been taken."
+            ) {
+              this.errorEmail =
+                "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
+            }
+            if (
+              err.response.data.Errorsin.birth_day ==
+              "The birth day must be a date before 17 years ago."
+            ) {
+              this.errorBirthday = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
+            }
+          });
+      }
+    },
+
+    signUpGoogle() {
+      // console.log(this.$refs.form[0]);
+      console.log(document.forms["myform"]["name"].value);
+      if (this.$refs.myform.validate()) {
+        axios({
+          method: "get",
+          url: "http://127.0.0.1:8000/api/auth/google/callback",
+          //  headers:{Authorization: AuthStr},
+          data: {
+            phone: this.phone,
+            gender: this.gender,
+            birth_day: this.birthday,
+          },
+        })
+          .then((res) => {
+            //console.log(res.data);
+            //this.$store.state.usertoken = res.data.access_token;
+            localStorage.setItem("usertoken", res.data.AccessToken);
+          })
+          .catch((err) => {
+            // console.log(err.response.data.Errorsin.password);
+            // console.log(err.response.data.Errorsin);
+            if (err.response.status === 403) {
+              alert("لقد استخدمت هذا الجهاز من قبل !!");
+              // this.show1=true;
+            }
+            // this.errorEmail=err.response.data.Errorsin.email;
+            // this.errorBirthday=err.response.data.Errorsin.birth_day;
+            if (
+              err.response.data.Errorsin.email ==
+              "The email has already been taken."
+            ) {
+              this.errorEmail =
+                "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
+            }
+            if (
+              err.response.data.Errorsin.birth_day ==
+              "The birth day must be a date before 17 years ago."
+            ) {
+              this.errorBirthday = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
+            }
+          });
+      }
+    },
     check() {
       if (
         document.getElementById("password").value !=
         document.getElementById("passwordconfirmation").value
       ) {
-        document.getElementById("message").innerHTML = "تأكيد كلمة المرور غير متطابق";
+        document.getElementById("message").innerHTML =
+          "تأكيد كلمة المرور غير متطابق";
         document.getElementById("passwordconfirmation").focus();
       }
-
-       /* if (
-            this.errorEmail ==
-            "The email has already been taken."
-          ) {
-           document.getElementById("messageEmail").innerHTML =
-              "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
-               document.getElementById("Email").focus();
-          }
-          if (
-           this.errorBirthday ==
-            "The birth day must be a date before 17 years ago."
-          ) {
-            document.getElementById("messageBirthday").innerHTML = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
-             document.getElementById("birthday").focus();
-          }*/
-
-
-
-
-     /* var cd = new Date(this.birthday).getFullYear();
+      /* var cd = new Date(this.birthday).getFullYear();
       var yy = new Date().getFullYear();
       console.log(cd);
       console.log(yy - cd);
@@ -376,63 +427,73 @@ export default {
       this.$router.push({ name: "Login" });
     },
     validate() {
-      this.$refs.form.validate();
+      this.$refs.myform.validate();
     },
     Register() {
+      
       console.log(this.name);
       console.log(this.email);
       console.log(this.password);
       console.log(this.confirmPassword);
-     // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
-      axios({
-        method: "post",
-        url: "http://127.0.0.1:8000/api/register",
-       //  headers:{Authorization: AuthStr},
-        data: {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.confirmPassword,
-          phone: this.phone,
-          gender: this.gender,
-          birth_day: this.birthday,
-        },
-      })
-        .then((res) => {
-          //console.log(res.data);
-          alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
-          //this.$store.state.usertoken = res.data.access_token;
-          localStorage.setItem("usertoken", res.data.AccessToken);
+     // if (/*(this.$refs.form.validate()) &&*/ this.$refs.form.validate()) {
+        axios({
+          method: "post",
+          url: "http://127.0.0.1:8000/api/register",
+
+          data: {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            password_confirmation: this.confirmPassword,
+            phone: this.phone,
+            gender: this.gender,
+            birth_day: this.birthday,
+          },
         })
-        .catch((err) => {
-         // console.log(err.response.data.Errorsin.password);
-         // console.log(err.response.data.Errorsin);
-          if (err.response.status === 403) {
-            alert("لقد استخدمت هذا الجهاز من قبل !!");
-            // this.show1=true;
-          }
-         // this.errorEmail=err.response.data.Errorsin.email;
-         // this.errorBirthday=err.response.data.Errorsin.birth_day;
-          if (
-            err.response.data.Errorsin.email ==
-            "The email has already been taken."
-          ) {
-            this.errorEmail =
-              "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
-          }
-          if (
-            err.response.data.Errorsin.birth_day ==
-            "The birth day must be a date before 17 years ago."
-          ) {
-            this.errorBirthday = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
-          }
-         /* if (
+          .then((res) => {
+            //console.log(res.data);
+            alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
+            //this.$store.state.usertoken = res.data.access_token;
+            localStorage.setItem("usertoken", res.data.AccessToken);
+          })
+          .catch((err) => {
+            // console.log(err.response.data.Errorsin.password);
+            // console.log(err.response.data.Errorsin);
+             if (err.response.status === 400) {
+              alert("من فضلك يرجى إدخال البيانات والتحقق منها أولا لإنشاء حسابك");
+              // this.show1=true;
+            }
+            if (err.response.status === 403) {
+              alert("لقد استخدمت هذا الجهاز من قبل !!");
+              // this.show1=true;
+            }
+            // this.errorEmail=err.response.data.Errorsin.email;
+            // this.errorBirthday=err.response.data.Errorsin.birth_day;
+            if (
+              err.response.data.Errorsin.email ==
+              "The email has already been taken."
+            ) {
+              this.errorEmail =
+                "لقد تم تسجيل الدخول من قبل هذا البريد الالكترونى";
+            }
+            if (
+              err.response.data.Errorsin.birth_day ==
+              "The birth day must be a date before 17 years ago."
+            ) {
+              this.errorBirthday = "يجب أن يكون تاريخ الميلاد قبل 17 عامًا";
+            }
+            /* if (
             err.response.data.Errorsin.password ==
             ["The password confirmation does not match."]
           ) {
             this.errorConfirm = "تأكيد كلمة المرور غير متطابق";
           }*/
-        });
+          });
+      //}
+     /* else{
+        console.log("nnnn");
+        alert(" من فضلك أدخل جميع البيانات لكى يتم إنشاء حسابك");
+      }*/
     },
   },
 };
