@@ -857,6 +857,11 @@ import { VListItem, VListItemTitle } from "vuetify/lib";
   border-radius:30px;
   width:90px;
 }
+
+.shift{
+  text-align:right;
+  margin-right:10px;
+}
 .textt{
   font-weight: bolder;
   font-size: 20px;

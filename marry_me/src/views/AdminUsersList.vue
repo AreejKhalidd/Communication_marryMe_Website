@@ -451,6 +451,10 @@ export default {
     background-color: 	#f5f5f5;
     border: solid 1px rgba(255,98,101,1);
 }
+.shift{
+  text-align:right;
+  margin-right:10px;
+}
 .in{
     height:30px;
     width:150px;
