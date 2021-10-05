@@ -1,4 +1,4 @@
-<template v-for="(question, id) in questions">
+<template v-for="( id) in questions">
   <v-stepper v-model="e1">
     <v-stepper-header>
       <v-stepper-step
@@ -15,63 +15,76 @@
 
     <v-stepper-items>
       <v-stepper-content
-           v-for="(question, id) in questions"
+           v-for="(q, id) in questions"
           :key="id"
           :step="id+1"
       >
 
-        <h2> {{question}} </h2>
-        <v-btn @click="color=blue"> Ans1 </v-btn>
-        <v-btn> Ans2 </v-btn>
-        <v-btn> Ans3 </v-btn>
-        <v-btn> Ans4 </v-btn>
-        <br> <br> 
+        <h2> {{q.question.question}} </h2>
+        <br>
+        <br>
 
         <v-btn
-          v-if="e1 < questions.length"
-          color="green"
-          @click="e1 += 1"
-        >
-          استكمال
-        </v-btn>
-
-        <v-btn
-          @click="redirect('HomePage')"
-          v-if="e1 == questions.length"
-          color="blue"
-        >
-          انتهاء
-        </v-btn>
-
-        &nbsp;
-
-        <v-btn
-            v-if="e1 > 1"
+            @click="e1 += 1;saveAnswer(q.question.id,ans.answer)"
+            outlined
+            large
             color="red"
-            @click="e1 -= 1"
+            v-for="ans in q.answers" :value="ans.answer" :key="ans.id"
+            :id="ans.id"
         >
-            الرجوع
+          {{ ans.answer }}
         </v-btn>
+
+        <br> <br>
+
+
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 
   export default {
     data () {
       return {
         e1: 1,
         questions: ["Q1", "Q2", "Q3", "Q4"],
-        answers: ["Ans1", "Ans2", "Ans3", "Ans4"]
-        // id: 1
+        currentIdOfButton:null ,
+        nextId: null,
+        currentId:null
       }
+    },
+    mounted() {
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      axios.get("http://127.0.0.1:8000/api/get-all-questions-with-gender", {headers: {Authorization: AuthStr}})
+          .then(response => {
+            this.questions = response.data[0];
+            console.log(this.questions[0].answers[0].answer)
+          })
     },
     methods: {
       redirect(name) {
       this.$router.push({name:name});
+      },
+      saveAnswer(id,ans){
+        const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+        axios({
+          method: 'post',
+          url: "http://127.0.0.1:8000/api/save-answer",
+          headers: {Authorization: AuthStr},
+          data: {
+            question_id: id, // This is the body part
+            answer: ans
+          }
+        });
+        if(id===this.questions.length){
+          this.redirect("HomePage")
+        }
+      },
+      changeStyle(id){
+        document.getElementById(id).style.backgroundColor='green'
       }
     }
   }
