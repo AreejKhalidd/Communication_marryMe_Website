@@ -181,11 +181,11 @@ export default {
     Login() {
       console.log(this.username);
       console.log(this.password);
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      //const AuthStr = 'Bearer '.concat(localStorage.getItem('admintoken'));
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/login/Admin", 
-          headers:{Authorization: AuthStr},
+      
           data:{
           username: this.username,
           password: this.password,
@@ -196,7 +196,7 @@ export default {
           console.log(res.data.AccessToken);
           console.log(res.data.message);
          // this.$store.state.usertoken = res.data.AccessToken;
-            localStorage.setItem('usertoken',res.data.AccessToken);
+            localStorage.setItem('adminToken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
              this.$router.push({ name: "AdminHomePage" });
            // }
