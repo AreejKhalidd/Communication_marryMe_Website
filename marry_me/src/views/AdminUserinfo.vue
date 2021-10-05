@@ -1,8 +1,17 @@
 <template>
  <div id="app">
-   <v-app id="content">  
-         
-      <div >  
+   <v-app id="content">    
+     <v-app v-if="notoken">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            لقد انتهت مدة صلاحيتك للتصفح داخل الموقع يرجي تسجيل الدخول  مرة اخري.
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="redirect()">
+                            نسجيل الدخول
+                          </v-btn>
+                        </div>
+      </v-app>       
+      <div v-if="!notoken" >           
                           <h4 class="mt-3" align="center" style="color: rgba(255,98,101,1);">   
                                        بيانات عن المستخدم  </h4>
                           <v-divider  dark></v-divider>
@@ -92,25 +101,22 @@
                         </div>                             
                         </v-col>
                       </v-row>
-
                       <v-row> 
- <v-col >
-    <v-alert v-if="deleted" type="success" color="#FF6265" align="center" dismissible @click="gotolistofuser()">  
-     تم مسح الحساب     
-    </v-alert>
-
-    <v-alert v-if="dodelete" type="info" color="#FF6265" dismissible @click="recheck()" >
-      <v-row align="center">
-        <v-col>
-          هل انت متاكد من مسح حساب هذا المستخدم؟
-        </v-col>
-        <v-col class="shrink">
-          <v-btn  color= "#FF6265"  @click="deleteuser()">مسح الحساب</v-btn>
-        </v-col>
-      </v-row>
-    </v-alert>  
- 
- </v-col>   
+                        <v-col >
+                          <v-alert v-if="deleted" type="success" color="#FF6265" align="center" dismissible @click="gotolistofuser()">  
+                            تم مسح الحساب     
+                          </v-alert>
+                          <v-alert v-if="dodelete" type="info" color="#FF6265" dismissible @click="recheck()" >
+                            <v-row align="center">
+                              <v-col>
+                                هل انت متاكد من مسح حساب هذا المستخدم؟
+                              </v-col>
+                              <v-col class="shrink">
+                                <v-btn  color= "#FF6265"  @click="deleteuser()">مسح الحساب</v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-alert>   
+                        </v-col>   
                         <v-col>                             
                         <div class="b">
                         <span class="mt-3" align="center" style="font-size: 20px;color: rgba(255,98,101,1);" >مسح حساب المستخدم</span>
@@ -120,7 +126,6 @@
                       </v-row>
                    </v-layout>  
                 </v-container>
-
             </div>
           </div>      
       </v-app> 
@@ -138,6 +143,7 @@ export default {
    },
   data() {
     return {
+      notoken:false,
       avatarurl: null,
       userId:this.$route.params.id,
       url: img,
@@ -164,13 +170,19 @@ export default {
       return faTimes
     },
     useravatar() {
-      if (this.avatarurl) return this.avatarurl;  /// `http://127.0.0.1:8000${this.avatarurl}`;///
-      return this.url;
+      
+      if(!this.avatarurl) return this.url;
+      if (!this.avatarurl.includes("http")) return `http://127.0.0.1:8000${this.avatarurl}`;
+      
+      return this.avatarurl;
     },
     
     }, 
     
-    methods:{
+    methods:{          
+        redirect(){
+          this.$router.push({ name: 'AdminLogin' })
+        }, 
         gotodelete(){
           this.dodelete=true;
         },
@@ -180,8 +192,14 @@ export default {
         gotolistofuser(){
             this.$router.push({name: 'AdminUserList'});
         },
-        deleteuser(ID){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
+        deleteuser(ID){                
+                if(!localStorage.getItem('adminToken'))
+                {
+                  this.notoken=true;
+                  return;
+                }
+                const token = 'Bearer '.concat(localStorage.getItem('adminToken'));
+                /// const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");///
                 console.log("ehhh?");
                 console.log(ID);
                 axios({
@@ -204,20 +222,25 @@ export default {
         },
         previewImage() {
           this.url = URL.createObjectURL(this.file);
-          this.useravatar();  
+          this.useravatar(); 
         },
         
     },
-    mounted(){
-        ///const token = 'Bearer '.concat(localStorage.getItem('usertoken'));///
- const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");
-        axios({
-          method: 'get',
-          url: "http://127.0.0.1:8000/api/getUserbyID", 
-          headers: {Authorization: tokenn},
-          params: {id :this.userId}
-        }).then((response) => {
-          console.log("user dataaa");
+    mounted(){               
+              if(!localStorage.getItem('adminToken'))
+              {
+                this.notoken=true;
+                return;
+              }
+             const tokenn = 'Bearer '.concat(localStorage.getItem('adminToken'));
+             ///const tokenn ='Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyMTgxMjEsImV4cCI6MTYzMzYyODUyMSwibmJmIjoxNjMzMjE4MTIxLCJqdGkiOiJKU3Q5MWV6MmF6T1Jya2k1Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.GdVUWDKV2HdvkH1LI0iQeCwb-fJ6jKQo9pdIVR4rjKY");///
+             axios({
+                method: 'get',
+                url: "http://127.0.0.1:8000/api/getUserbyID", 
+                headers: {Authorization: tokenn},
+                params: {id :this.userId}
+              }).then((response) => {
+              console.log("user dataaa");
               this.ID = response.data.id;
               this.Name = response.data.name;
               this.Email = response.data.email;

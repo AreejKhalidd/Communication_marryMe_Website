@@ -1,33 +1,38 @@
 <template>
   <div id="app">
-    <v-app>
-      <div class="all">
+    <v-app>     
+      <v-app v-if="notoken">
+                       <div class="text-center" style="margin: 50px !important;">
+                          <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
+                            لقد انتهت مدة صلاحيتك للتصفح داخل الموقع يرجي تسجيل الدخول  مرة اخري.
+                          </v-alert>
+                          <v-btn depressed color="primary" @click="redirect()">
+                            نسجيل الدخول
+                          </v-btn>
+                        </div>
+      </v-app> 
+      <div class="all" v-if="!notoken">
         <div class="page"> 
             <h4 class="hp" align="center"> قائمة بالمستخدمين </h4>
-                     <div align="right" class="mr-5"> 
-
-                             
-                                         
-                    <v-row>
-                    <div  style="direction: rtl; align:right;text-align: right;margin-right:20%; display:inline-block;">  
+              <div align="right" class="listbtns">                      
+                <v-row>
+                <div  style="direction: rtl; align:right;text-align: right;margin-right:20%; display:inline-block;">  
                        <v-checkbox style="display:inline-block;" v-model="all" :label="` جميع المستخدمين `" ></v-checkbox> 
                         <v-checkbox style="display:inline-block;" v-model="name" :label="` البحث بالاسم `" ></v-checkbox> 
-                        <input  type="text"  v-model="searchname"  placeholder="   .. ادخل الاسم" size="sm" class="in" />
+                        <input  type="text"  v-model="searchname"  placeholder="   .. ادخل الاسم" size="sm" class="in" v-if="name"/>
                         <v-checkbox style="display:inline-block;" v-model="vip" :label="` VIP `" ></v-checkbox>
                         <v-checkbox style="display:inline-block;" v-model="cert" :label="` المصرح حسابهم `"></v-checkbox>
                         <v-checkbox style="display:inline-block; " v-model="female" :label="` الاناث `"> </v-checkbox>
                         <v-checkbox style="display:inline-block; " v-model="male" :label="`الذكور  `"> </v-checkbox>
-                         <span>  </span> 
-                        
+                        <span>  </span>    
                         <span>  </span> 
-                        <v-btn style="{width:30px; height:30px;}" class="btn" @click="startsearch()">عرض </v-btn>
+                        <span/><span/>
+                        <v-btn class="btn2" @click="startsearch()" > عرض  </v-btn>
                         <span></span> 
-
-                      </div>
-                      </v-row>
+                  </div>
+                  </v-row>
                                   <h4 class="hp" align="center"> {{ this.title }} </h4>
-
-                     </div>
+              </div>
               <div id="all">
               <v-card class="card" v-for="(user, index) in users" :key="index">
                   <v-list class="list-style" three-line>
@@ -66,17 +71,17 @@
 </template>
 <script>
 import axios from "axios";
-
 import img from "../assets/UserDefaultAvatar.png";
 export default {
     name: "AdminUserList",
     components: {
-   },
+    },
   data() {
     return {   
                 users:[],
                 catg:"جميع المستخدمين", 
-                img:img,  
+                img:img, 
+                notoken:false, 
                 filter:false,                
                 all:false,
                 searchname:'',
@@ -89,12 +94,18 @@ export default {
                 cert:false,
                 c:0,
                 v:0,
-                title:"",
+                title:"", 
                          
         }
     },
-  mounted(){
-                const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyOTUyMTksImV4cCI6MTYzMzcwNTYxOSwibmJmIjoxNjMzMjk1MjE5LCJqdGkiOiJVOFVFNWFmRUxJYTdNams5Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.L_xQAe8y2eyhVKGjjTWAdbAAb9hOMgGrPynI6BaI2Bs");
+  mounted(){              
+              if(!localStorage.getItem('adminToken'))
+              {
+                this.notoken=true;
+                return;
+              }
+               const token = 'Bearer '.concat(localStorage.getItem('adminToken'));
+                ///const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyOTUyMTksImV4cCI6MTYzMzcwNTYxOSwibmJmIjoxNjMzMjk1MjE5LCJqdGkiOiJVOFVFNWFmRUxJYTdNams5Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.L_xQAe8y2eyhVKGjjTWAdbAAb9hOMgGrPynI6BaI2Bs");///
                 console.log("ehhh?");
                 axios({
                   method: 'get',
@@ -119,8 +130,10 @@ export default {
                       });
     },
     methods:
-    {
-        
+    {     
+        redirect(){
+          this.$router.push({ name: 'AdminLogin' })
+        },      
         openfilter(){
           this.filter=!this.filter;
         },
@@ -131,7 +144,13 @@ export default {
           this.$router.push({name: 'AdminUserinfo',params: { id:i }})
         },
         startsearch(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyOTUyMTksImV4cCI6MTYzMzcwNTYxOSwibmJmIjoxNjMzMjk1MjE5LCJqdGkiOiJVOFVFNWFmRUxJYTdNams5Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.L_xQAe8y2eyhVKGjjTWAdbAAb9hOMgGrPynI6BaI2Bs");
+            if(!localStorage.getItem('adminToken'))
+            {
+              this.notoken=true;
+              return;
+            }
+             const token = 'Bearer '.concat(localStorage.getItem('adminToken'));
+             /// const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzMyOTUyMTksImV4cCI6MTYzMzcwNTYxOSwibmJmIjoxNjMzMjk1MjE5LCJqdGkiOiJVOFVFNWFmRUxJYTdNams5Iiwic3ViIjoxMSwicHJ2IjoiZGY4ODNkYjk3YmQwNWVmOGZmODUwODJkNjg2YzQ1ZTgzMmU1OTNhOSJ9.L_xQAe8y2eyhVKGjjTWAdbAAb9hOMgGrPynI6BaI2Bs");///
              if (this.free==true && this.vip==true) this.all=true;
              if(this.all)
               {
@@ -367,6 +386,23 @@ export default {
   border: solid 1px rgba(255,98,101,1);
   border-radius:30px;
   width:90px;
+}
+.listbtns{   
+  margin-right:8%;
+  align:center;
+}
+.btn2{
+  margin-right:5px;
+  padding-top:5px; 
+  padding-bottom:5px;
+  variant:outline-secondary;
+  color:black;
+  background-color: grey;
+  box-shadow: 0px 6px 0px white;
+  border: solid 1px rgba(255,98,101,1);
+  border-radius:30px;
+  width:30px; 
+  height:25px;
 }
 .textt{
   font-weight: bolder;
