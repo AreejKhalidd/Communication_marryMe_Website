@@ -39,7 +39,7 @@
       SEARCH: 'بحث',
       IS_ONLINE: 'متصل',
       LAST_SEEN: ' آخر اتصال',
-      IS_TYPING: 'يكتب',
+      IS_TYPING: 'يكتب رسالة الآن',
     }"
   >
     <template #eye-icon> <span></span> </template>
@@ -449,18 +449,29 @@ export default {
       }
     },
     typingMsgHandler(data){
-      window.Echo.channel(`chat.${data.roomId}`).whisper("typing", {
-          name: this.currentUserName,
-        });
-        window.Echo.channel(`chat.${data.roomId}`).listenForWhisper("typing", (e) => {
-          console.log(e.name);
+      window.Echo.private(`chat.${data.roomId}`).whisper("typing", {
+          userId: this.currentUserId,
         });
 
     },
     connect(roomID) {
       if (roomID) {
-        window.Echo.channel(`chat.${roomID}`).listen(".MessageSent", (data) => {
+        window.Echo.private(`chat.${roomID}`).listen(".MessageSent", (data) => {
           this.updateMsgs(data);
+        });
+        window.Echo.private(`chat.${roomID}`).listenForWhisper("typing", (e) => {
+          console.log(e.userId);
+          let i = 0;
+          this.rooms.forEach((room) => {
+            if(room.roomId==roomID){
+          this.rooms[i].typingUsers = [`${e.userId}`];
+          
+          console.log(this.rooms[i])
+
+          }
+          i++;
+          });
+          this.rooms = [...this.rooms];
         });
         
       }
