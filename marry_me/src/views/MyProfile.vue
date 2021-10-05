@@ -198,7 +198,9 @@
               <v-btn @click="saveChanges" rounded outlined color="#FF6265" style="width: 230px">
                 تحديث الحساب
               </v-btn>
-              <h6 v-if="updataBoolean"> تم تعديل الحساب بنجاح</h6>
+              <v-alert v-if="updataBoolean" color="#FF6265" text prominent icon="mdi-cloud-alert" style="direction: rtl" >
+                  <h6> تم تعديل الحساب بنجاح</h6>
+              </v-alert>
               <v-spacer></v-spacer>
               <v-spacer></v-spacer>
               <v-spacer></v-spacer>
@@ -206,16 +208,17 @@
               <v-btn @click="DeleteAccount" rounded outlined color="#FF6265" style="width: 230px">
                 حذف الحساب
               </v-btn>
-              <v-btn @click="paypalCheckout" v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
-                     VIP تحديث الحساب ال 
-              </v-btn>
-              <!-- <v-alert v-if="alert" border="left" color="#ff6265" dark rounded  >
-                 لمتابعة الخطوات PayPal سيتم نقلك الي حساب ال 
-                    <a style="text-decoration: none;" href="http://127.0.0.1:8000/api/paypal" target="_blank">
-                      استمرار
-                    </a>
-            </v-alert> -->
-              
+               <v-btn @click ="alert=true" v-if="!vip" rounded outlined color="#FF6265" style="width: 230px">
+                         تحديث الحساب ال VIP
+              </v-btn> 
+              <v-alert v-if="alert" color="#FF6265" text prominent icon="mdi-cloud-alert" style="direction: rtl" >
+                  <h6> سيتم نقلك الي حساب ال PayPal</h6>
+                  <h6>  لمتابعة الخطوات اضغط
+                        <a style="text-decoration: none;" :href="'http://127.0.0.1:8000/api/test/'+this.ID" target="_blank">
+                                              استمرار
+                        </a> 
+                  </h6>
+            </v-alert>
             </div>
             </v-row>
           </v-form>
@@ -274,7 +277,7 @@ export default {
       checkquestions:false,
       notverified:false,
       notoken:false,
-      alert:false
+      alert:false,
     };
   },
   methods: {
@@ -459,17 +462,6 @@ export default {
           });
       }
     },
-    paypalCheckout(){
-      if (localStorage.getItem('usertoken') === null) this.$router.push('/');
-      const token = 'Bearer '.concat(localStorage.getItem('usertoken'));//waiting for the login to be finished to store the access token
-       //const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjI1ODI5NCwiZXhwIjoxNjMyNDg4Njk0LCJuYmYiOjE2MzIyNTgyOTQsImp0aSI6Imc2VnR1TG42UFNVbGlFYVkiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.X2FBWU2iydp-agPiFxVKsTF30bCMmSuBP-e_T4sLDWo");
-       axios({
-       method: 'get',
-       url: "http://127.0.0.1:8000/api/paypal",
-       headers: {Authorization: token},
-       });
-       this.alert = true;
-    }
   },
   created() {
     if(!localStorage.getItem('usertoken'))
