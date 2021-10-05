@@ -48,7 +48,7 @@
                         <v-checkbox style="display:inline-block;" v-model="ban" :label="` المحظورين بعدد `" ></v-checkbox>  
                         <input v-if="ban" style="display:inline-block;padding-top:5px;margin-right:3px;" type="number" class="age" v-model.number="bancount"  min=1 max=50/>
                         <v-checkbox style="display:inline-block; " v-model="age" :label="` بالعمر `"> </v-checkbox>
-                       <input v-if="ban" style="display:inline-block;padding-top:5px; margin-right:3px;" type="number" class="age" v-model.number="agenum"  min=20 max=80/>                     
+                       <input v-if="age" style="display:inline-block;padding-top:5px; margin-right:3px;" type="number" class="age" v-model.number="agenum"  min=20 max=80/>                     
 
                        <span></span>
                         <b-button class="b" style="width:120px;" @click="openfilter()">
