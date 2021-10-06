@@ -204,9 +204,9 @@ export default {
               newmsg = false;
             }
 
-            DateTime = moment(response.data[i].created_at)
-              .utc()
-              .format("HH:mm D/M/YYYY");
+            DateTime = moment(response.data[i].created_at).format(
+              "HH:mm D/M/YYYY"
+            );
             if (response.data[i].content === "") {
               temprooms.push({
                 roomId: `${response.data[i].chat_id}`,
@@ -363,8 +363,9 @@ export default {
     },
 
     deleteMsg(roomId, message) {
-      console.log(roomId);
-      console.log(message);
+      /*window.Echo.private(`delete.${roomId}`).listen(".DeleteMessage", (data) => {
+          console.log(data);
+        });*/
       if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
@@ -408,8 +409,6 @@ export default {
       });
     },
     reportAMsg(roomId, message) {
-      console.log(roomId);
-      console.log(message);
       if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
       const option = {
         headers: {
@@ -448,40 +447,85 @@ export default {
           break;
       }
     },
-    typingMsgHandler(data){
+    typingMsgHandler(data) {
       window.Echo.private(`chat.${data.roomId}`).whisper("typing", {
-          userId: this.currentUserId,
-        });
-
+        userId: this.currentUserId,
+      });
     },
     connect(roomID) {
       if (roomID) {
+        
         window.Echo.private(`chat.${roomID}`).listen(".MessageSent", (data) => {
           this.updateMsgs(data);
         });
-        window.Echo.private(`chat.${roomID}`).listenForWhisper("typing", (e) => {
-          console.log(e.userId);
-          let i = 0;
-          this.rooms.forEach((room) => {
-            if(room.roomId==roomID){
-          this.rooms[i].typingUsers = [`${e.userId}`];
-          
-          console.log(this.rooms[i])
+        window.Echo.private(`seen.${roomID}`).listen(".MessageSeen", (data) => {
 
+          let lastIndex;
+          let firstIndex;
+          for (
+            lastIndex = this.messages.length - 1;
+            lastIndex >= 0;
+            lastIndex--
+          ) {
+
+            
+            if (this.messages[lastIndex]._id == data.message.id) {
+              
+              break;
+            }
           }
-          i++;
-          });
-          this.rooms = [...this.rooms];
+          for (firstIndex = lastIndex; firstIndex >= 0; firstIndex--) {
+            if (this.messages[firstIndex].seen == true) {
+              break;
+            }
+            this.messages[firstIndex].seen = true;
+            this.messages = [...this.messages];
+            this.messages[firstIndex].new = false;
+            this.messages = [...this.messages];
+          }
+          
         });
-        
+        window.Echo.private(`chat.${roomID}`).listenForWhisper(
+          "typing",
+          (e) => {
+            let i = 0;
+            this.rooms.forEach((room) => {
+              if (room.roomId == roomID) {
+                this.rooms[i].typingUsers = [`${e.userId}`];
+              }
+              i++;
+            });
+            this.rooms = [...this.rooms];
+          }
+        );
       }
     },
     disconnect(roomID) {
       window.Echo.leave(`chat.${roomID}`);
+      window.Echo.leave(`seen.${roomID}`);
     },
     fetchMessages(data) {
       this.currentRoomId = data.room.roomId;
-      console.log(`chat.${data.room.roomId}`);
+      const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
+        },
+      };
+
+      axios
+        .post(
+          "http://127.0.0.1:8000/api/readmsg",
+          {
+            chat_id: data.room.roomId,
+            time: moment().locale("en").format("YYYY-MM-DD HH:mm:ss"),
+          },
+          option
+        )
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          }
+        });
 
       this.msgRecievedFromVIP = false;
       this.requestApproved = false;
@@ -514,11 +558,7 @@ export default {
         let newmsg = false;
         if (sessionStorage.getItem("usertoken") === null)
           this.$router.push("/");
-        const option = {
-          headers: {
-            Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
-          },
-        }; //waiting for the login to be finished to store the access token
+        //waiting for the login to be finished to store the access token
         /*const option = {
           headers: {
             Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
@@ -548,20 +588,16 @@ export default {
               let i;
               for (i = 0; i < response.data.length; i++) {
                 if (response.data[i].sender_id != this.currentUserId) {
-                  console.log(response.data[i].sender_id, this.currentUserId);
                   break;
                 }
-                console.log(i);
               }
               if (i == 4) {
                 this.canSendMoreThan4Msgs = false;
               }
             }
             for (let i = 0; i < response.data.length; i++) {
-              time = moment(response.data[i].created_at).utc().format("HH:mm");
-              date = moment(response.data[i].created_at)
-                .utc()
-                .format("DD MMMM YYYY");
+              time = moment(response.data[i].created_at).format("HH:mm");
+              date = moment(response.data[i].created_at).format("DD MMMM YYYY");
               if (response.data[i].status == 0) {
                 sent = true;
                 seenmsg = false;
@@ -804,6 +840,7 @@ export default {
       });
     },
     sendMsg(data) {
+      
       if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
 
       if (!data.replyMessage) {
@@ -938,21 +975,20 @@ export default {
               }
             });
         }
+        
       }
+      
     },
     updateMsgs(data) {
-      console.log(data);
       let time, date;
-      time = moment(data.message.created_at).utc().format("HH:mm");
-      date = moment(data.message.created_at).utc().format("DD MMMM YYYY");
+      time = moment(data.message.created_at).format("HH:mm");
+      date = moment(data.message.created_at).format("DD MMMM YYYY");
       let userImage = data.user.image.includes("http")
         ? data.user.image
         : `http://127.0.0.1:8000${data.user.image}`;
       if (!data.message.replyMsg) {
-        console.log("No reply");
         //no reply msg
         if (data.message.isImg != 1) {
-          console.log("not an image msg");
           let i = 0;
           this.rooms.forEach((room) => {
             if (room.roomId == data.chatId) {
@@ -968,7 +1004,7 @@ export default {
                 saved: true,
                 distributed: false,
                 seen: false,
-                new: true,
+                new: false,
                 deleted: false,
                 disableActions: false,
                 disableReactions: true,
@@ -990,13 +1026,13 @@ export default {
                   content: data.message.content,
                   senderId: data.message.sender_id,
                   username: data.user.name,
-                  timestamp: moment(data.message.created_at)
-                    .utc()
-                    .format("HH:mm D/M/YYYY"),
+                  timestamp: moment(data.message.created_at).format(
+                    "HH:mm D/M/YYYY"
+                  ),
                   saved: true,
                   distributed: false,
                   seen: false,
-                  new: true,
+                  new: false,
                   deleted: false,
                 },
               };
@@ -1036,7 +1072,7 @@ export default {
                 saved: true,
                 distributed: false,
                 seen: false,
-                new: true,
+                new: false,
                 deleted: false,
                 disableActions: false,
                 disableReactions: true,
@@ -1065,13 +1101,13 @@ export default {
                   content: lastMsgContent,
                   senderId: data.message.sender_id,
                   username: data.user.name,
-                  timestamp: moment(data.message.created_at)
-                    .utc()
-                    .format("HH:mm D/M/YYYY"),
+                  timestamp: moment(data.message.created_at).format(
+                    "HH:mm D/M/YYYY"
+                  ),
                   saved: true,
                   distributed: false,
                   seen: false,
-                  new: true,
+                  new: false,
                   deleted: false,
                 },
               };
@@ -1127,7 +1163,7 @@ export default {
                 saved: true,
                 distributed: false,
                 seen: false,
-                new: true,
+                new: false,
                 deleted: false,
                 disableActions: false,
                 disableReactions: true,
@@ -1150,13 +1186,13 @@ export default {
                   content: data.message.content,
                   senderId: data.message.sender_id,
                   username: data.user.name,
-                  timestamp: moment(data.message.created_at)
-                    .utc()
-                    .format("HH:mm D/M/YYYY"),
+                  timestamp: moment(data.message.created_at).format(
+                    "HH:mm D/M/YYYY"
+                  ),
                   saved: true,
                   distributed: false,
                   seen: false,
-                  new: true,
+                  new: false,
                   deleted: false,
                 },
               };
@@ -1195,7 +1231,7 @@ export default {
                 saved: true,
                 distributed: false,
                 seen: false,
-                new: true,
+                new: false,
                 deleted: false,
                 disableActions: false,
                 disableReactions: true,
@@ -1225,13 +1261,13 @@ export default {
                   content: lastMsgContent,
                   senderId: data.message.sender_id,
                   username: data.user.name,
-                  timestamp: moment(data.message.created_at)
-                    .utc()
-                    .format("HH:mm D/M/YYYY"),
+                  timestamp: moment(data.message.created_at).format(
+                    "HH:mm D/M/YYYY"
+                  ),
                   saved: true,
                   distributed: false,
                   seen: false,
-                  new: true,
+                  new: false,
                   deleted: false,
                 },
               };
@@ -1241,6 +1277,26 @@ export default {
           });
         }
       }
+      const option = {
+        headers: {
+          Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
+        },
+      };
+
+      axios
+        .post(
+          "http://127.0.0.1:8000/api/readmsg",
+          {
+            chat_id: data.chatId,
+            time: moment().locale("en").format("YYYY-MM-DD HH:mm:ss"),
+          },
+          option
+        )
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          }
+        });
     },
   },
   watch: {
