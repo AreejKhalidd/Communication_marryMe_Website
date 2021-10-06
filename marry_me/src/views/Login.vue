@@ -221,6 +221,7 @@ export default {
           console.log(res.data.message);
          // this.$store.state.usertoken = res.data.AccessToken;
           console.log("here");
+            sessionStorage.setItem('usertoken',res.data.AccessToken);
             localStorage.setItem('usertoken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
             

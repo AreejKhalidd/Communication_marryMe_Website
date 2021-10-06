@@ -44,6 +44,7 @@
   >
     <template #eye-icon> <span></span> </template>
     <template #document-icon> <span></span> </template>
+     
   </chat-window>
 </template>
 <script>
@@ -58,6 +59,7 @@ export default {
   },
   data() {
     return {
+    
       rooms: [],
       currentRoomId: "",
       messages: [],
@@ -88,13 +90,15 @@ export default {
           paperclip: "#ff6265",
           emoji: "#ff6265",
           send: "#ff6265",
+          add: '#ff6265',
         },
       },
     };
   },
   methods: {
+    
     getUserInfo() {
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -108,6 +112,7 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/profile", option)
         .then((response) => {
+    
           this.currentUserId = response.data.id;
           this.currentUserName = response.data.name;
           this.currentUserAvatar = "";
@@ -145,7 +150,8 @@ export default {
       this.$router.push("HomePage");
     },
     Chats() {
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      this.AllRoomsAreLoaded=false;
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -270,7 +276,7 @@ export default {
         if (room.roomId == roomId) {
           secondUser_id = room.users[1]._id;
           if (sessionStorage.getItem("usertoken") === null)
-            this.$router.push("/");
+            this.$router.push("Login");
           const option = {
             headers: {
               Authorization: `${"Bearer"} ${sessionStorage.getItem(
@@ -311,7 +317,7 @@ export default {
           block_id = room.block_id;
           blocked_id = room.users[1]._id;
           if (sessionStorage.getItem("usertoken") === null)
-            this.$router.push("/");
+            this.$router.push("Login");
           const option = {
             headers: {
               Authorization: `${"Bearer"} ${sessionStorage.getItem(
@@ -366,7 +372,7 @@ export default {
       /*window.Echo.private(`delete.${roomId}`).listen(".DeleteMessage", (data) => {
           console.log(data);
         });*/
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -390,7 +396,7 @@ export default {
       
     },
     reportAMsg(roomId, message) {
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -566,7 +572,7 @@ export default {
         let seenmsg = false;
         let newmsg = false;
         if (sessionStorage.getItem("usertoken") === null)
-          this.$router.push("/");
+          this.$router.push("Login");
         //waiting for the login to be finished to store the access token
         /*const option = {
           headers: {
@@ -850,7 +856,7 @@ export default {
     },
     sendMsg(data) {
       
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
+      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
 
       if (!data.replyMessage) {
         //no reply msg
