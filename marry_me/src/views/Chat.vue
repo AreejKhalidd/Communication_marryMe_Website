@@ -387,26 +387,7 @@ export default {
             alert(error.response.data.message);
           }
         });
-      let i = 0;
-      this.messages.forEach((msg) => {
-        if (msg._id == message._id) {
-          this.messages[i].deleted = true;
-          this.messages = [...this.messages];
-          let j = 0;
-          this.rooms.forEach((room) => {
-            if (room.roomId == roomId) {
-              if (this.messages[i]._id == room.lastMessage._id) {
-                //if msg deleted is the last msg update the last msg
-                this.rooms[j].lastMessage.deleted = true;
-                this.rooms = [...this.rooms];
-              }
-            }
-
-            j++;
-          });
-        }
-        i++;
-      });
+      
     },
     reportAMsg(roomId, message) {
       if (sessionStorage.getItem("usertoken") === null) this.$router.push("/");
@@ -447,6 +428,29 @@ export default {
           break;
       }
     },
+    updateDeletedMsgs(data){
+   
+      this.messages.forEach((msg,i) => {
+        if (msg._id == data.messageId) {
+          this.messages[i].deleted = true;
+          this.messages = [...this.messages];
+     
+          this.rooms.forEach((room,j) => {
+            if (room.roomId == data.chatId) {
+              if (this.messages[i]._id == room.lastMessage._id) {
+                //if msg deleted is the last msg update the last msg
+                this.rooms[j].lastMessage.deleted = true;
+                this.rooms = [...this.rooms];
+              }
+            }
+
+           
+          });
+        }
+       
+      });
+
+    },
     typingMsgHandler(data) {
       window.Echo.private(`chat.${data.roomId}`).whisper("typing", {
         userId: this.currentUserId,
@@ -454,7 +458,11 @@ export default {
     },
     connect(roomID) {
       if (roomID) {
-        
+
+        window.Echo.private(`delete.${roomID}`).listen(".DeleteMessage", (data) => {
+         
+          this.updateDeletedMsgs(data);
+        });
         window.Echo.private(`chat.${roomID}`).listen(".MessageSent", (data) => {
           this.updateMsgs(data);
         });
@@ -488,12 +496,12 @@ export default {
         window.Echo.private(`chat.${roomID}`).listenForWhisper(
           "typing",
           (e) => {
-            let i = 0;
-            this.rooms.forEach((room) => {
+           
+            this.rooms.forEach((room,i) => {
               if (room.roomId == roomID) {
                 this.rooms[i].typingUsers = [`${e.userId}`];
               }
-              i++;
+             
             });
             this.rooms = [...this.rooms];
           }
@@ -503,6 +511,7 @@ export default {
     disconnect(roomID) {
       window.Echo.leave(`chat.${roomID}`);
       window.Echo.leave(`seen.${roomID}`);
+      window.Echo.leave(`delete.${roomID}`);
     },
     fetchMessages(data) {
       this.currentRoomId = data.room.roomId;
@@ -989,8 +998,8 @@ export default {
       if (!data.message.replyMsg) {
         //no reply msg
         if (data.message.isImg != 1) {
-          let i = 0;
-          this.rooms.forEach((room) => {
+          
+          this.rooms.forEach((room,i) => {
             if (room.roomId == data.chatId) {
               this.messages[this.messages.length] = {
                 _id: data.message.id,
@@ -1038,10 +1047,10 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-            i++;
+           
           });
         } else {
-          let i = 0;
+         
           let msgImg = "";
           let imgtype = "";
 
@@ -1049,7 +1058,7 @@ export default {
             ? data.message.img_url
             : `http://127.0.0.1:8000${data.message.img_url}`;
           imgtype = msgImg.split(".").pop();
-          this.rooms.forEach((room) => {
+          this.rooms.forEach((room,i) => {
             if (room.roomId == data.chatId) {
               let msgContent =
                 data.message.content != null && data.message.content.length > 0
@@ -1113,7 +1122,7 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-            i++;
+           
           });
         }
       } else {
@@ -1148,8 +1157,8 @@ export default {
           };
         }
         if (data.message.isImg != 1) {
-          let i = 0;
-          this.rooms.forEach((room) => {
+          
+          this.rooms.forEach((room,i) => {
             if (room.roomId == data.chatId) {
               this.messages[this.messages.length] = {
                 _id: data.message.id,
@@ -1198,11 +1207,11 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-            i++;
+           
           });
         } else {
-          let i = 0;
-          this.rooms.forEach((room) => {
+        
+          this.rooms.forEach((room,i) => {
             if (room.roomId == data.chatId) {
               let msgContent =
                 data.message.content != null && data.message.content.length > 0
@@ -1273,7 +1282,7 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-            i++;
+            
           });
         }
       }
