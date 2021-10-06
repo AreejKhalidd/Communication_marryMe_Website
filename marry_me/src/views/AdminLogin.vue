@@ -141,13 +141,15 @@ export default {
     Login() {
       console.log(this.username);
       console.log(this.password);
+      //const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+      if(this.$refs.form.validate()){
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/login/Admin", 
+          
           data:{
           username: this.username,
           password: this.password,
-         
           }
         })
         .then((res) => {
@@ -165,9 +167,9 @@ export default {
               }
           console.log(err.message);
         });
-
-      //this.$router.push({ name: "HomePage" });
+      }
     },
+    
   },
 };
 </script>

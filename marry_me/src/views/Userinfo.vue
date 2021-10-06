@@ -263,10 +263,10 @@ export default {
             this.errorschat=false;
             this.msg="";
         } ,
-    previewImage() {
-      this.url = URL.createObjectURL(this.file);
-      this.useravatar(); 
-    },
+        previewImage() {
+          this.url = URL.createObjectURL(this.file);
+          this.useravatar(); 
+        },
         addtofavs(id){
           console.log(id);
                const token = 'Bearer '.concat(localStorage.getItem('usertoken'));

@@ -90,7 +90,6 @@
                   block
                   >إعادة كلمة المرور
                 </v-btn>
-
                 <v-alert  style=" margin-top: 2rem;" v-model="alert" dismissible type="success"
                   >تم إعادة كلمة المرور بنجاح
                 </v-alert>
@@ -145,9 +144,7 @@ export default {
     resetPassword() {
       console.log(this.password);
       console.log(this.email);
-     // const option = { headers: { Authorization: `${'Bearer'} ${localStorage.getItem('usertoken')}` } };
-     
-      //const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+         if (this.$refs.form.validate()) {
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/reset-password", 
@@ -165,8 +162,11 @@ token:this.$route.params.token,
           if(res.data.message=="Your password has been reset!"){
            this.alert=true;
           }
-          this.$store.state.usertoken = res.data.access_token;
+         // this.$store.state.usertoken = res.data.access_token;
             localStorage.setItem('usertoken',res.data.AccessToken);
+            
+             this.$router.push({ name: "Login" });
+            
         })
         .catch((err) => {
           console.log(err.message);
@@ -175,6 +175,7 @@ token:this.$route.params.token,
            
           }
         });
+         }
     },
   },
 };

@@ -86,6 +86,9 @@ export default {
           console.log(response.data.message);
 
           localStorage.setItem("usertoken", response.data.AccessToken);
+          
+             this.$router.push({ name: "questions" });
+
         })
         .catch((error) => {
           console.log(this.urlverify);
