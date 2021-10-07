@@ -219,7 +219,7 @@ export default {
 
          signIn() {
       console.log("signin");
-      this.$router.push({ name: "Login" });
+      this.$router.push({ name: "AdminLogin" });
     },
   
   
@@ -246,12 +246,12 @@ this.super_admin=0;
               console.log(this.name);
               console.log(this.super_admin);
               
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzM0MzU0NTMsImV4cCI6MTYzMzQzOTA1MywibmJmIjoxNjMzNDM1NDU0LCJqdGkiOiJIUGhUWG9Sem5weWJLcEcyIiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.DbhsjNWEgBY8zba_ONgBFD43mi6fHqn8JfNQ0thNNkg");
+          //const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzM0MzU0NTMsImV4cCI6MTYzMzQzOTA1MywibmJmIjoxNjMzNDM1NDU0LCJqdGkiOiJIUGhUWG9Sem5weWJLcEcyIiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.DbhsjNWEgBY8zba_ONgBFD43mi6fHqn8JfNQ0thNNkg");
           if(this.$refs.form.validate()){
           axios({
             method: 'post',
             url: "http://127.0.0.1:8000/api/register/Admin",
-            headers: {Authorization: token /*`${'Bearer'} ${localStorage.getItem('usertoken')}`*/  },
+            headers: {Authorization:`${'Bearer'} ${localStorage.getItem('adminToken')}` },
 
             data:{    username: this.name,
           password: this.password,

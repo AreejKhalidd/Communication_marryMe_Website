@@ -65,8 +65,8 @@ export default {
       }
     },
     mounted() {
-      const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
-      axios.get("http://127.0.0.1:8000/api/get-all-questions-with-answers", {headers: {Authorization: AuthStr}})
+      const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
+      axios.get("http://127.0.0.1:8000/api/getAllQuestionsandAnswers", {headers: {Authorization: AuthStr}})
           .then(response => {
             this.questions = response.data[0];
             console.log(this.questions[0].answers[0].answer)
@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         remove(messageID) {
-        const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+        const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
         axios({
             method: 'delete',
             url: "http://127.0.0.1:8000/api/deleteQuestion",

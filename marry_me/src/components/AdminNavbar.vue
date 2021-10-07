@@ -3,20 +3,15 @@
        <div class="nb" >
           <b-navbar class="navbar">
 
- <b-navbar-brand >
-            <button v-b-toggle.sidebar-right size="sm" title="فتح الشريط الجانبي" >
-              <font-awesome-icon title="فتح الشريط الجانبي" rounded="circle" style="color: #FE6265;background-color:#f5f5f5;font-size: 30px;" :icon="list" class="icon"/>
-            </button>
-          </b-navbar-brand>
-
         
             <span></span>
         
           <b-collapse id="nav-collapse" is-nav>
               <b-navbar-nav class="ms-auto">  
-                <b-nav-item href="/homepage">التقارير</b-nav-item>
-                <b-nav-item href="/my_profile">المستخدمين</b-nav-item>   
-                <b-nav-item href="/chat">الاسئله</b-nav-item>               
+                <b-nav-item href="/adminuserslist">المستخدمين</b-nav-item> 
+                <b-nav-item href="/All_Reports">الإبلاغات</b-nav-item>
+                <b-nav-item href="/certifyUsers">طلبات التصديق</b-nav-item> 
+                <b-nav-item href="/adminquestions">الأسئلة</b-nav-item>               
                 </b-navbar-nav>
           </b-collapse>
         <!--  <b-collapse id="nav-collapse" is-nav class="inform" >
@@ -80,18 +75,18 @@ export default{
     
      
       logout(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+          //const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
           axios({
             method: 'post',
-            url: "http://127.0.0.1:8000/api/logout",
-            headers: {Authorization: token}
+            url: "http://127.0.0.1:8000/api/logout/Admin",
+            headers: {Authorization: `${'Bearer'} ${localStorage.getItem('adminToken')}`}
           }).then(response => {
           console.log(response.data)
           alert("You are logged out..");
                
                 console.log("logged out");
            localStorage.clear();
-          this.$router.push('/login');
+          this.$router.push('/Adminlogin');
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
@@ -105,11 +100,12 @@ export default{
    },
 
   mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
-          axios({
+    
+          //const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMjUyNjY3MSwiZXhwIjoxNjMyOTM3MDcyLCJuYmYiOjE2MzI1MjY2NzIsImp0aSI6ImdhVVJYa0hLT0ZTMnZncTQiLCJzdWIiOjExLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nsz9eFgELtk7uU-IKF_X8RIxkXusIrcjF22bWuhq7l4");
+          /*axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/profile",
-            headers: {Authorization: token}
+            headers: {Authorization: `${'Bearer'} ${localStorage.getItem('adminToken')}`}
           }).then(response => {
           console.log(response.data)
           this.VIP=response.data.VIP;
@@ -117,7 +113,7 @@ export default{
                         .catch((error) => {
                         console.log('There is error:'+error);
                         return "error occoured"
-                });
+                });*/
   },
 }
 </script>

@@ -167,11 +167,11 @@ export default {
   },
 
       mounted(){
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjIwMTQsImV4cCI6MTYzMjc2NTYxNCwibmJmIjoxNjMyNzYyMDE0LCJqdGkiOiJZcDNlYzRybTlpYjJYcFJKIiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.sxoLdFDbp5HEuyFP94wKpCRfYOtGTQEPWW21Ij-WUCw");
+          //const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjIwMTQsImV4cCI6MTYzMjc2NTYxNCwibmJmIjoxNjMyNzYyMDE0LCJqdGkiOiJZcDNlYzRybTlpYjJYcFJKIiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.sxoLdFDbp5HEuyFP94wKpCRfYOtGTQEPWW21Ij-WUCw");
           axios({
             method: 'get',
             url: "http://127.0.0.1:8000/api/getNumOfOnlineUsers",
-            headers: {Authorization: token /*`${'Bearer'} ${localStorage.getItem('usertoken')}`*/  }
+            headers: {Authorization:`${'Bearer'} ${localStorage.getItem('adminToken')}`  }
           }).then(response => {
           console.log(response.data)
           this.number=response.data.body;

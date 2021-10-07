@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <v-app>     
+    <v-app> 
+      <AdminNavbar/>    
       <v-app v-if="notoken">
                        <div class="text-center" style="margin: 50px !important;">
                           <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
@@ -72,10 +73,12 @@
 <script>
 import axios from "axios";
 import img from "../assets/UserDefaultAvatar.png";
+import AdminNavbar from '@/components/AdminNavbar.vue'
 export default {
     name: "AdminUserList",
-    components: {
-    },
+    components:{
+    AdminNavbar,
+  },
   data() {
     return {   
                 users:[],
