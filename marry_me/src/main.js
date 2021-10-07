@@ -20,6 +20,14 @@ window.Pusher = require('pusher-js');
 Pusher.logToConsole = true;
 window.Echo = new Echo({
     broadcaster: 'pusher',
+    auth: {
+      headers: {
+        Authorization: `${"Bearer"} ${sessionStorage.getItem(
+                "usertoken"
+              )}`,
+      },
+    },
+    authEndpoint : 'http://localhost:8000/broadcasting/auth',
     key: process.env.VUE_APP_WEBSOCKETS_KEY,
     cluster: process.env.VUE_PUSHER_APP_CLUSTER,
     wsHost: process.env.VUE_APP_Host,

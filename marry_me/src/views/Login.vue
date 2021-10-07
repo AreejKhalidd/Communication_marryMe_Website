@@ -40,7 +40,6 @@
                     </v-col>
                   </v-row>
 
-
                 <v-form
                   method="post"
                    style="width:600px;text-align:center;margin-right: 1rem; margin-top: -2rem;"
@@ -51,7 +50,7 @@
                   @submit.prevent="Login"
                 >
                   <v-text-field
-                    label="الايميل/اسم المستخدم"
+                    label="الايميل"
                     style="width:600px"
                   
                     name="email"
@@ -87,7 +86,7 @@
                     ></v-checkbox>
 
                   <v-btn
-                    :disabled="!valid"
+                    
                     @click="validate"
                     type="submit"
                     style="
@@ -128,6 +127,21 @@
                  <!-- </v-card-actions> -->
                    </div>
                 </v-form>
+                    <v-btn
+                    
+                    @click="adminLogin"
+                    type="submit"
+                    style="
+                      background-color:tomato !important;
+                      color: white;
+                      border-radius: 5px;
+                          margin-right: 9rem;
+    margin-top: 2rem;
+                    "
+                    x-large
+                    block
+                    >تسجيل دخول للأدمن</v-btn
+                  >
               </v-card-text>
               <v-card-actions class="ml-6 mr-6 text-center">
                 <p>
@@ -180,14 +194,18 @@ export default {
       console.log("forgot password");
       this.$router.push({ name: "ForgotPassword" });
     },
+     adminLogin() {
+      console.log("admin login");
+      this.$router.push({ name: "AdminLogin" });
+    },
     signUp() {
       this.$router.push({ name: "Register" });
     },
- 
     Login() {
       console.log(this.email);
       console.log(this.password);
      // const AuthStr = 'Bearer '.concat(localStorage.getItem('usertoken'));
+     if(this.$refs.form.validate()){
       axios({
         method:"post",
         url:"http://127.0.0.1:8000/api/login", 
@@ -203,6 +221,7 @@ export default {
           console.log(res.data.message);
          // this.$store.state.usertoken = res.data.AccessToken;
           console.log("here");
+            sessionStorage.setItem('usertoken',res.data.AccessToken);
             localStorage.setItem('usertoken',res.data.AccessToken);
           // if(res.data.message =="logged in successfully"/*status== 200*/){
             
@@ -217,16 +236,15 @@ export default {
         });
 
       //this.$router.push({ name: "HomePage" });
+     }
     },
   },
 };
 </script>
-
 <style lang="css" scoped>
 .v-text-field__slot input {
   text-align: right;
 }
-
 .v-input__slot{
   width: 50rem;
     height: 62px;
@@ -234,7 +252,6 @@ export default {
  .v-text-field{
       width: 400px;
 }
-
 rounded-0.v-btn.v-btn--block.v-btn--is-elevated.v-btn--has-bg.theme--light.v-size--x-large.tomato {
   background-color: tomato;
   border-radius: 10px;
@@ -242,7 +259,6 @@ rounded-0.v-btn.v-btn--block.v-btn--is-elevated.v-btn--has-bg.theme--light.v-siz
 input#input-64 {
   background-color: white;
 }
-
 .v-card__text.text-center{
   margin-right: -10rem;
 }
@@ -258,20 +274,12 @@ div.v-image__image.v-image__image--cover{
 #text{
   font-size: 20px;
 }
-
 div.v-image.v-responsive.theme--light{
- 
   height: 50px;
   width: 50px;
-
   margin-left: 13px;
   margin-top: -3rem;
   margin-right: -27rem;
-      /*  height: 101px;
-    width: 100px;
-    margin-top: 3rem;
-    margin-right: -25rem;*/
-
 }
 
 div.row.no-gutters.justify-center{
@@ -285,5 +293,38 @@ div.v-alert.v-sheet.theme--dark.tomato{
     margin-top: -7rem;
     margin-right: 0rem;
 }
+@media screen and (max-width: 963px) {
+ p{
+ font-weight: bold;
+    /* font-weight: 100; */
+    font-size: 26px;
+    color: tomato;
+    margin: -1rem 16rem 9rem -6rem;
+    text-align: center;
+    width: -15px;
+    width: max-content;
+ }
 
+}
+@media screen and (max-width: 780px) {
+ body{
+       width: 48rem;
+    height: 32rem;
+ }
+
+}
+@media screen and (max-width: 360px) {
+ body{
+         width: 31rem;
+    height: 38rem;
+ }
+
+}
+@media screen and (max-width: 780px) {
+ div.v-image.v-responsive.theme--light{
+    margin-right: -8rem;
+    margin-top: -1rem;
+ }
+
+}
 </style>

@@ -1,7 +1,6 @@
 //require('./bootstrap');
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import MyProfile from '../views/MyProfile.vue'
 import block from '../views/Block'
 import friend from '../views/Friend'
@@ -35,11 +34,7 @@ import verifyEmail from '../views/verifyEmail';
 import certifyUsers from '../views/AdminCertify'
 Vue.use(VueRouter)
 
-const routes = [{
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
+const routes = [
     {
         path: '/about',
         name: 'About',

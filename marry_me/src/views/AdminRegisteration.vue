@@ -128,7 +128,7 @@
 
                   <v-btn
                     @click="validate"
-                    :disabled="!valid"
+                    
                     type="submit"
                     style="
                       background-color: tomato;
@@ -185,7 +185,7 @@ import axios from "axios";
 export default {
   name: "Register",
   data: () => ({
-    type: "type of admin",
+    type: "نوع المشرف",
 
        super_admin:null,
     ExistingUseralert: false,
@@ -246,7 +246,8 @@ this.super_admin=0;
               console.log(this.name);
               console.log(this.super_admin);
               
-          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzI3NjY2MTQsImV4cCI6MTYzMjc3MDIxNCwibmJmIjoxNjMyNzY2NjE0LCJqdGkiOiJienpaRUw2WXlrRGwxeFA4Iiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.4ZmYKqfoUizSQKHRqZE5SQFehUaCGquCVIasPUWm0dE");
+          const token = 'Bearer '.concat("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpblwvQWRtaW4iLCJpYXQiOjE2MzM0MzU0NTMsImV4cCI6MTYzMzQzOTA1MywibmJmIjoxNjMzNDM1NDU0LCJqdGkiOiJIUGhUWG9Sem5weWJLcEcyIiwic3ViIjoxLCJwcnYiOiJkZjg4M2RiOTdiZDA1ZWY4ZmY4NTA4MmQ2ODZjNDVlODMyZTU5M2E5In0.DbhsjNWEgBY8zba_ONgBFD43mi6fHqn8JfNQ0thNNkg");
+          if(this.$refs.form.validate()){
           axios({
             method: 'post',
             url: "http://127.0.0.1:8000/api/register/Admin",
@@ -258,14 +259,28 @@ this.super_admin=0;
           }).then(response => {
   
 
-          console.log(response.data)
+          console.log(response.data.message)
+            if (response.data.message=="New admin is created successfully, you can now login") {
+              alert("تم إضافه مشرف جديد بنجاح .يمكنك تسجيل الدخول الان");
+              
+            }
+           // New admin is created successfully, you can now login
              
                 })
                         .catch((error) => {
                         console.log('There is error:'+error);
+                          if (error.response.status === 401) {
+              alert("أنت ليس مشرف متميز");
+              
+            }
+              if (error.response.status === 400) {
+              alert("من فضلك تحقق من بياناتك .أسم المستخدم موجود من قبل");
+              // this.show1=true;
+            }
                         this.error = true;
                         return "error occoured"
                 });
+          }
   },
    
   },
