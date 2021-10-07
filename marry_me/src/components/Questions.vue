@@ -78,10 +78,12 @@ import axios from "axios";
             question_id: id, // This is the body part
             answer: ans
           }
-        });
-        if(id===this.questions.length){
+        }).then((res)=>{
+          if(res.data.Answered==1){
           this.redirect("HomePage")
         }
+        });
+        
       },
       changeStyle(id){
         document.getElementById(id).style.backgroundColor='green'
