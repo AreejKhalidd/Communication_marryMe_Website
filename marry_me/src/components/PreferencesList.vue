@@ -77,8 +77,7 @@
 </div>
           <v-card-actions class="c">
                       <span v-if="VIP === 1" style="{background-color: white;}" class="btns-logo" title="بدء المحادثة"  @click="startchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="startChat"/></span>
-                      <span></span>
-                      <span v-if="VIP === 0" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="startChat"/></span>
+                      <span v-else class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(user.user[0].id)"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="startChat"/></span>
                       <span  @click="addtofavs(user.user[0].id)" class="btns-logo" title="اضافة الي المفضلين"><font-awesome-icon style="color: #FE6265;font-size: 30px;margin-left: 1px;background-color: white;" :icon="fav"/></span>
               <div class="cc">      
                       <v-btn color="deep-purple lighten-2"   class="btn" text @click="gotouserinfo(user)" left> المزيد </v-btn>

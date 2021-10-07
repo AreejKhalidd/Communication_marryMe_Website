@@ -101,18 +101,40 @@
                               </div>
                         </div>                             
                         </v-col>  
-                       <v-col style="align-right:20%;">
+                       <v-col style="align-right:40%; margin-left:15%">
                          <v-divider  vertical></v-divider>
                        </v-col>
-                        <v-col >
-                            <h6 class="font-italic mt-3" style="align-right:20%; font-weight: bolder;" >  صور تصريح الحساب </h6>                                                                                    
-                          <v-img
-                          id="img2"
-                          :src="usercert"
-                          max-height="40%"
-                          max-width="10%"
-                          >
-                        </v-img>
+                        <v-col class="fix">
+                            <h6 class="font-italic mt-3" align="center" style=" font-weight: bolder;" >  صور تصريح الحساب </h6>                                                                                    
+
+                        <div v-for="(certimg, index) in certInfo" :key="index" >
+                            <div style=" ">
+                                <v-img    
+                                    id="img2"
+                                    max-height="43%"
+                                    max-width="13%"
+                                              
+                                  v-if="!certimg.image"
+                                  v-bind:src="img"
+                                ></v-img> 
+                                <v-img  
+                                    id="img2"
+                                    max-height="43%"
+                                    max-width="13%"    
+                                            
+                                  v-else-if="certimg.image.includes('http')"
+                                  v-bind:src="certimg.image"
+                                ></v-img>
+                                  <v-img  
+                                    id="img2"
+                                    max-height="43%"
+                                    max-width="13%"       
+                                       
+                                  v-else-if="!certimg.image.includes('http')"
+                                  v-bind:src="`http://127.0.0.1:8000${certimg.image}`"
+                                ></v-img> 
+                            </div>
+                        </div> 
                         </v-col>
                       </v-row>
                       <v-row> 
@@ -181,6 +203,7 @@ export default {
       dodelete:false,
       deleted:false,
       certImg:null,
+      certInfo:[],
       doneacc:false,
       
       donerej:false,
@@ -346,7 +369,13 @@ export default {
               console.log("all dataaa certttttttttt");
               console.log(response.data);
               console.log(response.data.body);
+              this.certInfo=response.data.body;
+              console.log("yeeeeeeeeeeeee");
+              console.log(this.certInfo);
+              console.log(this.certInfo);
+              console.log("yeeeeeeeeeeeee");
               console.log(response.data.body[0].image);
+              
               console.log("infoo of certttttttttttttttttt");
               this.certImg=response.data.body[0].image;
               console.log(this.certImg);
@@ -404,13 +433,21 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
 }
 #img2{
   border: solid 2px #ff6265;
-  max-width: 200px;
-  max-height: 200px;
+
   background-color:white;
-  margin-left:10%;
-  margin-top:5px;
+  
+  
+  margin-top:1%;
+  align:left;
+  
+  
+  display:inline-block;
+  
+}
+.fix{
   position: absolute;
-  left: 0;
+  margin-right:30%;
+ align:left;
 }
 .btns-logo{
 margin-right:1px;

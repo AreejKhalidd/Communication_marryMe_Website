@@ -95,7 +95,7 @@
                         <v-list >
                            <v-list-item-title style="font-size: 20px;"  > المستخدم  
                            <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="Certified === 1" >   مصرح حسابه  </v-list-item-subtitle>
-                           <v-list-item-subtitle style="font-size: 15px;display:inline;" v-if="Certified === 0" >    ليس مصرح حسابه  </v-list-item-subtitle>
+                           <v-list-item-subtitle style="font-size: 15px;display:inline;" v-else >    ليس مصرح حسابه  </v-list-item-subtitle>
                            <v-icon v-if="Certified" style="font-size: 20px;display:inline;" color="#FF6265">mdi-check-circle </v-icon> 
                            </v-list-item-title>
                         </v-list>
@@ -154,7 +154,7 @@
                         <v-col>
                         <div class="b">
                         <button  v-if="me_vip === 1 "  class="btns-logo" title="بدء المحادثة"  @click="startchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
-                        <button  v-if="me_vip === 0" class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
+                        <button  v-else class="btns-logo" title="ارسال طلب المحادثة"  @click="requestchat(ID)"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="startChat"/></button>
                         <button   class="btns-logo" title="اضافة الي المفضلين" @click="addtofavs(ID)" ><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="fav"/></button>
                         </div>
                        </v-col>
