@@ -7,7 +7,18 @@
 
         <v-list-item style="max-width: 1300px">
           <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
-            <v-img :src="img"></v-img>
+            <v-img
+                v-if="!image"
+                v-bind:src="img"
+            ></v-img>
+            <v-img
+                v-else-if="image.includes('http')"
+                v-bind:src="image"
+            ></v-img>
+            <v-img
+                v-else-if="!image.includes('http')"
+                v-bind:src="`http:localhost:8000${image}`"
+            ></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content style="text-align: right;margin: 0 20px 0 20px;min-width: 80px">
@@ -38,7 +49,7 @@
                     @click="redirect"
                     title="صفحته الشخصية"
                 >
-                  mdi-home
+                  mdi-account
                 </v-icon>
               </template>
           </div>
@@ -50,10 +61,12 @@
 <script>
 import axios from "axios";
 import {faCheck} from '@fortawesome/free-solid-svg-icons'
+import img from "../assets/UserDefaultAvatar.png";
 
 export default {
   data() {
     return {
+      img:img,
       dialog: false,
     }
   },
@@ -68,7 +81,7 @@ export default {
     name: String,
     age: Number,
     id: Number,
-    img: String,
+    image: String,
     count: Function,
     sender_id: Number,
     status: Number,
@@ -96,7 +109,7 @@ export default {
             name: 'Userinfo',
             params: { id:this.sender_id }
           })
-    }
+    },
   }
 }
 </script>

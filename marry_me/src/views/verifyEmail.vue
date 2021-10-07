@@ -84,10 +84,8 @@ export default {
           console.log(this.url);
           this.message = response.data.message;
           console.log(response.data.message);
-
-          localStorage.setItem("usertoken", response.data.AccessToken);
           
-             this.$router.push({ name: "questions" });
+          this.$router.push({ name: "questions" });
 
         })
         .catch((error) => {

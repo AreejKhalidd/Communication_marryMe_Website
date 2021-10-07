@@ -451,7 +451,7 @@ export default {
           },
         })
           .then((res) => {
-            //console.log(res.data);
+            console.log(res.data);
             alert("من فضلك يرجى التحقق من بريدك الإلكتروني ");
             //this.$store.state.usertoken = res.data.access_token;
             localStorage.setItem("usertoken", res.data.AccessToken);

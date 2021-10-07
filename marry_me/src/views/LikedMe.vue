@@ -10,7 +10,7 @@
           <FollowersList style="margin: 20px !important;" v-for="follower in followers" :key="follower.id"
                          :id="follower.id" :name="follower.name"
                          :user1_id="follower.user_1"
-                         :age="follower.age" :img="follower.user2_image"/>
+                         :age="follower.age" :image="follower.user2_image"/>
 
         </div>
 

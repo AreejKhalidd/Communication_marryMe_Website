@@ -6,7 +6,18 @@
 
         <v-list-item style="max-width: 1300px">
           <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
-            <v-img :src="img"></v-img>
+            <v-img
+                v-if="!image"
+                v-bind:src="img"
+            ></v-img>
+            <v-img
+                v-else-if="image.includes('http')"
+                v-bind:src="image"
+            ></v-img>
+            <v-img
+                v-else-if="!image.includes('http')"
+                v-bind:src="`http:localhost:8000${image}`"
+            ></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content style="text-align: right;margin: 0 50px 0 0">
@@ -19,7 +30,7 @@
                 @click="redirect"
                 title="صفحته الشخصية"
             >
-              mdi-home
+              mdi-account
             </v-icon>
           </template>
         </v-list-item>
@@ -30,15 +41,16 @@
   </v-card>
 </template>
 <script>
-
+import img from "../assets/UserDefaultAvatar.png";
 export default {
   data() {
     return {
+      img:img,
       dialog: false,
     }
   },
   name: "FollowersList",
-  props: ["name", "age", "id", "img","user1_id"],
+  props: ["name", "age", "id", "image","user1_id"],
   methods:{
     redirect(){
       this.$router

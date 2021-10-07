@@ -9,7 +9,7 @@
           <BlockList style="margin: 20px !important;" v-for="block in blocks" :key="block.id" :id="block.id"
                      :name="block.name" :age="block.age"
                      :blocked_id="block.blocked_id"
-                     :img="block.blocked_image"/>
+                     :image="block.blocked_image"/>
 
         </div>
 

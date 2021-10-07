@@ -10,7 +10,7 @@
           <FriendList style="margin: 20px !important;" v-for="friend in friends" :key="friend.id" :id="friend.id"
                       :name="friend.name" :age="friend.age"
                       :user2_id="friend.user_2"
-                      :img="friend.user2_image"/>
+                      :image="friend.user2_image"/>
 
         </div>
 

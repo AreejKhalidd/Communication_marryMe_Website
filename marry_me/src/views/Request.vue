@@ -27,7 +27,7 @@
                               :age="request.age"
                               :req_id="request.req_id"
                               :status="request.status"
-                              :img="request.image" :name="request.name"
+                              :image="request.image" :name="request.name"
                               :count="decCount"/>
               </div>
               <div  v-if="all && req">
@@ -39,7 +39,7 @@
                             :status="request.status"
                             :key="request.id"
                             :age="request.age"
-                            :img="request.image" :name="request.name"
+                            :image="request.image" :name="request.name"
                             :count="reqCount"/>
               </div>
               <div  v-if=" accept">
@@ -49,7 +49,7 @@
                             :status="request.status"
                             :key="request.id"
                             :age="request.age"
-                            :img="request.image" :name="request.name"
+                            :image="request.image" :name="request.name"
                             :count="reqCount"/>
               </div>
               <div  v-if="reject">
@@ -58,7 +58,7 @@
                             :status="request.status"
                             :key="request.id"
                             :age="request.age"
-                            :img="request.image" :name="request.name"
+                            :image="request.image" :name="request.name"
                             :count="reqCount"/>
               </div>
             </v-container>
@@ -69,7 +69,9 @@
                          :buttMess="buttMess"
                          :red="red"
                          style=";margin: 50px 200px 50px 200px !important;"/>
-              <ErrorPage style="margin: 50px !important;" v-if="error"/>
+             <v-app v-if="error">
+               <ErrorPage style="margin: 50px !important;" v-if="error"/>
+             </v-app>
 
           </v-main>
     </div>
@@ -167,7 +169,7 @@ export default {
               this.error2 = false;
               this.requests = response.data
             }
-
+            console.log(response.data)
             let filteredItem =
                response.data.requests_received.filter(item => (item.status !== 1 && item.status !== 2));
 
@@ -221,3 +223,4 @@ export default {
   margin: 1rem;}
 
 </style>
+
