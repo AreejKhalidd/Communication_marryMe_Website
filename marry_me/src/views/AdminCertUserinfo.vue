@@ -1,3 +1,4 @@
+
 <template>
  <div id="app">
    <v-app id="content">    
@@ -24,14 +25,13 @@
                           <v-img
                           :src="useravatar"
                           id="img"           
-                          rounded             
-                          class="my-auto mx-5"
+                          rounded
                           max-height="25%"
                           max-width="15%"
                           >
                         </v-img>
                       </v-col>
-                       <v-col class="list">
+                       <v-col class="list" style="align-right:20%;">
                            <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;"> معلومات شخصية عن المستخدم </h6> 
                         <v-list >
                           <v-list-item-title style="font-size: 20px; align:right;">  الاسم :
@@ -81,10 +81,10 @@
                           </v-list-item-title>
                         </v-list>                                      
                        </v-col> 
-                       <v-col align="center">
+                       <v-col style="align-right:20%;">
                          <v-divider  vertical></v-divider>
                        </v-col>
-                        <v-col>
+                        <v-col style="align-right:20%;">
                             <h6 class="font-italic mt-3" align="center" style="font-weight: bolder;">  اسئلة عن المستخدم </h6> 
                         <div class="list" v-for="(data, index) in info" :key="index">
                               <div v-if="data[1][0].hidden==0">
@@ -100,29 +100,43 @@
                                 </v-list>
                               </div>
                         </div>                             
+                        </v-col>  
+                       <v-col style="align-right:20%;">
+                         <v-divider  vertical></v-divider>
+                       </v-col>
+                        <v-col >
+                            <h6 class="font-italic mt-3" style="align-right:20%; font-weight: bolder;" >  صور تصريح الحساب </h6>                                                                                    
+                          <v-img
+                          id="img2"
+                          :src="usercert"
+                          max-height="40%"
+                          max-width="10%"
+                          >
+                        </v-img>
                         </v-col>
                       </v-row>
                       <v-row> 
-                        <v-col >
-                          <v-alert v-if="deleted" type="success" color="#FF6265" align="center" dismissible @click="gotolistofuser()">  
-                            تم مسح الحساب     
+ 
+                        <v-col> 
+                    <div  class="bb">           
+                          <v-alert v-if="doneacc" type="success" color="green" align="center" dismissible @click="gotoAdmincertuser()">  
+                            {{this.msg}}    
                           </v-alert>
-                          <v-alert v-if="dodelete" type="info" color="#FF6265" dismissible @click="recheck()" >
-                            <v-row align="center">
-                              <v-col>
-                                هل انت متاكد من مسح حساب هذا المستخدم؟
-                              </v-col>
-                              <v-col class="shrink">
-                                <v-btn  color= "#FF6265"  @click="deleteuser()">مسح الحساب</v-btn>
-                              </v-col>
-                            </v-row>
-                          </v-alert>   
-                        </v-col>   
-                        <v-col>                             
-                        <div class="b">
-                        <span class="mt-3" align="center" style="font-size: 20px;color: rgba(255,98,101,1);" >مسح حساب المستخدم</span>
-                        <button rounded="circle" class="btns-logo" title="مسح حساب المستخدم"  @click="gotodelete()"><font-awesome-icon style="color: #FE6265;font-size: 50px;margin-left: 4px" :icon="remove"/></button>                                                                               
-                        </div>
+                                     
+                          <v-alert v-if="donerej" type="success" color="red" align="center" dismissible @click="gotoAdmincertuser()">  
+                            {{this.msg}}    
+                          </v-alert>
+                      <v-btn                    
+                          @click="acceptcert()"
+                          style="margin-left:  10px;background-color: green;font-weight: bolder;padding: 0 ;height:35px;width:100px;color: #EEEEEE;" depressed>
+                        قبول
+                      </v-btn>
+                      <v-btn
+                         @click="rejectcert()"
+                          style="background-color: red;font-weight: bolder;padding: 0 ;height: 35px;width:100px;color: #EEEEEE;" depressed>
+                        رفض
+                      </v-btn>
+                    </div>
                        </v-col> 
                       </v-row>
                    </v-layout>  
@@ -140,7 +154,7 @@ import img from "../assets/UserDefaultAvatar.png";
 import AdminNavbar from '@/components/AdminNavbar.vue'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 export default {
-    name: "AdminUserinfo",
+    name: "AdminCertUserinfo",
     components: {     
     AdminNavbar,
    },
@@ -166,6 +180,11 @@ export default {
       info:[],
       dodelete:false,
       deleted:false,
+      certImg:null,
+      doneacc:false,
+      
+      donerej:false,
+      msg:"",
     }
   }, 
       computed: {
@@ -179,7 +198,12 @@ export default {
       
       return this.avatarurl;
     },
-    
+    usercert(){   
+      if(!this.certImg) return this.url;
+      if (!this.certImg.includes("http")) return `http://127.0.0.1:8000${this.certImg}`;
+      
+      return this.certImg;
+    }
     }, 
     
     methods:{          
@@ -194,6 +218,11 @@ export default {
         },
         gotolistofuser(){
             this.$router.push({name: 'AdminUserList'});
+        },
+        gotoAdmincertuser(){
+            
+
+            this.$router.push({name: 'certifyUsers'});
         },
         deleteuser(ID){                
                 if(!localStorage.getItem('adminToken'))
@@ -227,6 +256,35 @@ export default {
           this.url = URL.createObjectURL(this.file);
           this.useravatar(); 
         },
+        acceptcert(){          
+                const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
+                axios({
+                method: 'post',
+                url: "http://127.0.0.1:8000/api/admin/adminCertify",
+                headers: {Authorization: AuthStr},
+                data: {
+                    id: this.ID,
+                    action: 1 // This is the body part
+                }
+                });
+                this.doneacc=true;
+                this.msg="تم تصديق الحساب";
+        },
+        rejectcert(){          
+                const AuthStr = 'Bearer '.concat(localStorage.getItem('adminToken'));
+                axios({
+                method: 'post',
+                url: "http://127.0.0.1:8000/api/admin/adminCertify",
+                headers: {Authorization: AuthStr},
+                data: {
+                    id: this.ID,
+                    action: 2 // This is the body part
+                }
+                });
+                
+                this.donerej=true;
+                this.msg="تم رفض تصديق الحساب";
+        }
         
     },
     mounted(){               
@@ -278,6 +336,24 @@ export default {
             }).catch((error) => {
           console.log(error.response.statusText) 
         });
+        
+        axios({
+          method: 'get',
+          url: "http://127.0.0.1:8000/api/getUserCertifiableData",
+          headers: {Authorization: tokenn},
+          params:  { user_id : this.userId}
+        }).then((response) => {
+              console.log("all dataaa certttttttttt");
+              console.log(response.data);
+              console.log(response.data.body);
+              console.log(response.data.body[0].image);
+              console.log("infoo of certttttttttttttttttt");
+              this.certImg=response.data.body[0].image;
+              console.log(this.certImg);
+             ////this.certImgs=this.response.data.body.image;///
+            }).catch((error) => {
+          console.log(error); 
+        });
   },
 }
 </script>
@@ -311,10 +387,10 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
   flex-direction: column;
 }
-.d{
-  
-  
-  
+.bb{
+   
+   
+  display:inline-block;
 }
 #img{
   border-radius: 50%;
@@ -325,6 +401,16 @@ box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
   margin-right:2px;
   position: absolute;
   right: 0;
+}
+#img2{
+  border: solid 2px #ff6265;
+  max-width: 200px;
+  max-height: 200px;
+  background-color:white;
+  margin-left:10%;
+  margin-top:5px;
+  position: absolute;
+  left: 0;
 }
 .btns-logo{
 margin-right:1px;
@@ -349,17 +435,12 @@ width: 60px;
 }
 .list{
  
-  direction: rtl; 
-   align:right;
+  direction: rtl;
    text-align:right;
-   align-text:right;
+   
 }
 .page{
 
-}
-.b{
- margin-left:20% ;
-  
 }
 .title{
   margin-top:5px;

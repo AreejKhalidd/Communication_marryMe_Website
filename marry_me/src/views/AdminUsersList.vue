@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <v-app> 
-      <AdminNavbar/>    
+    <v-app>   
       <v-app v-if="notoken">
                        <div class="text-center" style="margin: 50px !important;">
                           <v-alert text prominent type="error" icon="mdi-cloud-alert" style="direction: rtl" >
@@ -12,7 +11,8 @@
                           </v-btn>
                         </div>
       </v-app> 
-      <div class="all" v-if="!notoken">
+      <div class="all" v-if="!notoken">       
+      <AdminNavbar/> 
         <div class="page"> 
             <h4 class="hp" align="center"> قائمة بالمستخدمين </h4>
               <div align="right" class="listbtns">                      

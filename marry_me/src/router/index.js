@@ -27,11 +27,12 @@ import All_Reports from '../views/AdminReports';
 
 import AdminUserList from '../views/AdminUsersList';
 import AdminUserinfo from '../views/AdminUserinfo';
+import AdminCertUserinfo from '../views/AdminCertUserinfo';
 import AdminQuestions from '../views/AdminQuestions';
 import AdminLogin from '../views/AdminLogin';
 
 import verifyEmail from '../views/verifyEmail';
-import certifyUsers from '../views/AdminCertify'
+import certifyUsers from '../views/AdminCertify';
 Vue.use(VueRouter)
 
 const routes = [
@@ -166,6 +167,11 @@ const routes = [
         component: AdminUserinfo,
     },
     {
+        path: '/adminCertUserinfo/:id',
+        name: 'AdminCertUserinfo',
+        component: AdminCertUserinfo,
+    },
+    {
         path: '/all_reports',
         name: 'all_reports',
         component: All_Reports,
@@ -182,7 +188,7 @@ const routes = [
         name: 'verifyEmail',
         component: verifyEmail,
         props: true
-    },
+    }, 
 
 ]
 

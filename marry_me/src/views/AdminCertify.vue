@@ -3,13 +3,24 @@
     <AdminNavbar/>
     <v-main>
       <v-container>
-        <v-card v-for="c in certifies.cert" :key="c.id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto">
+        <v-card v-for="c in certifies.cert" :key="c.id" style="background-color: white;margin:15px;direction: rtl" class="mx-auto" @click="gotoinfo(c.id)">
           <v-list   class="list-style" three-line>
             <template>
 
               <v-list-item style="max-width: 1300px">
                 <v-list-item-avatar style="width: 80px;height: 70px;border-radius: 50%">
-                  <v-img :src="c.image"></v-img>
+                                <v-img            
+                                  v-if="!c.image"
+                                  v-bind:src="img"
+                                ></v-img> 
+                                <v-img            
+                                  v-else-if="c.image.includes('http')"
+                                  v-bind:src="c.image"
+                                ></v-img>
+                                  <v-img            
+                                  v-else-if="!c.image.includes('http')"
+                                  v-bind:src="`http://127.0.0.1:8000${c.image}`"
+                                ></v-img> 
                 </v-list-item-avatar>
 
                 <v-list-item-content style="text-align: right;margin: 0 20px 0 20px">
@@ -84,7 +95,7 @@
 import EmptyPage from '@/components/EmptyPage.vue'
 import axios from "axios";
 import AdminNavbar from '@/components/AdminNavbar.vue'
-
+import img from "../assets/UserDefaultAvatar.png";
 export default {
   name: "CertifyUser",
   components:{
@@ -93,6 +104,7 @@ export default {
   },
   data() {
     return {
+      img:img,
       msg:"لا يوجد اي بلاغات حتي الأن",
       dialog: false,
       certifies:[],
@@ -104,6 +116,9 @@ export default {
     this.reload();
   },
   methods: {
+    gotoinfo(idd){
+      this.$router.push({name: 'AdminCertUserinfo',params: { id:idd }})
+    },
     redirect() {
       this.$router.push('/userProfile/' + this.sender_id)
     },
