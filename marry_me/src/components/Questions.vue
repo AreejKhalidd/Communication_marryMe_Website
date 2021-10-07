@@ -1,4 +1,4 @@
-<template v-for="( id) in questions">
+<template v-for="(id) in questions">
   <v-stepper v-model="e1">
     <v-stepper-header>
       <v-stepper-step

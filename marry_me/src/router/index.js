@@ -28,7 +28,7 @@ import All_Reports from '../views/AdminReports';
 
 import AdminUserList from '../views/AdminUsersList';
 import AdminUserinfo from '../views/AdminUserinfo';
-
+import AdminQuestions from '../views/AdminQuestions';
 import AdminLogin from '../views/AdminLogin';
 
 import verifyEmail from '../views/verifyEmail';
@@ -100,6 +100,11 @@ const routes = [{
         path: '/questions',
         name: 'questions',
         component: questions
+    },
+    {
+        path: '/adminquestions',
+        name: '/AdminQuestions',
+        component: AdminQuestions
     },
     {
         path: '/searchResult/:searchname',
