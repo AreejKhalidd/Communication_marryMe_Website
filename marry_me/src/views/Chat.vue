@@ -101,12 +101,7 @@ export default {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
         },
-      }; //waiting for the login to be finished to store the access token
-      /*const option = {
-        headers: {
-          Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-        },
-      }; */
+      }; 
       axios
         .get("http://127.0.0.1:8000/api/profile", option)
         .then((response) => {
@@ -630,20 +625,7 @@ export default {
         let newmsg = false;
         if (sessionStorage.getItem("usertoken") === null)
           this.$router.push("Login");
-        //waiting for the login to be finished to store the access token
-        /*const option = {
-          headers: {
-            Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-          },
-        }; //temp for testing the request*/
-        /*axios
-            .post(
-              "http://127.0.0.1:8000/api/readmsg",
-              { chat_id: data.room.roomId, time: },
-              option
-            ).then((response)=>{
-
-            });*/
+        
         axios
           .get(
             `http://127.0.0.1:8000/api/fetchmsgs/${data.room.roomId}`,
@@ -928,12 +910,7 @@ export default {
                 "usertoken"
               )}`,
             },
-          }; //waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
+          }; 
           axios
             .post(
               "http://127.0.0.1:8000/api/sendmsg",
@@ -979,13 +956,7 @@ export default {
                 "usertoken"
               )}`,
             },
-          }; //waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
+          }; 
           const fd = new FormData();
 
           if (data.content != null && data.content.length > 0) {
@@ -1046,12 +1017,7 @@ export default {
                 "usertoken"
               )}`,
             },
-          }; //waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
+          }; 
           axios
             .post(
               "http://127.0.0.1:8000/api/sendmsg",
@@ -1101,13 +1067,7 @@ export default {
                 "usertoken"
               )}`,
             },
-          }; //waiting for the login to be finished to store the access token
-          /*const option = {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `${"Bearer"} ${"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTYzMzA5MTI1MCwiZXhwIjoxNjMzNTAxNjUwLCJuYmYiOjE2MzMwOTEyNTAsImp0aSI6ImtCbVoyQTI3d2dUYUVHZTUiLCJzdWIiOjIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.y5eoB01Bibcm1a4MbRWYcMG2wqrO4g1eoFORRcKHDEg"}`,
-            },
-          }; //temp for testing the request*/
+          }; 
           const fd = new FormData();
 
           fd.append(

@@ -327,6 +327,7 @@ export default {
         })
           .then((res) => {
             localStorage.setItem("usertoken", res.data.AccessToken);
+            this.$router.push("questions");
           })
           .catch((err) => {
             // console.log(err.response.data.Errorsin.password);
@@ -367,6 +368,7 @@ export default {
             //console.log(res.data);
             //this.$store.state.usertoken = res.data.access_token;
             localStorage.setItem("usertoken", res.data.AccessToken);
+            this.$router.push("questions");
           })
           .catch((err) => {
             // console.log(err.response.data.Errorsin.password);
