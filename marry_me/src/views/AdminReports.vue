@@ -3,12 +3,12 @@
    <AdminNavbar/>
    <v-main>
      <v-container>
-       <Report style="margin: 20px !important;" v-for="r in report.reports" :key="r.id" :id="r.id"
-               :num="r.message_id"
-               :dateUpdate="r.updated_at"
-               :dateCreate="r.created_at"
-               :message="r.details"
-               :image="r.sender_img"/>
+       <Report style="margin: 20px !important;" v-for="r in report" :key="r.reports.id" :id="r.reports.id"
+               :num="r.reports.message_id"
+               :dateUpdate="r.reports.updated_at"
+               :dateCreate="r.reports.created_at"
+               :message="r.msg_content"
+               :image="r.reports.sender_img"/>
      </v-container>
    </v-main>
    <EmptyPage :msg="this.msg" v-if="this.len" style="margin: 50px !important;"/>
@@ -45,9 +45,16 @@ export default {
       axios.get("http://127.0.0.1:8000/api/admin/getAllReports", {headers: {Authorization: AuthStr}})
           .then(response => {
             // If request is good...
-            this.report = response.data
+            this.report = response.data[0]
             this.error = false;
             this.len = response.data.msg;
+             this.report.forEach((report,i) => {
+               if(report.isImg==1){
+                  this.report[i].msg_content=this.report[i].msg_content.includes('http')?this.report[i].msg_content:`http://127.0.0.1:8000${this.report[i].msg_content}`
+
+               }
+              
+            });
           })
           .catch(() => {
             this.error = true;

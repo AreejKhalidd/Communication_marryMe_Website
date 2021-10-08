@@ -30,7 +30,7 @@
               }}
             </v-list-item-subtitle>
             <v-list-item-subtitle :id="id +'comment'" class="font_age" style="font-weight: bolder;display: none">
-              التعليق : {{ message }}
+              محتوى الرسالة : {{ message }}
             </v-list-item-subtitle>
             <v-list-item-subtitle :id="id +'action'" class="font_age" style="font-weight: bolder;display: none">القرار
               المأخوذ : في انتظار رد المشرف
