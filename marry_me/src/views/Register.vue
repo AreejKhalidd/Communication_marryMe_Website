@@ -323,12 +323,7 @@ export default {
       ) {
         axios({
           method: "get",
-          url: "http://127.0.0.1:8000/api/auth/facebook",
-          data: {
-            phone: this.phone,
-            gender: this.gender,
-            birth_day: this.birthday,
-          },
+          url: `${"http://127.0.0.1:8000/api/auth/facebook?gender="}${this.gender}${"&birth_day="}${this.birthday}${"&phone="}${this.phone}`,
         })
           .then((res) => {
             localStorage.setItem("usertoken", res.data.AccessToken);
@@ -365,13 +360,8 @@ export default {
       if (this.$refs.myform.validate()) {
         axios({
           method: "get",
-          url: "http://127.0.0.1:8000/api/auth/google/callback",
-          //  headers:{Authorization: AuthStr},
-          data: {
-            phone: this.phone,
-            gender: this.gender,
-            birth_day: this.birthday,
-          },
+          url: `${"http://127.0.0.1:8000/api/auth/google?gender="}${this.gender}${"&birth_day="}${this.birthday}${"&phone="}${this.phone}`,
+          
         })
           .then((res) => {
             //console.log(res.data);

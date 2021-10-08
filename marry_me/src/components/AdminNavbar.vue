@@ -3,15 +3,12 @@
        <div class="nb" >
           <b-navbar class="navbar">
 
-        
-            <span></span>
-        
-          <b-collapse id="nav-collapse" is-nav>
+          <b-collapse id="nav-collapse" is-nav >
               <b-navbar-nav class="ms-auto">  
-                <b-nav-item href="/adminuserslist">المستخدمين</b-nav-item> 
-                <b-nav-item href="/All_Reports">الإبلاغات</b-nav-item>
-                <b-nav-item href="/certifyUsers">طلبات التصديق</b-nav-item> 
-                <b-nav-item href="/adminquestions">الأسئلة</b-nav-item>               
+                <b-nav-item style="margin-right: -10rem;" href="/adminuserslist">المستخدمين</b-nav-item> 
+                <b-nav-item style="margin-right: 15rem;" href="/All_Reports">الإبلاغات</b-nav-item>
+                <b-nav-item style="margin-right: 15rem;" href="/certifyUsers">طلبات التصديق</b-nav-item> 
+                <b-nav-item style="margin-right: 15rem;" href="/adminquestions">الأسئلة</b-nav-item>               
                 </b-navbar-nav>
           </b-collapse>
         <!--  <b-collapse id="nav-collapse" is-nav class="inform" >
@@ -132,7 +129,8 @@ export default{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+  align-content: center;
+
   background-color: 	#f5f5f5;
   color:rgba(255,98,101,1);
   height:100 px;
@@ -234,39 +232,8 @@ input[type=number]::-webkit-outer-spin-button {
 span:not(:last-child) {
     margin-right: 5px;
 }
-.search-wrapper {
-    position: relative;
-    label {
-      position: absolute;
-      font-size: 12px;
-      color: rgba(0,0,0,.50);
-      top: 8px;
-      left: 12px;
-      z-index: -1;
-      transition: .15s all ease-in-out;
-    }
-    input {
-      padding: 4px 12px;
-      color: rgba(0,0,0,.70);
-      border: 1px solid rgba(0,0,0,.12);
-      transition: .15s all ease-in-out;
-      background: white;
-      &:focus {
-        outline: none;
-        transform: scale(1.05);
-        & + label  {
-          font-size: 10px;
-          transform: translateY(-24px) translateX(-12px);
-        }
-      }
-      &::-webkit-input-placeholder {
-          font-size: 12px;
-          color: rgba(0,0,0,.50);
-          font-weight: 100;
-      }
-    }
 
-  }
+    
 
     .nb{
       background-color: #f5f5f5; 

@@ -44,7 +44,6 @@
   >
     <template #eye-icon> <span></span> </template>
     <template #document-icon> <span></span> </template>
-     
   </chat-window>
 </template>
 <script>
@@ -59,7 +58,6 @@ export default {
   },
   data() {
     return {
-    
       rooms: [],
       currentRoomId: "",
       messages: [],
@@ -90,15 +88,15 @@ export default {
           paperclip: "#ff6265",
           emoji: "#ff6265",
           send: "#ff6265",
-          add: '#ff6265',
+          add: "#ff6265",
         },
       },
     };
   },
   methods: {
-    
     getUserInfo() {
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
+      if (sessionStorage.getItem("usertoken") === null)
+        this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -112,7 +110,6 @@ export default {
       axios
         .get("http://127.0.0.1:8000/api/profile", option)
         .then((response) => {
-    
           this.currentUserId = response.data.id;
           this.currentUserName = response.data.name;
           this.currentUserAvatar = "";
@@ -150,8 +147,9 @@ export default {
       this.$router.push("HomePage");
     },
     Chats() {
-      this.AllRoomsAreLoaded=false;
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
+      this.AllRoomsAreLoaded = false;
+      if (sessionStorage.getItem("usertoken") === null)
+        this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -297,12 +295,36 @@ export default {
             )
             .then((response) => {
               if (response.data.message) {
-                alert(response.data.message);
+                if (response.data.message == "Block Created Successfully") {
+                  alert("تم حظر المستخدم بنجاح");
+                } else {
+                  alert(response.data.message);
+                }
               }
             })
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (
+                  error.response.data.message ==
+                  "receiver id and sender can't be same!"
+                ) {
+                  alert("لا يمكنك حظر نفسك");
+                } else if (
+                  error.response.data.message == "No user with this id"
+                ) {
+                  alert("لا يوجد هذا المستخدم");
+                } else if (
+                  error.response.data.message == "You Blocked this user before"
+                ) {
+                  alert("لقد حظرت هذا المستخدم من قبل");
+                } else if (
+                  error.response.data.message ==
+                  "You not have message with user"
+                ) {
+                  alert("ليس لديك رسالة مع المستخدم");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
           this.menuActions = [{ name: "removeBlock", title: "رفع الحظر" }];
@@ -344,12 +366,27 @@ export default {
             .delete("http://127.0.0.1:8000/api/removeBlock", option)
             .then((response) => {
               if (response.data.message) {
-                alert(response.data.message);
+                if (
+                  response.data.message == "Block has been Deleted Successfully"
+                ) {
+                  alert("تمت إزالة الحظر بنجاح");
+                } else {
+                  alert(response.data.message);
+                }
               }
             })
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (error.response.data.message == "no block with this id") {
+                  alert("لا يوجد هذا حظر ");
+                } else if (
+                  error.response.data.message ==
+                  "you are not the blocker for this block"
+                ) {
+                  alert("أنت لست صاحب هذاالحظر");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
           this.CanChat = true;
@@ -372,7 +409,8 @@ export default {
       /*window.Echo.private(`delete.${roomId}`).listen(".DeleteMessage", (data) => {
           console.log(data);
         });*/
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
+      if (sessionStorage.getItem("usertoken") === null)
+        this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -390,13 +428,17 @@ export default {
         )
         .catch((error) => {
           if (error.response.data.message) {
-            alert(error.response.data.message);
+            if (error.response.data.message == "no msg found by This id ") {
+              alert("لم يتم العثور على هذه رسالة ");
+            } else {
+              alert(error.response.data.message);
+            }
           }
         });
-      
     },
     reportAMsg(roomId, message) {
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
+      if (sessionStorage.getItem("usertoken") === null)
+        this.$router.push("Login");
       const option = {
         headers: {
           Authorization: `${"Bearer"} ${sessionStorage.getItem("usertoken")}`,
@@ -415,12 +457,34 @@ export default {
         )
         .then((response) => {
           if (response.data.message) {
-            alert(response.data.message);
+            if (
+              response.data.message == "report has been Created Successfully"
+            ) {
+              alert("تم إنشاءالإبلاغ بنجاح");
+            } else {
+              alert(response.data.message);
+            }
           }
         })
         .catch((error) => {
           if (error.response.data.message) {
-            alert(error.response.data.message);
+            if (
+              error.response.data.message ==
+              "you are not receiver for this message!"
+            ) {
+              alert("! أنت لست متلقي لهذه الرسالة");
+            } else if (
+              error.response.data.message == "You reported this message before!"
+            ) {
+              alert(" ! لقد أبلغت عن هذه الرسالة من قبل");
+            } else if (
+              error.response.data.message == "no message with this id" ||
+              error.response.data.message == "id of message is not found"
+            ) {
+              alert("لم يتم العثور على هذه رسالة ");
+            } else {
+              alert(error.response.data.message);
+            }
           }
         });
     },
@@ -434,14 +498,13 @@ export default {
           break;
       }
     },
-    updateDeletedMsgs(data){
-   
-      this.messages.forEach((msg,i) => {
+    updateDeletedMsgs(data) {
+      this.messages.forEach((msg, i) => {
         if (msg._id == data.messageId) {
           this.messages[i].deleted = true;
           this.messages = [...this.messages];
-     
-          this.rooms.forEach((room,j) => {
+
+          this.rooms.forEach((room, j) => {
             if (room.roomId == data.chatId) {
               if (this.messages[i]._id == room.lastMessage._id) {
                 //if msg deleted is the last msg update the last msg
@@ -449,13 +512,9 @@ export default {
                 this.rooms = [...this.rooms];
               }
             }
-
-           
           });
         }
-       
       });
-
     },
     typingMsgHandler(data) {
       window.Echo.private(`chat.${data.roomId}`).whisper("typing", {
@@ -464,16 +523,16 @@ export default {
     },
     connect(roomID) {
       if (roomID) {
-
-        window.Echo.private(`delete.${roomID}`).listen(".DeleteMessage", (data) => {
-         
-          this.updateDeletedMsgs(data);
-        });
+        window.Echo.private(`delete.${roomID}`).listen(
+          ".DeleteMessage",
+          (data) => {
+            this.updateDeletedMsgs(data);
+          }
+        );
         window.Echo.private(`chat.${roomID}`).listen(".MessageSent", (data) => {
           this.updateMsgs(data);
         });
         window.Echo.private(`seen.${roomID}`).listen(".MessageSeen", (data) => {
-
           let lastIndex;
           let firstIndex;
           for (
@@ -481,10 +540,7 @@ export default {
             lastIndex >= 0;
             lastIndex--
           ) {
-
-            
             if (this.messages[lastIndex]._id == data.message.id) {
-              
               break;
             }
           }
@@ -497,17 +553,14 @@ export default {
             this.messages[firstIndex].new = false;
             this.messages = [...this.messages];
           }
-          
         });
         window.Echo.private(`chat.${roomID}`).listenForWhisper(
           "typing",
           (e) => {
-           
-            this.rooms.forEach((room,i) => {
+            this.rooms.forEach((room, i) => {
               if (room.roomId == roomID) {
                 this.rooms[i].typingUsers = [`${e.userId}`];
               }
-             
             });
             this.rooms = [...this.rooms];
           }
@@ -538,7 +591,11 @@ export default {
         )
         .catch((error) => {
           if (error.response.data.message) {
-            alert(error.response.data.message);
+            if (error.response.data.message == "no chat found by This id ") {
+              alert("لم يتم العثور على هذه المحادثة ");
+            } else {
+              alert(error.response.data.message);
+            }
           }
         });
 
@@ -847,7 +904,11 @@ export default {
           })
           .catch((error) => {
             if (error.response.data.message) {
-              alert(error.response.data.message);
+              if (error.response.data.message == "no chat found by This id ") {
+                alert("لم يتم العثور على هذه المحادثة ");
+              } else {
+                alert(error.response.data.message);
+              }
             }
           });
         this.messages = tempMsgs;
@@ -855,8 +916,8 @@ export default {
       });
     },
     sendMsg(data) {
-      
-      if (sessionStorage.getItem("usertoken") === null) this.$router.push("Login");
+      if (sessionStorage.getItem("usertoken") === null)
+        this.$router.push("Login");
 
       if (!data.replyMessage) {
         //no reply msg
@@ -881,7 +942,33 @@ export default {
             )
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (
+                  error.response.data.message == "no chat found by This id "
+                ) {
+                  alert("لم يتم العثور على هذه المحادثة ");
+                } else if (
+                  error.response.data.message ==
+                  "you dont have access to this chat "
+                ) {
+                  alert("لا يمكنك الدردشة في هذه المحادثة");
+                } else if (
+                  error.response.data.message ==
+                  "you blocked this user, cannot send a message"
+                ) {
+                  alert("لقد حظرت هذا المستخدم ، لا يمكنك إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "this user blocked you, cannot send a message"
+                ) {
+                  alert("لقد حظرك هذا المستخدم ، لا يمكنه إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "can not send more than 4 msgs to this account"
+                ) {
+                  alert("لا يمكن إرسال أكثر من 4 رسائل إلى هذا الحساب");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
         } else {
@@ -921,7 +1008,33 @@ export default {
             .post("http://127.0.0.1:8000/api/sendpic", fd, option)
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (
+                  error.response.data.message == "no chat found by This id "
+                ) {
+                  alert("لم يتم العثور على هذه المحادثة ");
+                } else if (
+                  error.response.data.message ==
+                  "you dont have access to this chat "
+                ) {
+                  alert("لا يمكنك الدردشة في هذه المحادثة");
+                } else if (
+                  error.response.data.message ==
+                  "you blocked this user, cannot send pic"
+                ) {
+                  alert("لقد حظرت هذا المستخدم ، لا يمكنك إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "this user blocked you, cannot send pic"
+                ) {
+                  alert("لقد حظرك هذا المستخدم ، لا يمكنه إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "can not send more than 4 msgs to this account"
+                ) {
+                  alert("لا يمكن إرسال أكثر من 4 رسائل إلى هذا الحساب");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
         }
@@ -951,7 +1064,33 @@ export default {
             )
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (
+                  error.response.data.message == "no chat found by This id "
+                ) {
+                  alert("لم يتم العثور على هذه المحادثة ");
+                } else if (
+                  error.response.data.message ==
+                  "you dont have access to this chat "
+                ) {
+                  alert("لا يمكنك الدردشة في هذه المحادثة");
+                } else if (
+                  error.response.data.message ==
+                  "you blocked this user, cannot send a message"
+                ) {
+                  alert("لقد حظرت هذا المستخدم ، لا يمكنك إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "this user blocked you, cannot send a message"
+                ) {
+                  alert("لقد حظرك هذا المستخدم ، لا يمكنه إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "can not send more than 4 msgs to this account"
+                ) {
+                  alert("لا يمكن إرسال أكثر من 4 رسائل إلى هذا الحساب");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
         } else {
@@ -986,13 +1125,37 @@ export default {
             .post("http://127.0.0.1:8000/api/sendpic", fd, option)
             .catch((error) => {
               if (error.response.data.message) {
-                alert(error.response.data.message);
+                if (
+                  error.response.data.message == "no chat found by This id "
+                ) {
+                  alert("لم يتم العثور على هذه المحادثة ");
+                } else if (
+                  error.response.data.message ==
+                  "you dont have access to this chat "
+                ) {
+                  alert("لا يمكنك الدردشة في هذه المحادثة");
+                } else if (
+                  error.response.data.message ==
+                  "you blocked this user, cannot send pic"
+                ) {
+                  alert("لقد حظرت هذا المستخدم ، لا يمكنك إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "this user blocked you, cannot send pic"
+                ) {
+                  alert("لقد حظرك هذا المستخدم ، لا يمكنه إرسال رسالة");
+                } else if (
+                  error.response.data.message ==
+                  "can not send more than 4 msgs to this account"
+                ) {
+                  alert("لا يمكن إرسال أكثر من 4 رسائل إلى هذا الحساب");
+                } else {
+                  alert(error.response.data.message);
+                }
               }
             });
         }
-        
       }
-      
     },
     updateMsgs(data) {
       let time, date;
@@ -1004,8 +1167,7 @@ export default {
       if (!data.message.replyMsg) {
         //no reply msg
         if (data.message.isImg != 1) {
-          
-          this.rooms.forEach((room,i) => {
+          this.rooms.forEach((room, i) => {
             if (room.roomId == data.chatId) {
               this.messages[this.messages.length] = {
                 _id: data.message.id,
@@ -1053,10 +1215,8 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-           
           });
         } else {
-         
           let msgImg = "";
           let imgtype = "";
 
@@ -1064,7 +1224,7 @@ export default {
             ? data.message.img_url
             : `http://127.0.0.1:8000${data.message.img_url}`;
           imgtype = msgImg.split(".").pop();
-          this.rooms.forEach((room,i) => {
+          this.rooms.forEach((room, i) => {
             if (room.roomId == data.chatId) {
               let msgContent =
                 data.message.content != null && data.message.content.length > 0
@@ -1128,7 +1288,6 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-           
           });
         }
       } else {
@@ -1163,8 +1322,7 @@ export default {
           };
         }
         if (data.message.isImg != 1) {
-          
-          this.rooms.forEach((room,i) => {
+          this.rooms.forEach((room, i) => {
             if (room.roomId == data.chatId) {
               this.messages[this.messages.length] = {
                 _id: data.message.id,
@@ -1213,11 +1371,9 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-           
           });
         } else {
-        
-          this.rooms.forEach((room,i) => {
+          this.rooms.forEach((room, i) => {
             if (room.roomId == data.chatId) {
               let msgContent =
                 data.message.content != null && data.message.content.length > 0
@@ -1288,7 +1444,6 @@ export default {
               };
               this.rooms = [...this.rooms];
             }
-            
           });
         }
       }
@@ -1309,7 +1464,11 @@ export default {
         )
         .catch((error) => {
           if (error.response.data.message) {
-            alert(error.response.data.message);
+            if (error.response.data.message == "no chat found by This id ") {
+              alert("لم يتم العثور على هذه المحادثة ");
+            } else {
+              alert(error.response.data.message);
+            }
           }
         });
     },
